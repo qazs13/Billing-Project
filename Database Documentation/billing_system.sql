@@ -26,10 +26,10 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.cdr (
     cdr_id integer NOT NULL,
-    diala integer,
+    diala text,
     dialb text,
     sid integer,
-    duration_msg_volume text,
+    duration_msg_volume integer,
     start_date date,
     start_time time without time zone,
     external_charges money,
@@ -66,7 +66,7 @@ ALTER SEQUENCE public.cdr_cdr_id_seq OWNED BY public.cdr.cdr_id;
 --
 
 CREATE TABLE public.customer (
-    msisdn integer NOT NULL,
+    msisdn text NOT NULL,
     f_name text,
     l_name text,
     email text,
@@ -81,16 +81,16 @@ ALTER TABLE public.customer OWNER TO postgres;
 --
 
 CREATE TABLE public.customer_profile (
-    msisdn integer NOT NULL,
+    msisdn text NOT NULL,
     pid integer NOT NULL,
     start_date date,
     end_date date,
     blocked_services integer,
-    free_voice_same text,
-    free_voice_diff text,
-    free_sms_same text,
-    free_sms_diff text,
-    free_internet text
+    free_voice_same integer,
+    free_voice_diff integer,
+    free_sms_same integer,
+    free_sms_diff integer,
+    free_internet integer
 );
 
 
@@ -102,11 +102,11 @@ ALTER TABLE public.customer_profile OWNER TO postgres;
 
 CREATE TABLE public.free_units (
     fid integer NOT NULL,
-    free_voice_same text,
-    free_voice_diff text,
-    free_sms_same text,
-    free_sms_diff text,
-    free_internet text
+    free_voice_same integer,
+    free_voice_diff integer,
+    free_sms_same integer,
+    free_sms_diff integer,
+    free_internet integer
 );
 
 
@@ -180,7 +180,7 @@ ALTER SEQUENCE public.profile_pid_seq OWNED BY public.profile.pid;
 CREATE TABLE public.profile_services (
     pid integer NOT NULL,
     sid integer NOT NULL,
-    round_amount text,
+    round_amount integer,
     fees_local_same money,
     fees_local_diff money,
     fees_international money
