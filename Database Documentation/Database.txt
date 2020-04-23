@@ -1,0 +1,11 @@
+ CREATE DATABASE billing_system;
+\c billing_system 
+CREATE TABLE customer (msisdn int primary key, f_name text,l_name text,email text,address text);
+create table free_units (fid serial primary key,free_voice_same text,free_voice_diff text,free_sms_same text,free_sms_diff text ,free_internet text);
+Create table profile (pid serial primary key, pname text , one_time_fee money,renew_duration int ,pfees money,recurring_services money,fid int references free_units(fid));
+Create table services (sid serial primary key ,sname text);
+create table customer_profile (msisdn int references customer(msisdn),pid int references profile(pid),start_date date,end_date date,blocked_services int references services(sid),free_voice_same text,free_voice_diff text,free_sms_same text,free_sms_diff text,free_internet text, primary key(msisdn,pid));
+create table profile_services (pid int references profile(pid),sid int references services(sid),round_amount text,fees_local_same money,fees_local_diff money,fees_international money ,primary key (pid,sid));
+create table cdr (cdr_id serial primary key,dialA int,dialB text,sid int references services(sid),duration_msg_volume text,start_date date,start_time time,external_charges money,is_rated boolean);
+create table udr (udr_id serial , cdr_id int references cdr(cdr_id),pid int references profile(pid), has_freeUnits boolean,cost money, primary key (udr_id,cdr_id));
+

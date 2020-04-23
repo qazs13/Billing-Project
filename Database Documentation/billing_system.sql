@@ -25,38 +25,25 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.cdr (
+    cdr_id integer NOT NULL,
     diala integer,
-    dialb json,
+    dialb text,
     sid integer,
-    duration integer,
+    duration_msg_volume text,
     start_date date,
-    end_date date,
-    external_charges integer
+    start_time time without time zone,
+    external_charges money,
+    is_rated boolean
 );
 
 
 ALTER TABLE public.cdr OWNER TO postgres;
 
 --
--- Name: customer; Type: TABLE; Schema: public; Owner: postgres
+-- Name: cdr_cdr_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.customer (
-    msisdn integer NOT NULL,
-    first_name text,
-    last_name text,
-    email text,
-    address text
-);
-
-
-ALTER TABLE public.customer OWNER TO postgres;
-
---
--- Name: customer_msisdn_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.customer_msisdn_seq
+CREATE SEQUENCE public.cdr_cdr_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -65,14 +52,29 @@ CREATE SEQUENCE public.customer_msisdn_seq
     CACHE 1;
 
 
-ALTER TABLE public.customer_msisdn_seq OWNER TO postgres;
+ALTER TABLE public.cdr_cdr_id_seq OWNER TO postgres;
 
 --
--- Name: customer_msisdn_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: cdr_cdr_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.customer_msisdn_seq OWNED BY public.customer.msisdn;
+ALTER SEQUENCE public.cdr_cdr_id_seq OWNED BY public.cdr.cdr_id;
 
+
+--
+-- Name: customer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.customer (
+    msisdn integer NOT NULL,
+    f_name text,
+    l_name text,
+    email text,
+    address text
+);
+
+
+ALTER TABLE public.customer OWNER TO postgres;
 
 --
 -- Name: customer_profile; Type: TABLE; Schema: public; Owner: postgres
@@ -83,7 +85,12 @@ CREATE TABLE public.customer_profile (
     pid integer NOT NULL,
     start_date date,
     end_date date,
-    additional_services integer
+    blocked_services integer,
+    free_voice_same text,
+    free_voice_diff text,
+    free_sms_same text,
+    free_sms_diff text,
+    free_internet text
 );
 
 
@@ -95,9 +102,11 @@ ALTER TABLE public.customer_profile OWNER TO postgres;
 
 CREATE TABLE public.free_units (
     fid integer NOT NULL,
-    free_voice integer,
-    free_sms integer,
-    free_internet integer
+    free_voice_same text,
+    free_voice_diff text,
+    free_sms_same text,
+    free_sms_diff text,
+    free_internet text
 );
 
 
@@ -132,24 +141,15 @@ ALTER SEQUENCE public.free_units_fid_seq OWNED BY public.free_units.fid;
 CREATE TABLE public.profile (
     pid integer NOT NULL,
     pname text,
+    one_time_fee money,
     renew_duration integer,
-    pfees integer
+    pfees money,
+    recurring_services money,
+    fid integer
 );
 
 
 ALTER TABLE public.profile OWNER TO postgres;
-
---
--- Name: profile_freeunits; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.profile_freeunits (
-    pid integer NOT NULL,
-    fid integer NOT NULL
-);
-
-
-ALTER TABLE public.profile_freeunits OWNER TO postgres;
 
 --
 -- Name: profile_pid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -180,11 +180,10 @@ ALTER SEQUENCE public.profile_pid_seq OWNED BY public.profile.pid;
 CREATE TABLE public.profile_services (
     pid integer NOT NULL,
     sid integer NOT NULL,
-    round_amount numeric,
-    fees_local_same_operator integer,
-    fees_local_diff_operator integer,
-    fees_international integer,
-    additional_quota integer
+    round_amount text,
+    fees_local_same money,
+    fees_local_diff money,
+    fees_international money
 );
 
 
@@ -225,10 +224,47 @@ ALTER SEQUENCE public.services_sid_seq OWNED BY public.services.sid;
 
 
 --
--- Name: customer msisdn; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: udr; Type: TABLE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.customer ALTER COLUMN msisdn SET DEFAULT nextval('public.customer_msisdn_seq'::regclass);
+CREATE TABLE public.udr (
+    udr_id integer NOT NULL,
+    cdr_id integer NOT NULL,
+    pid integer,
+    has_freeunits boolean,
+    cost money
+);
+
+
+ALTER TABLE public.udr OWNER TO postgres;
+
+--
+-- Name: udr_udr_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.udr_udr_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.udr_udr_id_seq OWNER TO postgres;
+
+--
+-- Name: udr_udr_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.udr_udr_id_seq OWNED BY public.udr.udr_id;
+
+
+--
+-- Name: cdr cdr_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cdr ALTER COLUMN cdr_id SET DEFAULT nextval('public.cdr_cdr_id_seq'::regclass);
 
 
 --
@@ -253,10 +289,17 @@ ALTER TABLE ONLY public.services ALTER COLUMN sid SET DEFAULT nextval('public.se
 
 
 --
+-- Name: udr udr_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.udr ALTER COLUMN udr_id SET DEFAULT nextval('public.udr_udr_id_seq'::regclass);
+
+
+--
 -- Data for Name: cdr; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cdr (diala, dialb, sid, duration, start_date, end_date, external_charges) FROM stdin;
+COPY public.cdr (cdr_id, diala, dialb, sid, duration_msg_volume, start_date, start_time, external_charges, is_rated) FROM stdin;
 \.
 
 
@@ -264,8 +307,7 @@ COPY public.cdr (diala, dialb, sid, duration, start_date, end_date, external_cha
 -- Data for Name: customer; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.customer (msisdn, first_name, last_name, email, address) FROM stdin;
-1	Ali	Mohamed	ali@telecom.com	Masr el gedida
+COPY public.customer (msisdn, f_name, l_name, email, address) FROM stdin;
 \.
 
 
@@ -273,7 +315,7 @@ COPY public.customer (msisdn, first_name, last_name, email, address) FROM stdin;
 -- Data for Name: customer_profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.customer_profile (msisdn, pid, start_date, end_date, additional_services) FROM stdin;
+COPY public.customer_profile (msisdn, pid, start_date, end_date, blocked_services, free_voice_same, free_voice_diff, free_sms_same, free_sms_diff, free_internet) FROM stdin;
 \.
 
 
@@ -281,8 +323,7 @@ COPY public.customer_profile (msisdn, pid, start_date, end_date, additional_serv
 -- Data for Name: free_units; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.free_units (fid, free_voice, free_sms, free_internet) FROM stdin;
-3	10	0	300
+COPY public.free_units (fid, free_voice_same, free_voice_diff, free_sms_same, free_sms_diff, free_internet) FROM stdin;
 \.
 
 
@@ -290,15 +331,7 @@ COPY public.free_units (fid, free_voice, free_sms, free_internet) FROM stdin;
 -- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.profile (pid, pname, renew_duration, pfees) FROM stdin;
-\.
-
-
---
--- Data for Name: profile_freeunits; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.profile_freeunits (pid, fid) FROM stdin;
+COPY public.profile (pid, pname, one_time_fee, renew_duration, pfees, recurring_services, fid) FROM stdin;
 \.
 
 
@@ -306,7 +339,7 @@ COPY public.profile_freeunits (pid, fid) FROM stdin;
 -- Data for Name: profile_services; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.profile_services (pid, sid, round_amount, fees_local_same_operator, fees_local_diff_operator, fees_international, additional_quota) FROM stdin;
+COPY public.profile_services (pid, sid, round_amount, fees_local_same, fees_local_diff, fees_international) FROM stdin;
 \.
 
 
@@ -319,10 +352,18 @@ COPY public.services (sid, sname) FROM stdin;
 
 
 --
--- Name: customer_msisdn_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Data for Name: udr; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.customer_msisdn_seq', 1, true);
+COPY public.udr (udr_id, cdr_id, pid, has_freeunits, cost) FROM stdin;
+\.
+
+
+--
+-- Name: cdr_cdr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cdr_cdr_id_seq', 1, false);
 
 
 --
@@ -344,6 +385,21 @@ SELECT pg_catalog.setval('public.profile_pid_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.services_sid_seq', 1, false);
+
+
+--
+-- Name: udr_udr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.udr_udr_id_seq', 1, false);
+
+
+--
+-- Name: cdr cdr_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cdr
+    ADD CONSTRAINT cdr_pkey PRIMARY KEY (cdr_id);
 
 
 --
@@ -371,14 +427,6 @@ ALTER TABLE ONLY public.free_units
 
 
 --
--- Name: profile_freeunits profile_freeunits_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.profile_freeunits
-    ADD CONSTRAINT profile_freeunits_pkey PRIMARY KEY (pid, fid);
-
-
---
 -- Name: profile profile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -403,11 +451,27 @@ ALTER TABLE ONLY public.services
 
 
 --
+-- Name: udr udr_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.udr
+    ADD CONSTRAINT udr_pkey PRIMARY KEY (udr_id, cdr_id);
+
+
+--
 -- Name: cdr cdr_sid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.cdr
     ADD CONSTRAINT cdr_sid_fkey FOREIGN KEY (sid) REFERENCES public.services(sid);
+
+
+--
+-- Name: customer_profile customer_profile_blocked_services_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_profile
+    ADD CONSTRAINT customer_profile_blocked_services_fkey FOREIGN KEY (blocked_services) REFERENCES public.services(sid);
 
 
 --
@@ -427,19 +491,11 @@ ALTER TABLE ONLY public.customer_profile
 
 
 --
--- Name: profile_freeunits profile_freeunits_fid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: profile profile_fid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.profile_freeunits
-    ADD CONSTRAINT profile_freeunits_fid_fkey FOREIGN KEY (fid) REFERENCES public.free_units(fid);
-
-
---
--- Name: profile_freeunits profile_freeunits_pid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.profile_freeunits
-    ADD CONSTRAINT profile_freeunits_pid_fkey FOREIGN KEY (pid) REFERENCES public.profile(pid);
+ALTER TABLE ONLY public.profile
+    ADD CONSTRAINT profile_fid_fkey FOREIGN KEY (fid) REFERENCES public.free_units(fid);
 
 
 --
@@ -456,6 +512,22 @@ ALTER TABLE ONLY public.profile_services
 
 ALTER TABLE ONLY public.profile_services
     ADD CONSTRAINT profile_services_sid_fkey FOREIGN KEY (sid) REFERENCES public.services(sid);
+
+
+--
+-- Name: udr udr_cdr_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.udr
+    ADD CONSTRAINT udr_cdr_id_fkey FOREIGN KEY (cdr_id) REFERENCES public.cdr(cdr_id);
+
+
+--
+-- Name: udr udr_pid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.udr
+    ADD CONSTRAINT udr_pid_fkey FOREIGN KEY (pid) REFERENCES public.profile(pid);
 
 
 --
