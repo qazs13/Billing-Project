@@ -1,0 +1,127 @@
+body
+{
+    margin: 0px;
+    padding: 0px;
+}
+/*Header*/
+header
+{
+    height: auto;
+    background-color: black;
+}
+header .firstRowHeader
+{
+    min-height: 30px;
+}
+header .secondRowHeader
+{
+    min-height: 70px;
+}
+.orange
+{
+    height: 50px;
+    width: 50px;
+}
+.secondRowHeader .collapse .nav-item .nav-link:hover
+{
+    color: #FF7900;
+}
+/*Header*/
+/*Login*/
+.login
+{
+    margin: auto;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    height: 450px;
+    width: 350px;
+    border: 3px outset #FF7900;
+    border-radius: 25px;
+    background-color: rgb(0, 0, 0);
+}
+.login .userName
+{
+    height: 70px;
+    margin-top: 100px;
+    margin-bottom: 10px;
+}
+.login .userName span
+{
+    display: grid;
+    color: #FF7900;
+    margin-left: 10px;
+    font-family: monospace;
+    font-size: 20px;
+    text-emphasis: 20px;
+}
+.login .userName input[type="text"]
+{
+    margin-left: 95px;
+    margin-top: 5px;
+    border-radius: 10px;
+    padding-left: 5px;
+    border-color: chocolate;
+}
+.login .password
+{
+    height: 70px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.login .password span
+{
+    display: grid;
+    color: #FF7900;    
+    margin-left: 10px;
+    font-family: monospace;
+    font-size: 20px;
+    text-emphasis: 20px;
+}
+.login .password input[type="password"]
+{
+    margin-left: 95px;
+    margin-top: 5px;
+    border-radius: 10px;
+    padding-left: 5px;
+    border-color: chocolate;
+}
+.login .submit
+{
+    height: 50px;
+    margin-top: 30px;
+}
+.login .submit .sub
+{
+    display: grid;
+    height: 50px;
+    width: 150px;
+    margin: auto;
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: bold;
+    border-color: chocolate;
+    background-color: white;
+    color: black;
+    border-radius: 15px;
+}
+.login .submit .sub:hover
+{
+    background-color: #FF7900;
+    border-color: white;
+    color: white;
+    border-radius: 15px;
+}
+/*Login*/
+/*Footer*/
+.footerOrange
+{
+    background-color: black;
+    line-height: 77px;
+}
+.footerOrange p
+{
+    color: #FF7900;
+    padding: 0px;
+    margin: 0px;
+}
+/*Footer*/
