@@ -30,9 +30,9 @@ CREATE TABLE public.cdr (
     dialb text,
     sid integer,
     duration_msg_volume integer,
-    start_date date,
-    start_time time without time zone,
-    external_charges money,
+    start_date text,
+    start_time text,
+    external_charges integer,
     is_rated boolean
 );
 
@@ -83,8 +83,8 @@ ALTER TABLE public.customer OWNER TO postgres;
 CREATE TABLE public.customer_profile (
     msisdn text NOT NULL,
     pid integer NOT NULL,
-    start_date date,
-    end_date date,
+    start_date text,
+    end_date text,
     blocked_services integer,
     free_voice_same integer,
     free_voice_diff integer,
@@ -141,10 +141,10 @@ ALTER SEQUENCE public.free_units_fid_seq OWNED BY public.free_units.fid;
 CREATE TABLE public.profile (
     pid integer NOT NULL,
     pname text,
-    one_time_fee money,
+    one_time_fee integer,
     renew_duration integer,
-    pfees money,
-    recurring_services money,
+    pfees integer,
+    recurring_services integer,
     fid integer
 );
 
@@ -181,9 +181,9 @@ CREATE TABLE public.profile_services (
     pid integer NOT NULL,
     sid integer NOT NULL,
     round_amount integer,
-    fees_local_same money,
-    fees_local_diff money,
-    fees_international money
+    fees_local_same integer,
+    fees_local_diff integer,
+    fees_international integer
 );
 
 
@@ -232,7 +232,7 @@ CREATE TABLE public.udr (
     cdr_id integer NOT NULL,
     pid integer,
     has_freeunits boolean,
-    cost money
+    cost integer
 );
 
 

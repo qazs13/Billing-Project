@@ -3,9 +3,9 @@
 CREATE TABLE customer (msisdn text primary key, f_name text,l_name text,email text,address text);
 Create table services (sid serial primary key ,sname text);
 create table free_units (fid serial primary key,free_voice_same int,free_voice_diff int,free_sms_same int,free_sms_diff int,free_internet int); 
-Create table profile (pid serial primary key, pname text , one_time_fee money,renew_duration int ,pfees money,recurring_services money,fid int references free_units(fid));
- create table customer_profile (msisdn text references customer(msisdn),pid int references profile(pid),start_date date,end_date date,blocked_services int references services(sid),free_voice_same int,free_voice_diff int,free_sms_same int,free_sms_diff int,free_internet int, primary key(msisdn,pid));
-create table profile_services (pid int references profile(pid),sid int references services(sid),round_amount int,fees_local_same money,fees_local_diff money,fees_international money ,primary key (pid,sid));
-create table cdr (cdr_id serial primary key,dialA text,dialB text,sid int references services(sid),duration_msg_volume int,start_date date,start_time time,external_charges money,is_rated boolean);
-create table udr (udr_id serial , cdr_id int references cdr(cdr_id),pid int references profile(pid), has_freeUnits boolean,cost money, primary key (udr_id,cdr_id));
+Create table profile (pid serial primary key, pname text , one_time_fee int,renew_duration int ,pfees int,recurring_services int,fid int references free_units(fid));
+ create table customer_profile (msisdn text references customer(msisdn),pid int references profile(pid),start_date text,end_date text,blocked_services int references services(sid),free_voice_same int,free_voice_diff int,free_sms_same int,free_sms_diff int,free_internet int, primary key(msisdn,pid));
+create table profile_services (pid int references profile(pid),sid int references services(sid),round_amount int,fees_local_same int,fees_local_diff int,fees_international int ,primary key (pid,sid));
+create table cdr (cdr_id serial primary key,dialA text,dialB text,sid int references services(sid),duration_msg_volume int,start_date text,start_time text,external_charges int,is_rated boolean);
+create table udr (udr_id serial , cdr_id int references cdr(cdr_id),pid int references profile(pid), has_freeUnits boolean,cost int, primary key (udr_id,cdr_id));
 
