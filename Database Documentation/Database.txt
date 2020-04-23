@@ -8,4 +8,4 @@ Create table profile (pid serial primary key, pname text , one_time_fee int,rene
 create table profile_services (pid int references profile(pid),sid int references services(sid),round_amount int,fees_local_same int,fees_local_diff int,fees_international int ,primary key (pid,sid));
 create table cdr (cdr_id serial primary key,dialA text,dialB text,sid int references services(sid),duration_msg_volume int,start_date text,start_time text,external_charges int,is_rated boolean);
 create table udr (udr_id serial , cdr_id int references cdr(cdr_id),pid int references profile(pid), has_freeUnits boolean,cost int, primary key (udr_id,cdr_id));
-
+create table admin (adminUser text primary key, adminPassword text);
