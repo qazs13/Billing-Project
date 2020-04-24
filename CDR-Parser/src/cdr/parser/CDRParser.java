@@ -30,7 +30,6 @@ public class CDRParser {
         String dirPath = "/home/ahmed/Desktop/cdr/";
         String archivePath = "/home/ahmed/Desktop/archivecdr/";
         File cdrdir = new File(dirPath);
-        File archivedir = new File(archivePath);
         String[] files = cdrdir.list();
         if (files.length == 0) {
             System.out.println("dir is Empty");
@@ -39,11 +38,14 @@ public class CDRParser {
             for (String filename : files) {
                 try {
                     FileInputStream fis = new FileInputStream(dirPath + "/" + filename);
-                    File cdr = new File(dirPath+ "/" + filename);
-                    File arccdr = new File(archivePath+ "/" + filename);
+                    File cdr = new File(dirPath + "/" + filename);
+                    File arccdr = new File(archivePath + "/" + filename);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     readFile(br);
+                    fis.close();
+                    br.close();
                     Files.move(cdr.toPath(), arccdr.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
                     System.out.println("moved succes");
 
                 } catch (Exception e) {
@@ -56,10 +58,10 @@ public class CDRParser {
     }
 
     public static void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException {
-
+        Cdr cdr = new Cdr();
         String strline = null;
         while ((strline = br.readLine()) != null) {
-            Cdr cdr = new Cdr();
+
             ConnectDB con = new ConnectDB();
             String[] splited = strline.split(",");
             cdr.diala = splited[0];
@@ -69,8 +71,6 @@ public class CDRParser {
             cdr.start_date = splited[4];
             cdr.start_time = splited[5];
             cdr.external_charges = splited[6];
-
-            System.out.println(cdr.start_date);
             con.insertCdr(cdr);
 
         }

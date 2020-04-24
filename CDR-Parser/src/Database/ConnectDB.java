@@ -50,15 +50,4 @@ public class ConnectDB {
         pst.close();
         con.close();
     }
-    
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        ConnectDB c = new ConnectDB();
-        c.connect();
-        Cdr cd = new Cdr();
-        cd.diala="dfdf";
-        cd.sid=1;
-      
-        c.insertCdr(cd);
-    }
-
 }
