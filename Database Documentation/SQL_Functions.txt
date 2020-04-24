@@ -1,0 +1,10 @@
+CREATE OR REPLACE FUNCTION checklogin (auser text, pass text) RETURNS boolean AS $$
+DECLARE
+count int;
+BEGIN
+SELECT COUNT(*) INTO count FROM admin WHERE adminuser = auser AND adminpassword = pass;
+IF count = 1 THEN RETURN TRUE;
+ELSE RETURN FALSE;
+END IF;
+END;
+$$ LANGUAGE plpgsql;
