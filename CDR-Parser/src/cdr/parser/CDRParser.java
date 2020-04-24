@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +25,13 @@ import java.util.logging.Logger;
  * @author ahmed
  */
 public class CDRParser {
-    
-    ConnectDB conn = new ConnectDB();
+
     public static void getFile() {
-        String dirPath = "/home/cdr/";
-        File dir = new File(dirPath);
-        String[] files = dir.list();
+        String dirPath = "/home/ahmed/Desktop/cdr/";
+        String archivePath = "/home/ahmed/Desktop/archivecdr/";
+        File cdrdir = new File(dirPath);
+        File archivedir = new File(archivePath);
+        String[] files = cdrdir.list();
         if (files.length == 0) {
             System.out.println("dir is Empty");
 
@@ -37,8 +39,13 @@ public class CDRParser {
             for (String filename : files) {
                 try {
                     FileInputStream fis = new FileInputStream(dirPath + "/" + filename);
+                    File cdr = new File(dirPath+ "/" + filename);
+                    File arccdr = new File(archivePath+ "/" + filename);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     readFile(br);
+                    Files.move(cdr.toPath(), arccdr.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("moved succes");
+
                 } catch (Exception e) {
 
                 }
@@ -49,7 +56,7 @@ public class CDRParser {
     }
 
     public static void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException {
-        
+
         String strline = null;
         while ((strline = br.readLine()) != null) {
             Cdr cdr = new Cdr();
@@ -62,10 +69,10 @@ public class CDRParser {
             cdr.start_date = splited[4];
             cdr.start_time = splited[5];
             cdr.external_charges = splited[6];
-          
+
             System.out.println(cdr.start_date);
             con.insertCdr(cdr);
-                    
+
         }
 
     }
