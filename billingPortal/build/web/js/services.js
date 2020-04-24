@@ -1,9 +1,9 @@
 document.getElementById('su').addEventListener("click",function(e)
 {
-    if (e.path[2][0].value != "" && e.path[2][1].value != "")
+    if (e.path[2][0].value != "")
     {
         e.preventDefault();
-        url = "/billingPortal/loginCheck";
+        url = "/billingPortal/Add_Services";
         var xmlhttp;
         if (window.XMLHttpRequest)
         {
@@ -23,16 +23,17 @@ document.getElementById('su').addEventListener("click",function(e)
                 var status = xmlhttp.status;
                 if (status === 0 || (status >= 200 && status < 400)) 
                 {
-                    window.location.assign("pages/mainPage.jsp");
+                    location.reload();
+                    alert("Service is Added Successfully");
                 }
                 else
                 {
-                    alert("you have entered a wrong username or password");
+                    alert("Service is Already Exist Please See The Table First");
                 }
             }
         };
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-        xmlhttp.send($('form').serialize());        
+        xmlhttp.send($('form').serialize());
     }
 });
