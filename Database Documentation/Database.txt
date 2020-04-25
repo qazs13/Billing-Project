@@ -1,11 +1,16 @@
  CREATE DATABASE billing_system;
 \c billing_system 
 CREATE TABLE customer (msisdn text primary key, f_name text,l_name text,email text,address text);
-Create table services (sid serial primary key ,sname text);
+Create table services (sid serial primary key ,sname text,is_recurring boolean,recurring_fees int);
 create table free_units (fid serial primary key,free_voice_same int,free_voice_diff int,free_sms_same int,free_sms_diff int,free_internet int); 
-Create table profile (pid serial primary key, pname text , one_time_fee int,renew_duration int ,pfees int,recurring_services int,fid int references free_units(fid));
+Create table profile (pid serial primary key, pname text ,renew_duration int ,pfees int,fid int references free_units(fid));
  create table customer_profile (msisdn text references customer(msisdn),pid int references profile(pid),start_date text,end_date text,blocked_services int references services(sid),free_voice_same int,free_voice_diff int,free_sms_same int,free_sms_diff int,free_internet int, primary key(msisdn,pid));
-create table profile_services (pid int references profile(pid),sid int references services(sid),round_amount int,fees_local_same int,fees_local_diff int,fees_international int ,primary key (pid,sid));
+create table one_time_service (one_time_service_id serial primary key,osname text,osfee int);
+
+create table profile_services (profile_services_id serial primary key,pid int references profile(pid),sid int references services(sid),round_amount int,fees_local_same int,fees_local_diff int,fees_international int);
 create table cdr (cdr_id serial primary key,dialA text,dialB text,sid int references services(sid),duration_msg_volume int,start_date text,start_time text,external_charges int,is_rated boolean);
 create table udr (udr_id serial , cdr_id int references cdr(cdr_id),pid int references profile(pid), has_freeUnits boolean,cost int, primary key (udr_id,cdr_id));
+create table occ (occ_id serial primary key, msisdn text references customer(msisdn),one_time_service_id int references one_time_service(one_time_service_id),service_processed boolean);
+create table customer_profile_services (msisdn text references customer(msisdn),profile_services_id int references profile_services(profile_services_id ),occ_id int references occ (occ_id), primary key(msisdn,profile_services_id , occ_id));
+
 create table admin (adminUser text primary key, adminPassword text);

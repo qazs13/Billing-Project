@@ -21,6 +21,18 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: admin; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.admin (
+    adminuser text NOT NULL,
+    adminpassword text
+);
+
+
+ALTER TABLE public.admin OWNER TO postgres;
+
+--
 -- Name: cdr; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -97,6 +109,19 @@ CREATE TABLE public.customer_profile (
 ALTER TABLE public.customer_profile OWNER TO postgres;
 
 --
+-- Name: customer_profile_services; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.customer_profile_services (
+    msisdn text NOT NULL,
+    profile_services_id integer NOT NULL,
+    occ_id integer NOT NULL
+);
+
+
+ALTER TABLE public.customer_profile_services OWNER TO postgres;
+
+--
 -- Name: free_units; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -135,16 +160,85 @@ ALTER SEQUENCE public.free_units_fid_seq OWNED BY public.free_units.fid;
 
 
 --
+-- Name: occ; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.occ (
+    occ_id integer NOT NULL,
+    msisdn text,
+    one_time_service_id integer,
+    service_processed boolean
+);
+
+
+ALTER TABLE public.occ OWNER TO postgres;
+
+--
+-- Name: occ_occ_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.occ_occ_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.occ_occ_id_seq OWNER TO postgres;
+
+--
+-- Name: occ_occ_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.occ_occ_id_seq OWNED BY public.occ.occ_id;
+
+
+--
+-- Name: one_time_service; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.one_time_service (
+    one_time_service_id integer NOT NULL,
+    osname text,
+    osfee integer
+);
+
+
+ALTER TABLE public.one_time_service OWNER TO postgres;
+
+--
+-- Name: one_time_service_one_time_service_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.one_time_service_one_time_service_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.one_time_service_one_time_service_id_seq OWNER TO postgres;
+
+--
+-- Name: one_time_service_one_time_service_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.one_time_service_one_time_service_id_seq OWNED BY public.one_time_service.one_time_service_id;
+
+
+--
 -- Name: profile; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.profile (
     pid integer NOT NULL,
     pname text,
-    one_time_fee integer,
     renew_duration integer,
     pfees integer,
-    recurring_services integer,
     fid integer
 );
 
@@ -178,8 +272,9 @@ ALTER SEQUENCE public.profile_pid_seq OWNED BY public.profile.pid;
 --
 
 CREATE TABLE public.profile_services (
-    pid integer NOT NULL,
-    sid integer NOT NULL,
+    profile_services_id integer NOT NULL,
+    pid integer,
+    sid integer,
     round_amount integer,
     fees_local_same integer,
     fees_local_diff integer,
@@ -190,12 +285,36 @@ CREATE TABLE public.profile_services (
 ALTER TABLE public.profile_services OWNER TO postgres;
 
 --
+-- Name: profile_services_profile_services_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.profile_services_profile_services_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.profile_services_profile_services_id_seq OWNER TO postgres;
+
+--
+-- Name: profile_services_profile_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.profile_services_profile_services_id_seq OWNED BY public.profile_services.profile_services_id;
+
+
+--
 -- Name: services; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.services (
     sid integer NOT NULL,
-    sname text
+    sname text,
+    is_recurring boolean,
+    recurring_fees integer
 );
 
 
@@ -275,10 +394,31 @@ ALTER TABLE ONLY public.free_units ALTER COLUMN fid SET DEFAULT nextval('public.
 
 
 --
+-- Name: occ occ_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.occ ALTER COLUMN occ_id SET DEFAULT nextval('public.occ_occ_id_seq'::regclass);
+
+
+--
+-- Name: one_time_service one_time_service_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.one_time_service ALTER COLUMN one_time_service_id SET DEFAULT nextval('public.one_time_service_one_time_service_id_seq'::regclass);
+
+
+--
 -- Name: profile pid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.profile ALTER COLUMN pid SET DEFAULT nextval('public.profile_pid_seq'::regclass);
+
+
+--
+-- Name: profile_services profile_services_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profile_services ALTER COLUMN profile_services_id SET DEFAULT nextval('public.profile_services_profile_services_id_seq'::regclass);
 
 
 --
@@ -293,6 +433,14 @@ ALTER TABLE ONLY public.services ALTER COLUMN sid SET DEFAULT nextval('public.se
 --
 
 ALTER TABLE ONLY public.udr ALTER COLUMN udr_id SET DEFAULT nextval('public.udr_udr_id_seq'::regclass);
+
+
+--
+-- Data for Name: admin; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.admin (adminuser, adminpassword) FROM stdin;
+\.
 
 
 --
@@ -320,6 +468,14 @@ COPY public.customer_profile (msisdn, pid, start_date, end_date, blocked_service
 
 
 --
+-- Data for Name: customer_profile_services; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.customer_profile_services (msisdn, profile_services_id, occ_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: free_units; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -328,10 +484,26 @@ COPY public.free_units (fid, free_voice_same, free_voice_diff, free_sms_same, fr
 
 
 --
+-- Data for Name: occ; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.occ (occ_id, msisdn, one_time_service_id, service_processed) FROM stdin;
+\.
+
+
+--
+-- Data for Name: one_time_service; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.one_time_service (one_time_service_id, osname, osfee) FROM stdin;
+\.
+
+
+--
 -- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.profile (pid, pname, one_time_fee, renew_duration, pfees, recurring_services, fid) FROM stdin;
+COPY public.profile (pid, pname, renew_duration, pfees, fid) FROM stdin;
 \.
 
 
@@ -339,7 +511,7 @@ COPY public.profile (pid, pname, one_time_fee, renew_duration, pfees, recurring_
 -- Data for Name: profile_services; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.profile_services (pid, sid, round_amount, fees_local_same, fees_local_diff, fees_international) FROM stdin;
+COPY public.profile_services (profile_services_id, pid, sid, round_amount, fees_local_same, fees_local_diff, fees_international) FROM stdin;
 \.
 
 
@@ -347,7 +519,7 @@ COPY public.profile_services (pid, sid, round_amount, fees_local_same, fees_loca
 -- Data for Name: services; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.services (sid, sname) FROM stdin;
+COPY public.services (sid, sname, is_recurring, recurring_fees) FROM stdin;
 \.
 
 
@@ -374,10 +546,31 @@ SELECT pg_catalog.setval('public.free_units_fid_seq', 1, false);
 
 
 --
+-- Name: occ_occ_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.occ_occ_id_seq', 1, false);
+
+
+--
+-- Name: one_time_service_one_time_service_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.one_time_service_one_time_service_id_seq', 1, false);
+
+
+--
 -- Name: profile_pid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.profile_pid_seq', 1, false);
+
+
+--
+-- Name: profile_services_profile_services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.profile_services_profile_services_id_seq', 1, false);
 
 
 --
@@ -392,6 +585,14 @@ SELECT pg_catalog.setval('public.services_sid_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.udr_udr_id_seq', 1, false);
+
+
+--
+-- Name: admin admin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin
+    ADD CONSTRAINT admin_pkey PRIMARY KEY (adminuser);
 
 
 --
@@ -419,11 +620,35 @@ ALTER TABLE ONLY public.customer_profile
 
 
 --
+-- Name: customer_profile_services customer_profile_services_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_profile_services
+    ADD CONSTRAINT customer_profile_services_pkey PRIMARY KEY (msisdn, profile_services_id, occ_id);
+
+
+--
 -- Name: free_units free_units_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.free_units
     ADD CONSTRAINT free_units_pkey PRIMARY KEY (fid);
+
+
+--
+-- Name: occ occ_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.occ
+    ADD CONSTRAINT occ_pkey PRIMARY KEY (occ_id);
+
+
+--
+-- Name: one_time_service one_time_service_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.one_time_service
+    ADD CONSTRAINT one_time_service_pkey PRIMARY KEY (one_time_service_id);
 
 
 --
@@ -439,7 +664,7 @@ ALTER TABLE ONLY public.profile
 --
 
 ALTER TABLE ONLY public.profile_services
-    ADD CONSTRAINT profile_services_pkey PRIMARY KEY (pid, sid);
+    ADD CONSTRAINT profile_services_pkey PRIMARY KEY (profile_services_id);
 
 
 --
@@ -488,6 +713,46 @@ ALTER TABLE ONLY public.customer_profile
 
 ALTER TABLE ONLY public.customer_profile
     ADD CONSTRAINT customer_profile_pid_fkey FOREIGN KEY (pid) REFERENCES public.profile(pid);
+
+
+--
+-- Name: customer_profile_services customer_profile_services_msisdn_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_profile_services
+    ADD CONSTRAINT customer_profile_services_msisdn_fkey FOREIGN KEY (msisdn) REFERENCES public.customer(msisdn);
+
+
+--
+-- Name: customer_profile_services customer_profile_services_occ_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_profile_services
+    ADD CONSTRAINT customer_profile_services_occ_id_fkey FOREIGN KEY (occ_id) REFERENCES public.occ(occ_id);
+
+
+--
+-- Name: customer_profile_services customer_profile_services_profile_services_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_profile_services
+    ADD CONSTRAINT customer_profile_services_profile_services_id_fkey FOREIGN KEY (profile_services_id) REFERENCES public.profile_services(profile_services_id);
+
+
+--
+-- Name: occ occ_msisdn_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.occ
+    ADD CONSTRAINT occ_msisdn_fkey FOREIGN KEY (msisdn) REFERENCES public.customer(msisdn);
+
+
+--
+-- Name: occ occ_one_time_service_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.occ
+    ADD CONSTRAINT occ_one_time_service_id_fkey FOREIGN KEY (one_time_service_id) REFERENCES public.one_time_service(one_time_service_id);
 
 
 --
