@@ -9,16 +9,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -26,59 +27,86 @@ import java.util.logging.Logger;
  */
 public class CDRParser {
 
-    public static void getFile() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {
+    public static void getFile() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException, InterruptedException {
         String dirPath = "/home/ahmed/Desktop/cdr/";
         String archivePath = "/home/ahmed/Desktop/archivecdr/";
         File cdrdir = new File(dirPath);
+
         String[] files = cdrdir.list();
+     while(true){
         if (files.length == 0) {
             System.out.println("dir is Empty");
-
+           
+         
         } else {
+       
             for (String filename : files) {
-             
-                    FileInputStream fis = new FileInputStream(dirPath + "/" + filename);
-                    File cdr = new File(dirPath + "/" + filename);
-                    File arccdr = new File(archivePath + "/archive" + filename);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-                    readFile(br);
-                     br.close();
-                    fis.close();
-                   
-                    Files.move(cdr.toPath(), arccdr.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                    System.out.println("moved succes");
-
+                File cdr = new File(dirPath + "/" + filename);
+                File arccdr = new File(archivePath + "/archive" + filename);
+                FileInputStream fis = new FileInputStream(dirPath + "/" + filename);
+                BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                readFile(br);
                
+                Files.move(cdr.toPath(), arccdr.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                 br.close();
+                fis.close();
+                System.out.println("moved succes");
+                
             }
-
+             monitorDirectory();
         }
-
+           
+        }
     }
 
-    public static void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException{
+    public static void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException {
         Cdr cdr = new Cdr();
         String strline = null;
         while ((strline = br.readLine()) != null) {
 
             ConnectDB con = new ConnectDB();
-            String []splited = strline.split("\\,");
-            if(splited.length>1){
-            cdr.diala =splited[0]; 
-            cdr.dialb = splited[1];
-            cdr.sid = Integer.parseInt(splited[2]);
-            cdr.duration_msg_vol = Integer.parseInt(splited[3]);
-            cdr.start_date = splited[4];
-            cdr.start_time = splited[5];
-            cdr.external_charges = splited[6];
-            con.insertCdr(cdr);
+            String[] splited = strline.split("\\,");
+            if (splited.length > 1) {
+                cdr.diala = splited[0];
+                cdr.dialb = splited[1];
+                cdr.sid = Integer.parseInt(splited[2]);
+                cdr.duration_msg_vol = Integer.parseInt(splited[3]);
+                cdr.start_date = splited[4];
+                cdr.start_time = splited[5];
+                cdr.external_charges = splited[6];
+                con.insertCdr(cdr);
             }
         }
 
     }
 
-    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException, SQLException {
-        getFile();
+    public static void monitorDirectory() throws IOException, InterruptedException, FileNotFoundException, ClassNotFoundException, SQLException {
+        Path cdrFolder = Paths.get("/home/ahmed/Desktop/cdr/");
+		WatchService watchService = FileSystems.getDefault().newWatchService();
+		cdrFolder.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
+               
+		boolean valid = true;
+		do {
+			WatchKey watchKey = watchService.take();
+
+			for (WatchEvent event : watchKey.pollEvents()) {
+				WatchEvent.Kind kind = event.kind();
+				if (StandardWatchEventKinds.ENTRY_CREATE.equals(event.kind())) {
+					String fileName = event.context().toString();
+					System.out.println("File Created:" + fileName);
+                                        getFile();
+				}
+			}
+			valid = watchKey.reset();
+
+		} while (valid);
+
+    }
+
+    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException, SQLException, InterruptedException {
+
+        monitorDirectory();
+        
     }
 
 }
