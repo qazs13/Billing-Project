@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  */
 public class CDRParser {
 
-    public static void getFile() {
+    public static void getFile() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {
         String dirPath = "/home/ahmed/Desktop/cdr/";
         String archivePath = "/home/ahmed/Desktop/archivecdr/";
         File cdrdir = new File(dirPath);
@@ -36,35 +36,35 @@ public class CDRParser {
 
         } else {
             for (String filename : files) {
-                try {
+             
                     FileInputStream fis = new FileInputStream(dirPath + "/" + filename);
                     File cdr = new File(dirPath + "/" + filename);
-                    File arccdr = new File(archivePath + "/" + filename);
+                    File arccdr = new File(archivePath + "/archive" + filename);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     readFile(br);
+                     br.close();
                     fis.close();
-                    br.close();
+                   
                     Files.move(cdr.toPath(), arccdr.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                     System.out.println("moved succes");
 
-                } catch (Exception e) {
-
-                }
+               
             }
 
         }
 
     }
 
-    public static void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException {
+    public static void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException{
         Cdr cdr = new Cdr();
         String strline = null;
         while ((strline = br.readLine()) != null) {
 
             ConnectDB con = new ConnectDB();
-            String[] splited = strline.split(",");
-            cdr.diala = splited[0];
+            String []splited = strline.split("\\,");
+            if(splited.length>1){
+            cdr.diala =splited[0]; 
             cdr.dialb = splited[1];
             cdr.sid = Integer.parseInt(splited[2]);
             cdr.duration_msg_vol = Integer.parseInt(splited[3]);
@@ -72,12 +72,12 @@ public class CDRParser {
             cdr.start_time = splited[5];
             cdr.external_charges = splited[6];
             con.insertCdr(cdr);
-
+            }
         }
 
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException, SQLException {
         getFile();
     }
 
