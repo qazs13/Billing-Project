@@ -59,9 +59,11 @@ public class Database {
         try
         {
             connect();
-            sqlCommand = "INSERT INTO services (sname) VALUES (?);";
+            sqlCommand = "INSERT INTO services (sname,is_recurring,recurring_fees) VALUES (?,?,?);";
             preparedStatment = connection.prepareStatement(sqlCommand);
             preparedStatment.setString(1, service.getSname());
+            preparedStatment.setBoolean(2, service.getIsRecurring());
+            preparedStatment.setFloat(3, service.getServiceFees());
             preparedStatment.execute();
             operation = true;
         }
@@ -77,6 +79,30 @@ public class Database {
         }
     }
     
+    public boolean addOneTimeService (Services service)
+    {
+        try
+        {
+            connect();
+            sqlCommand = "INSERT INTO onetimeservice (osname,osfees) VALUES (?,?);";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, service.getSname());
+            preparedStatment.setFloat(2, service.getServiceFees());
+            preparedStatment.execute();
+            operation = true;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operation = false;
+        }
+        finally
+        {
+            stop();
+            return operation;
+        }
+    }    
+    
     public Services getAllServices()
     {
         Services allServices = new Services();
@@ -88,8 +114,10 @@ public class Database {
             result = preparedStatment.executeQuery();
             while (result.next())
             {
-                allServices.getAllServices().add(new Services(result.getInt(1), result.getString(2)));
+                allServices.getAllServices().add(new Services(result.getInt(1), result.getString(2),
+                        result.getBoolean(3),result.getFloat(4)));
             }
+            allServices = getOneTimeServices(allServices);
         }
         catch (SQLException ex)
         {
@@ -98,6 +126,30 @@ public class Database {
         finally
         {
             stop();
+            return allServices;
+        }
+    }
+    
+    private Services getOneTimeServices (Services allServices)
+    {
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM oneTimeService";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allServices.getAllServices().add(new Services(result.getInt(1), result.getString(2),
+                        true,result.getFloat(3),null));
+            }            
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
             return allServices;
         }
     }

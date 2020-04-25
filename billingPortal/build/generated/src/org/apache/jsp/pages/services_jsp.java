@@ -117,6 +117,20 @@ public final class services_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <span>Enter Service Name</span>\n");
       out.write("        <input type=\"text\" name=\"serviceName\" placeholder=\"Serivce Name\" required>\n");
       out.write("      </div>\n");
+      out.write("      <div class=\"addServiceInput\">\n");
+      out.write("        <span>Service Additional Info</span>\n");
+      out.write("        <select name=\"recurring\" size=\"1\">\n");
+      out.write("          <option value=\"false\">Not Recurring</option>\n");
+      out.write("          <option value=\"true\">Recurring</option>          \n");
+      out.write("        </select>\n");
+      out.write("        <select name=\"oneTimeService\" size=\"1\">\n");
+      out.write("          <option value=\"false\">Not one Time</option>\n");
+      out.write("          <option value=\"true\">One Time</option>          \n");
+      out.write("        </select>\n");
+      out.write("        <label>Service Fee</label>\n");
+      out.write("        <input type=\"number\" name=\"serviceFees\" value=\"0\" min=\"0\"/>\n");
+      out.write("        <h6>LE</h6>\n");
+      out.write("      </div>\n");
       out.write("      <div class=\"addServiceSubmit\">\n");
       out.write("        <input id=\"su\" class=\"sub\" type=\"submit\" value=\"ADD SERVICE\">\n");
       out.write("      </div>\n");
@@ -128,6 +142,8 @@ public final class services_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("            <th scope=\"col\">#</th>\n");
       out.write("            <th scope=\"col\">Service ID</th>\n");
       out.write("            <th scope=\"col\">Service Name</th>\n");
+      out.write("            <th scope=\"col\">Type Of Service</th>\n");
+      out.write("            <th scope=\"col\">Service Fee</th>            \n");
       out.write("          </tr>\n");
       out.write("        </thead>\n");
       out.write("        <tbody>\n");
@@ -143,6 +159,25 @@ for (int i = 0; i < allServices.getAllServices().size(); i++){
       out.write("            <td>");
       out.print(allServices.getAllServices().elementAt(i).getSname());
       out.write("</td>\n");
+if (allServices.getAllServices().elementAt(i).getIsOneTime() == false && allServices.getAllServices().elementAt(i).getIsRecurring()== false){
+      out.write("\n");
+      out.write("            <td>Normal Service</td>\n");
+      out.write("            <td>It differ from Profile to another</td>\n");
+}else{
+      out.write('\n');
+if (allServices.getAllServices().elementAt(i).getIsOneTime() == true){
+      out.write("\n");
+      out.write("            <td>One Time Service</td>\n");
+}else if (allServices.getAllServices().elementAt(i).getIsRecurring()== true){
+      out.write("\n");
+      out.write("            <td>Recurring Service</td>\n");
+}
+      out.write("\n");
+      out.write("            <td>");
+      out.print(allServices.getAllServices().elementAt(i).getServiceFees());
+      out.write(" LE</td>\n");
+}
+      out.write("\n");
       out.write("          </tr>\n");
 }
       out.write("\n");

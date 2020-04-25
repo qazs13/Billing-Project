@@ -129,7 +129,7 @@ header .secondRowHeader
 }
 .fullSize .addService .addSeriveTitle
 {
-    height: 150px;
+    height: 130px;
     display: block;
     text-align: center;
     line-height: 150px;
@@ -152,14 +152,53 @@ header .secondRowHeader
     width: 220px;
     margin-left: 65px;
     margin-top: 15px;
+    margin-bottom: 15px;
     border-radius: 10px;
     padding-left: 5px;
     border-color: chocolate;    
 }
+.fullSize .addService .addServiceInput select
+{
+    display: inline-block;
+    margin-left: 8.5%;
+    margin-top: 4%; 
+    border-radius: 25px;
+    color: #FF7900;
+    background-color: black;
+}
+.fullSize .addService .addServiceInput select:hover
+{
+    cursor: pointer;
+}
+.fullSize .addService .addServiceInput label
+{
+    color: #FF7900;    
+    margin-left: 10px;
+    margin-top: 4%; 
+    font-family: monospace;
+    font-size: 20px;
+    text-emphasis: 20px;       
+}
+.fullSize .addService .addServiceInput input[type="number"]
+{
+    display: inline-block;
+    margin-top: 4%;
+    padding-left: 50px;
+    width: 35%;
+    margin-left: 5px;
+    color: #FF7900;
+    background-color: black;
+    border-radius: 25px;
+}
+.fullSize .addService .addServiceInput h6
+{
+    color: #FF7900;
+    display: inline;
+}
 .fullSize .addService .addServiceSubmit
 {
     height: 50px;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 .fullSize .addService .addServiceSubmit .sub
 {
