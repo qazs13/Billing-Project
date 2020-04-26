@@ -7,7 +7,7 @@ public class Database {
 
      private final String url = "jdbc:postgresql://localhost:5432/billing_system";
     private final String user = "postgres";
-    private final String password = "amrwsk13";
+    private final String password = "1234";
 
 
     private Connection connection = null;
@@ -84,7 +84,7 @@ public class Database {
         try
         {
             connect();
-            sqlCommand = "INSERT INTO onetimeservice (osname,osfees) VALUES (?,?);";
+            sqlCommand = "INSERT INTO  one_time_service (osname,osfee) VALUES (?,?);";
             preparedStatment = connection.prepareStatement(sqlCommand);
             preparedStatment.setString(1, service.getSname());
             preparedStatment.setFloat(2, service.getServiceFees());
@@ -135,7 +135,7 @@ public class Database {
         try
         {
             connect();
-            sqlCommand = "SELECT * FROM oneTimeService";
+            sqlCommand = "SELECT * FROM one_time_service";
             preparedStatment = connection.prepareStatement(sqlCommand);
             result = preparedStatment.executeQuery();
             while (result.next())
