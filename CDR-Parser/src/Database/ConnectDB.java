@@ -5,6 +5,8 @@
  */
 package Database;
 import CdrModel.Cdr;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 /**
  *
@@ -49,5 +51,19 @@ public class ConnectDB {
         System.out.println("inserted");
         pst.close();
         con.close();
+    }
+    public static void main(String[] args) throws IOException {
+        String path = new File(".").getCanonicalPath();
+        System.out.println(path);
+        String directoryName = path.concat("/cdr");
+        String directoryName1 = path.concat("/archivecdr");
+        System.out.println(directoryName);
+        File dir = new File(directoryName);
+        File dir1 = new File(directoryName1);
+        if(!dir.exists()&&!dir1.exists()){
+            dir.mkdir();
+            dir1.mkdir();
+        
+        }
     }
 }
