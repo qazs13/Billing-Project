@@ -1,7 +1,8 @@
 profileName = "";
 document.getElementById('firstPageProfileSubmit').addEventListener("click",function(e){
-    if (e.path[2][0].value !== "" && e.path[2][1].value !== 0 && e.path[2][2].value !== 0)
+    if (e.path[2][0].value != "" && e.path[2][1].value != 0 && e.path[2][2].value != 0)
     {
+        console.log(e.path[2][1].value);
         e.preventDefault();
         url = "/billingPortal/Add_Profile";
         var xmlhttp;
