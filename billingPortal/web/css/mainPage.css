@@ -230,6 +230,236 @@ header .secondRowHeader
     float: right;
 }
 /*Service*/
+/**Profile*/
+.fullAreaProfile
+{
+    height: 570px;
+}
+.fullAreaProfile .firstPageProfile
+{
+    height: 500px;
+    width: 50%;
+    display: flexbox;
+    margin: auto;
+    position: relative;
+    top: 7%;
+    border: 3px outset #FF7900;
+    border-radius: 25px;
+    background-color: rgb(0, 0, 0);   
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageTitle
+{
+    margin-top: 5%;
+    height: auto;
+    text-align: center;
+    text-indent: 10px;
+    font-size: 40px;
+    font-family: monospace;
+    color: #FF7900;
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageName
+{
+    display: inline-block;
+    margin-top: 2%;
+    margin-left: 5%;    
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageName span
+{
+    display: grid;
+    color: #FF7900;    
+    margin-left: 10px;
+    font-family: monospace;
+    font-size: 20px;
+    text-emphasis: 20px;    
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageName input[type="text"]
+{
+    width: 220px;
+    margin-left: 65px;
+    margin-top: 15px;
+    border-radius: 10px;
+    padding-left: 5px;
+    border-color: chocolate;    
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageFees
+{
+    display: inline-block;
+    margin-top: 2%;
+    margin-left: 5%;
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageFees span
+{
+    display: grid;
+    color: #FF7900;    
+    margin-left: 10px;
+    font-family: monospace;
+    font-size: 20px;
+    text-emphasis: 20px;    
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageFees input[type="number"]
+{
+    width: 220px;
+    margin-left: 65px;
+    margin-top: 15px;
+    border-radius: 10px;
+    padding-left: 5px;
+    text-align: center;
+    color: black; 
+    border-color: chocolate;    
+}
+.fullAreaProfile .firstPageProfile .firstProfilePageFees label
+{
+    color: #FF7900;    
+    margin-left: 5px;   
+}
+.fullAreaProfile .firstPageProfile .addFirstPageProfileSubmit
+{
+    float: right;
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+}
+.fullAreaProfile .firstPageProfile .addFirstPageProfileSubmit .sub
+{
+    display: grid;
+    height: 50px;
+    width: 150px;
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: bold;
+    border-color: chocolate;
+    background-color: white;
+    color: black;
+    border-radius: 15px;
+}
+.fullAreaProfile .firstPageProfile .addFirstPageProfileSubmit .sub:hover
+{
+    background-color: #FF7900;
+    border-color: white;
+    color: white;
+    border-radius: 15px;
+}
+.fullAreaProfile .secondPageProfile
+{
+    height: 500px;
+    width: 50%;
+    display: none;
+    margin: auto;
+    position: relative;
+    top: 7%;
+    border: 3px outset #FF7900;
+    border-radius: 25px;
+    background-color: rgb(0, 0, 0)
+}
+.fullAreaProfile .secondPageProfile .secondProfilePageTitle
+{
+    margin-top: 5%;
+    height: auto;
+    text-align: center;
+    text-indent: 10px;
+    font-size: 40px;
+    font-family: monospace;
+    color: #FF7900;    
+}
+.fullAreaProfile .secondPageProfile .secondProfilePageName span
+{
+    display: grid;
+    color: #FF7900;    
+    margin-left: 10px;
+    font-family: monospace;
+    font-size: 20px;
+    text-emphasis: 20px;    
+}
+.fullAreaProfile .secondPageProfile .secondProfilePageName .secondPageProfileSelectService
+{
+    width: 120px;
+    margin-left: 65px;
+    margin-top: 15px;
+    border-radius: 10px;
+    padding-left: 5px;
+    border-color: chocolate;
+}
+.fullAreaProfile .secondPageProfile .secondProfilePageName input[type="button"]
+{
+    width: 120px;
+    margin-left: 65px;
+    margin-top: 15px;
+    border-radius: 10px;
+    padding-left: 5px;
+    border-color: chocolate;    
+}
+.fullAreaProfile .secondPageProfile .allSelectedServices
+{
+    height: auto;
+}
+.fullAreaProfile .secondPageProfile .allSelectedServices section
+{
+    border-top: 1px solid #FF7900;
+    border-bottom: 1px solid #FF7900;
+    margin-top: 10px;
+}
+.fullAreaProfile .secondPageProfile .allSelectedServices section span
+{
+    display: grid;
+    color: white;    
+    margin-left: 10px;
+    font-family: monospace;
+    font-size: 20px;
+    text-emphasis: 20px;   
+}
+.fullAreaProfile .secondPageProfile .allSelectedServices section label
+{
+    color: #FF7900;
+    font-size: 15px;
+    margin-left: 10px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.fullAreaProfile .secondPageProfile .allSelectedServices section input[type="number"]
+{
+    width: 100px;
+    margin-left: 10px;
+    margin-top: 5px;
+    border-radius: 10px;
+    padding-left: 5px;
+    text-align: center;
+    color: black; 
+    border-color: chocolate;    
+}
+.fullAreaProfile .secondPageProfile .allSelectedServices section h6
+{
+    display: inline;
+    color: #FF7900; 
+    margin-right: 15px;
+    margin-left: 5px;
+}
+.fullAreaProfile .secondPageProfile .addSecondPageProfileSubmit
+{
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+.fullAreaProfile .secondPageProfile .addSecondPageProfileSubmit .sub
+{
+    display: grid;
+    height: 50px;
+    width: 150px;
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: bold;
+    border-color: chocolate;
+    background-color: white;
+    color: black;
+    border-radius: 15px;
+}
+.fullAreaProfile .secondPageProfile .addSecondPageProfileSubmit .sub:hover
+{
+    background-color: #FF7900;
+    border-color: white;
+    color: white;
+    border-radius: 15px;
+}
+/**Profile*/
 /*Footer*/
 .footerOrange
 {

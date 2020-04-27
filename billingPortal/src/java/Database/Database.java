@@ -7,7 +7,7 @@ public class Database {
 
      private final String url = "jdbc:postgresql://localhost:5432/billing_system";
     private final String user = "postgres";
-    private final String password = "1234";
+    private final String password = "amrwsk13";
 
 
     private Connection connection = null;
@@ -151,6 +151,61 @@ public class Database {
         finally
         {
             return allServices;
+        }
+    }
+    
+    public boolean checkProfileExistance (Profile profile)
+    {
+        try
+        {
+            int numberOfProfiles = 0;
+            connect();
+            sqlCommand = "SELECT COUNT (*) FROM profile WHERE pname = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, profile.getpName());
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                numberOfProfiles = result.getInt(1);
+            }
+            if (numberOfProfiles == 0)
+            {
+                operation = true;
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return operation;
+        }
+    }
+    
+    public boolean addNewProfile (Profile profile)
+    {
+        try
+        {
+            connect();
+            sqlCommand = "INSERT INTO profile (pname,renew_duration,pfees) VALUES (?,?,?)";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, profile.getpName());
+            preparedStatment.setInt(2, profile.getRenew_Duration());
+            preparedStatment.setFloat(3, profile.getRenew_Duration());
+            preparedStatment.execute();
+            operation = true;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operation = false;
+        }
+        finally
+        {
+            stop();
+            return operation;
         }
     }
         

@@ -3,10 +3,8 @@ package org.apache.jsp.pages;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
-import Database_Tables.Services;
-import Database.Database;
 
-public final class services_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
@@ -50,9 +48,7 @@ public final class services_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
+      out.write('\n');
       out.write("<!DOCTYPE html>\n");
       out.write("<html lang=\"en\">\n");
       out.write("<head>\n");
@@ -103,89 +99,52 @@ public final class services_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("      </div>\n");
       out.write("  </header>\n");
       out.write("<!-- Header -->\n");
-      out.write('\n');
-
-    Database db = new Database();
-    Services allServices = db.getAllServices();
-
       out.write("\n");
-      out.write("<!-- Service Area -->\n");
-      out.write("  <div class=\"container-fluid fullSize\">\n");
-      out.write("      <form class=\"addService\">\n");
-      out.write("      <span class=\"addSeriveTitle\">Add Service</span>\n");
-      out.write("      <div class=\"addServiceInput\">\n");
-      out.write("        <span>Enter Service Name</span>\n");
-      out.write("        <input type=\"text\" name=\"serviceName\" placeholder=\"Serivce Name\" required>\n");
+      out.write("<!-- Profile Area -->\n");
+      out.write("  <div class=\"container-fluid fullAreaProfile\">\n");
+      out.write("    <form class=\"firstPageProfile\">\n");
+      out.write("      <div class=\"firstProfilePageTitle\">\n");
+      out.write("        <span>Main Profile Info</span>\n");
       out.write("      </div>\n");
-      out.write("      <div class=\"addServiceInput\">\n");
-      out.write("        <span>Service Additional Info</span>\n");
-      out.write("        <select name=\"recurring\" size=\"1\">\n");
-      out.write("          <option value=\"false\">Not Recurring</option>\n");
-      out.write("          <option value=\"true\">Recurring</option>          \n");
-      out.write("        </select>\n");
-      out.write("        <select name=\"oneTimeService\" size=\"1\">\n");
-      out.write("          <option value=\"false\">Not one Time</option>\n");
-      out.write("          <option value=\"true\">One Time</option>          \n");
-      out.write("        </select>\n");
-      out.write("        <label>Service Fee</label>\n");
-      out.write("        <input type=\"number\" name=\"serviceFees\" value=\"0\" min=\"0\"/>\n");
-      out.write("        <h6>LE</h6>\n");
+      out.write("      <div class=\"firstProfilePageName\">\n");
+      out.write("        <span>Profile Name</span>\n");
+      out.write("        <input id=\"profileName\" type=\"text\" placeholder=\"Enter Profile Name\" required name=\"profileName\"/>\n");
       out.write("      </div>\n");
-      out.write("      <div class=\"addServiceSubmit\">\n");
-      out.write("        <input id=\"su\" class=\"sub\" type=\"submit\" value=\"ADD SERVICE\">\n");
+      out.write("      <div class=\"firstProfilePageFees\">\n");
+      out.write("        <span>Profile Fees</span>\n");
+      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"profileFees\"/>\n");
+      out.write("        <label>LE</label>\n");
+      out.write("      </div> \n");
+      out.write("      <div class=\"firstProfilePageFees\">\n");
+      out.write("        <span>Renew Duration</span>\n");
+      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"renewProfileDuration\"/>\n");
+      out.write("        <label>days</label>\n");
       out.write("      </div>\n");
+      out.write("      <div class=\"addFirstPageProfileSubmit\">\n");
+      out.write("        <input id=\"firstPageProfileSubmit\" class=\"sub\" type=\"submit\" value=\"Next Page\">      \n");
+      out.write("      </div>  \n");
       out.write("    </form>\n");
-      out.write("    <div class=\"showAllServices overflow-auto\">\n");
-      out.write("      <table class=\"table table-hover\">\n");
-      out.write("        <thead>\n");
-      out.write("          <tr>\n");
-      out.write("            <th scope=\"col\">#</th>\n");
-      out.write("            <th scope=\"col\">Service ID</th>\n");
-      out.write("            <th scope=\"col\">Service Name</th>\n");
-      out.write("            <th scope=\"col\">Type Of Service</th>\n");
-      out.write("            <th scope=\"col\">Service Fee</th>            \n");
-      out.write("          </tr>\n");
-      out.write("        </thead>\n");
-      out.write("        <tbody>\n");
-for (int i = 0; i < allServices.getAllServices().size(); i++){
-      out.write("\n");
-      out.write("          <tr>\n");
-      out.write("            <th scope=\"row\">");
-      out.print(i+1);
-      out.write("</th>\n");
-      out.write("            <td>");
-      out.print(allServices.getAllServices().elementAt(i).getSid());
-      out.write("</td>\n");
-      out.write("            <td>");
-      out.print(allServices.getAllServices().elementAt(i).getSname());
-      out.write("</td>\n");
-if (allServices.getAllServices().elementAt(i).getIsOneTime() == false && allServices.getAllServices().elementAt(i).getIsRecurring()== false){
-      out.write("\n");
-      out.write("            <td>Normal Service</td>\n");
-      out.write("            <td>It differ from Profile to another</td>\n");
-}else{
-      out.write('\n');
-if (allServices.getAllServices().elementAt(i).getIsOneTime() == true){
-      out.write("\n");
-      out.write("            <td>One Time Service</td>\n");
-}else if (allServices.getAllServices().elementAt(i).getIsRecurring()== true){
-      out.write("\n");
-      out.write("            <td>Recurring Service</td>\n");
-}
-      out.write("\n");
-      out.write("            <td>");
-      out.print(allServices.getAllServices().elementAt(i).getServiceFees());
-      out.write(" LE</td>\n");
-}
-      out.write("\n");
-      out.write("          </tr>\n");
-}
-      out.write("\n");
-      out.write("        </tbody>\n");
-      out.write("      </table>\n");
-      out.write("    </div>\n");
+      out.write("<!--/////////////////////////////////////////////////////////////////////////////////////////////-->\n");
+      out.write("    <form class=\"secondPageProfile overflow-auto\" id=\"secondPageProfile\">\n");
+      out.write("      <div class=\"secondProfilePageTitle\">\n");
+      out.write("        <span id=\"secondProfilePageTitle\">Add Services to </span>\n");
+      out.write("      </div>\n");
+      out.write("      <div class=\"secondProfilePageName\">\n");
+      out.write("        <span>Add Service</span>\n");
+      out.write("        <select class=\"secondPageProfileSelectService\" name=\"selectService\" id=\"selectService\">\n");
+      out.write("          <option>service1</option>\n");
+      out.write("          <option>service2</option>\n");
+      out.write("          <option>service3</option>\n");
+      out.write("        </select>\n");
+      out.write("        <input type=\"button\" id=\"addServiceButton\" value=\"+\"/>\n");
+      out.write("      </div>\n");
+      out.write("      <div class=\"allSelectedServices\" id=\"allSelectedServices\"></div>\n");
+      out.write("      <div class=\"addSecondPageProfileSubmit\">\n");
+      out.write("        <input id=\"secondPageProfileSubmit\" class=\"sub\" type=\"submit\" value=\"Next Page\">  \n");
+      out.write("      </div>  \n");
+      out.write("    </form>\n");
       out.write("  </div>\n");
-      out.write("<!-- Service Area -->\n");
+      out.write("<!-- Profile Area -->\n");
       out.write("<!-- Footer -->\n");
       out.write("  <footer class=\"container-fluid footerOrange\">\n");
       out.write("    <p class=\"text-center\">Welcome to Admin Portal of Orange Mobile Services</ps>\n");
@@ -196,7 +155,7 @@ if (allServices.getAllServices().elementAt(i).getIsOneTime() == true){
       out.write("<script src=\"../js/all.js\"></script>\n");
       out.write("<script src=\"../js/bootstrap.min.js\"></script>    ");
       out.write("\n");
-      out.write("<script src=\"../js/services.js\"></script>  \n");
+      out.write("<script src=\"../js/addProfile.js\"></script>  \n");
       out.write("</body>\n");
       out.write("</html>");
     } catch (Throwable t) {

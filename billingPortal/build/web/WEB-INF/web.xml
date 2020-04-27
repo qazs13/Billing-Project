@@ -8,6 +8,10 @@
         <servlet-name>Add_Services</servlet-name>
         <servlet-class>Add_Functions.Add_Services</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Add_Profile</servlet-name>
+        <servlet-class>Add_Functions.Add_Profile</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginCheck</servlet-name>
         <url-pattern>/loginCheck</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>Add_Services</servlet-name>
         <url-pattern>/Add_Services</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Add_Profile</servlet-name>
+        <url-pattern>/Add_Profile</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
