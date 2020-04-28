@@ -1,7 +1,9 @@
 profileName = "";
-document.getElementById('firstPageProfileSubmit').addEventListener("click",function(e){
-    if (e.path[2][0].value !== "" && e.path[2][1].value !== 0 && e.path[2][2].value !== 0)
+document.getElementById('firstPageProfileSubmit').addEventListener("click",function(e)
+{
+    if (e.path[2][0].value != "" && e.path[2][1].value != 0 && e.path[2][2].value != 0)
     {
+        console.log(e.path[2][1].value);
         e.preventDefault();
         url = "/billingPortal/Add_Profile";
         var xmlhttp;
@@ -53,7 +55,7 @@ document.getElementById('addServiceButton').addEventListener("click",function(e)
         servicesCounter++;
         allServicesName.push(selectedService);
         allSelectedServicesDiv.innerHTML += '<section><span>'+selectedService+'</span>'+
-        '<label>Round Unit</label><input type="number" value="0" min="1" name="serviceRound'+selectedService+'"><h6>Minutes/SMSs/MBs</h6>'+
+        '<label>Round Unit</label><input type="number" value="0" min="1" name="serviceRound'+selectedService+'"><h6>Seconds/SMSs/MBs</h6>'+
         '<label>Fees For Same Local Operator</label><input type="number" value="0" min="1" name="serviceFeesSameLocal'+selectedService+'"><h6>LE</h6>'+
         '<label>Fees For Others Local Operator</label><input type="number" value="0" min="1" name="serviceFeesOtherLocal'+selectedService+'"><h6>LE</h6>'+
         '<label>Fees For International</label><input type="number" value="0" min="1" name="serviceFeesInternational'+selectedService+'"><h6>LE</h6></section>';
@@ -61,5 +63,53 @@ document.getElementById('addServiceButton').addEventListener("click",function(e)
     else
     {
         alert("Sorry You Have Added this Serivce Already");
+    }
+});
+
+document.getElementById('secondPageProfileSubmit').addEventListener("click",function(e)
+{
+    if (servicesCounter > 0)
+    {
+        document.getElementById('allServicesNames').value = allServicesName;
+        document.getElementById('profileNameServices').value = profileName;
+        e.preventDefault();
+        
+        url = "/billingPortal/Add_Services_To_Profile";
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {
+            xmlhttp = new XMLHttpRequest(); //for IE7+, Firefox, Chrome, Opera, Safari
+        }
+        else
+        {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); //for IE6, IE5
+        }
+
+        xmlhttp.open("POST",url,true);
+
+        xmlhttp.onreadystatechange = function()
+        {
+            if(xmlhttp.readyState === XMLHttpRequest.DONE) 
+            {
+                var status = xmlhttp.status;
+                if (status === 0 || (status >= 200 && status < 400)) 
+                {
+                    alert ("SUCCESSFULL STEP");
+                }
+                else
+                {
+                    alert("Profile is Already Exist or Maybe Something wrong happened");
+                }
+            }
+        };
+    
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        
+        xmlhttp.send($('form').serialize());
+        console.log($('form').serialize());
+    }
+    else
+    {
+        alert("Please Add At Lease One Serivce");
     }
 });

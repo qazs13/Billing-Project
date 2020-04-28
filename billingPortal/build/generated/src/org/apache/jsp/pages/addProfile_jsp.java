@@ -3,9 +3,15 @@ package org.apache.jsp.pages;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
+import Database_Tables.Services;
+import Database.Database;
 
 public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
+
+
+    Database db = new Database();
+    Services service = db.getAllNotOneTimeServices();
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
 
@@ -48,7 +54,9 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write('\n');
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html lang=\"en\">\n");
       out.write("<head>\n");
@@ -99,6 +107,7 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("      </div>\n");
       out.write("  </header>\n");
       out.write("<!-- Header -->\n");
+      out.write('\n');
       out.write("\n");
       out.write("<!-- Profile Area -->\n");
       out.write("  <div class=\"container-fluid fullAreaProfile\">\n");
@@ -132,15 +141,21 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("      <div class=\"secondProfilePageName\">\n");
       out.write("        <span>Add Service</span>\n");
       out.write("        <select class=\"secondPageProfileSelectService\" name=\"selectService\" id=\"selectService\">\n");
-      out.write("          <option>service1</option>\n");
-      out.write("          <option>service2</option>\n");
-      out.write("          <option>service3</option>\n");
+for(int i = 0; i < service.getAllServices().size(); i++){
+      out.write("\n");
+      out.write("          <option>");
+      out.print(service.getAllServices().elementAt(i).getSname());
+      out.write("</option>\n");
+}
+      out.write("     \n");
       out.write("        </select>\n");
       out.write("        <input type=\"button\" id=\"addServiceButton\" value=\"+\"/>\n");
       out.write("      </div>\n");
       out.write("      <div class=\"allSelectedServices\" id=\"allSelectedServices\"></div>\n");
       out.write("      <div class=\"addSecondPageProfileSubmit\">\n");
-      out.write("        <input id=\"secondPageProfileSubmit\" class=\"sub\" type=\"submit\" value=\"Next Page\">  \n");
+      out.write("        <input type=\"hidden\" value=\"\" id=\"allServicesNames\" name=\"allServicesName\"/>\n");
+      out.write("        <input type=\"hidden\" value=\"\" id=\"profileNameServices\" name=\"profileNameServices\"/>\n");
+      out.write("        <input id=\"secondPageProfileSubmit\" class=\"sub\" type=\"submit\" value=\"Next Page\"/>  \n");
       out.write("      </div>  \n");
       out.write("    </form>\n");
       out.write("  </div>\n");

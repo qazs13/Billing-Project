@@ -23,7 +23,7 @@ public class Add_Profile extends HttpServlet
         System.out.println("////////////////////////////////////////////////////////////");
         System.out.println("New Profile Is HERE");
         System.out.println("////////////////////////////////////////////////////////////");
-        if (db.checkProfileExistance(profile))
+        if (!db.checkProfileExistance(profile))
         {
             operation = db.addNewProfile(profile);
             System.out.println("////////////////////////////////////////////////////////////");

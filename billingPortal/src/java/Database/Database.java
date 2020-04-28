@@ -130,6 +130,32 @@ public class Database {
         }
     }
     
+    public Services getAllNotOneTimeServices()
+    {
+        Services allServices = new Services();
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM services";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allServices.getAllServices().add(new Services(result.getInt(1), result.getString(2),
+                        result.getBoolean(3),result.getFloat(4)));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return allServices;
+        }
+    }    
+    
     private Services getOneTimeServices (Services allServices)
     {
         try
@@ -154,6 +180,32 @@ public class Database {
         }
     }
     
+    public int getServiceIDByItsName (String serviceName)
+    {
+        int serviceNumber = 0;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT sid FROM services WHERE sname = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, serviceName);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                serviceNumber = result.getInt(1);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return serviceNumber;
+        }
+    }
+    
     public boolean checkProfileExistance (Profile profile)
     {
         try
@@ -168,7 +220,7 @@ public class Database {
             {
                 numberOfProfiles = result.getInt(1);
             }
-            if (numberOfProfiles == 0)
+            if (numberOfProfiles > 0)
             {
                 operation = true;
             }
@@ -206,6 +258,62 @@ public class Database {
         {
             stop();
             return operation;
+        }
+    }
+    
+    public int getProfileID (String profileName)
+    {
+        int profileID = 0;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT pid from PROFILE WHERE pname = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, profileName);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                profileID = result.getInt(1);
+            }
+        }
+        catch(SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return profileID;
+        }
+    }
+    
+    public int addProfileServices (Profile_Services profile_Services)
+    {
+        int operatio = 0;
+        try
+        {
+            connect();
+            sqlCommand = "INSERT INTO profile_services (pid, sid, round_amount, fees_local_same, fees_local_diff, fees_international)"
+                    + "VALUES (?,?,?,?,?,?)";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, profile_Services.getPid());
+            preparedStatment.setInt(2, profile_Services.getSid());
+            preparedStatment.setInt(3, profile_Services.getRound_amount());
+            preparedStatment.setFloat(4, profile_Services.getFees_local_same());
+            preparedStatment.setFloat(5, profile_Services.getFees_local_diff());
+            preparedStatment.setFloat(6, profile_Services.getFees_international());
+            preparedStatment.execute();
+            operatio = 1;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operatio = 0;
+        }
+        finally
+        {
+            stop();
+            return operatio;
         }
     }
         
