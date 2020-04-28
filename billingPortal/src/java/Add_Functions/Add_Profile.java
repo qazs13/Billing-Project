@@ -16,10 +16,11 @@ public class Add_Profile extends HttpServlet
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
     {
         Database db = new Database();
+        boolean operation = false;
         Profile profile = new Profile(req.getParameter("profileName"),
                 Integer.parseInt(req.getParameter("renewProfileDuration")),
                 Float.parseFloat(req.getParameter("profileFees")));
-        boolean operation = false;
+        
         System.out.println("////////////////////////////////////////////////////////////");
         System.out.println("New Profile Is HERE");
         System.out.println("////////////////////////////////////////////////////////////");

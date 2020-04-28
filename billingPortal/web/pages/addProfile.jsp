@@ -51,6 +51,41 @@
         <input id="secondPageProfileSubmit" class="sub" type="submit" value="Next Page"/>  
       </div>  
     </form>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////-->
+    <form class="thirdPageProfile overflow-auto" id="thirdPageProfile">
+      <div class="thirdPageProfilePageTitle">
+        <span id="thirdPageProfilePageTitle">Add Free Units to </span>
+      </div>
+      <div class="thirdProfilePageFreeUnits">
+        <span>Free Unit Voice On Net</span>
+        <input type="number" required min="1" value="0" name="free_Unit_Voice_On_Net"/>
+        <label>Unit</label>
+      </div>
+      <div class="thirdProfilePageFreeUnits">
+        <span>Free Unit Voice On Cross Net</span>
+        <input type="number" required min="1" value="0" name="free_Unit_Voice_On_Cross_Net"/>
+        <label>Unit</label>
+      </div>
+      <div class="thirdProfilePageFreeUnits">
+        <span>Free Unit SMS On Net</span>
+        <input type="number" required min="1" value="0" name="free_Unit_SMS_On_Net"/>
+        <label>Unit</label>
+      </div>
+      <div class="thirdProfilePageFreeUnits">
+        <span>Free Unit SMS On Cross Net</span>
+        <input type="number" required min="1" value="0" name="free_Unit_SMS_On_Cross_Net"/>
+        <label>Unit</label>
+      </div>
+      <div class="thirdProfilePageFreeUnits">
+        <span>Free Unit for Internet</span>
+        <input type="number" required min="1" value="0" name="free_Unit_For_Internet"/>
+        <label>Unit</label>
+      </div>
+      <div class="addthirdPageProfileSubmit">
+        <input id="thirdPageProfileSubmit" class="sub" type="submit" value="Finish">  
+      </div>  
+    </form>
+</div>        
   </div>
 <!-- Profile Area -->
 <%@include file="../header&footer/scripts.html"%>

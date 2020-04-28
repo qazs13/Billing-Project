@@ -316,6 +316,35 @@ public class Database {
             return operatio;
         }
     }
+    
+    public boolean addFreeUnitsToProfile (Free_Units free_Units)
+    {
+        try
+        {
+            connect();
+            sqlCommand = "INSERT INTO free_units (free_voice_same,free_voice_diff,free_sms_same,free_sms_diff,free_internet,pid)"
+                    + "VALUES (?,?,?,?,?,?)";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setFloat(1, free_Units.getFree_voice_same());
+            preparedStatment.setFloat(2, free_Units.getFree_voice_diff());
+            preparedStatment.setFloat(3, free_Units.getFree_sms_same());
+            preparedStatment.setFloat(4, free_Units.getFree_sms_diff());
+            preparedStatment.setFloat(5, free_Units.getFree_internet());
+            preparedStatment.setInt(6, free_Units.getPid());
+            preparedStatment.execute();
+            operation = true;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operation = false;
+        }
+        finally
+        {
+            stop();
+            return operation;
+        }
+    }
         
     private void stop()
     {

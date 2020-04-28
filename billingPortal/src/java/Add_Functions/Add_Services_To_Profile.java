@@ -35,9 +35,9 @@ public class Add_Services_To_Profile extends HttpServlet
                         round_Amount, fees_local_same, fees_local_diff, fees_international);
                 operation += db.addProfileServices(profile_Services);
                 System.out.println("////////////////////////////////////////////////////////////////////////////");
-//                System.out.println(profile_Services.getSid());
-//                System.out.println(profile_Services.getRound_amount());
-//                System.out.println(profile_Services.getFees_local_same());
+                System.out.println(profile_Services.getSid());
+                System.out.println(profile_Services.getRound_amount());
+                System.out.println(profile_Services.getFees_local_same());
                 System.out.println("ADDED NEW PROFILE SERVICE SUCCESSFULLY");
                 System.out.println("////////////////////////////////////////////////////////////////////////////");  
             }
@@ -46,7 +46,7 @@ public class Add_Services_To_Profile extends HttpServlet
         {
             resp.sendError(400);
         }
-        
+
         if (operation == allServices.length)
         {
             resp.sendError(200);
