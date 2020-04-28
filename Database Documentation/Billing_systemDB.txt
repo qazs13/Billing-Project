@@ -1,0 +1,64 @@
+CREATE OR REPLACE FUNCTION profileFreeUnits(profileID integer) RETURNS SETOF free_units AS $$
+DECLARE
+BEGIN
+	RETURN QUERY(SELECT * FROM free_units WHERE pid=profileID);
+END
+$$LANGUAGE plpgsql;
+
+SELECT * FROM profileFreeUnits(1);
+------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION customerRemainedFreeUnits(profileID integer, dialNum text)RETURNS SETOF customer_profile AS $$
+DECLARE 
+BEGIN
+	RETURN QUERY(SELECT * FROM customer_profile WHERE msisdn=dialNum AND pid=profileID);
+END
+$$LANGUAGE plpgsql;
+
+SELECT * FROM customerRemainedFreeUnits(1,'01215860927');
+------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION customerUDR(dialNum text)RETURNS SETOF udr AS $$
+DECLARE
+	timestamp text;
+BEGIN
+	RETURN QUERY(SELECT * FROM udr WHERE dialA=dialNum ORDER BY TO_DATE(start_date, 'DD/MM/YYYY'));
+END
+$$LANGUAGE plpgsql;
+--------------------------------------------------------------------------------------------------------------------------------------
+used in Database class as sqlcommand:
+SELECT udr_id,( start_date || ' ' || start_time)::timestamp FROM udr WHERE dialA=dialNum ORDER BY timestamp;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION udrRow(udrID integer) RETURNS SETOF udr AS $$
+DECLARE
+BEGIN
+	RETURN QUERY(SELECT * FROM udr WHERE udr_id = udrID);
+END
+$$LANGUAGE plpgsql;
+
+SELECT * FROM udrRow(3);
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION updateCustomerFUs(dialNum text,profileID integer,serviceID integer,quantity integer, netConnection text)RETURNS Boolean AS $$
+DECLARE
+BEGIN
+	if  serviceID = 2  THEN
+		IF netConnection = 'onNet' THEN 
+			UPDATE customer_profile SET free_voice_same = quantity WHERE msisdn = dialNum AND pid = profileID;
+		ELSIF netConnection = 'crossNet' THEN
+			UPDATE customer_profile SET free_voice_diff = quantity WHERE msisdn = dialNum AND pid = profileID;
+		END IF;	
+		RETURN true; 
+	elsif serviceID = 3 THEN
+		IF netConnection = 'onNet' THEN 
+			UPDATE customer_profile SET free_sms_same = quantity WHERE msisdn = dialNum AND pid = profileID;
+		ELSIF netConnection = 'crossNet' THEN
+			UPDATE customer_profile SET free_sms_diff = quantity WHERE msisdn = dialNum AND pid = profileID;
+		END IF;
+		RETURN true;
+	elsif serviceID = 4 THEN 
+		UPDATE customer_profile SET free_internet = quantity WHERE msisdn = dialNum AND pid = profileID;
+		RETURN true;
+	ELSE 
+		RETURN false;
+	END IF; 
+END;
+$$LANGUAGE plpgsql;
+-------------------------------------------------------------------------------------------------------------------------------------------------
