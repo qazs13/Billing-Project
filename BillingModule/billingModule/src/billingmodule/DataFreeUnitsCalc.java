@@ -47,6 +47,8 @@ public class DataFreeUnitsCalc {
                                             customerRemainedFUs.setConsumedQuantity(updatedValue);
                                             state=db.UpdateCustomerFUs(customerRemainedFUs,"nothing");
                                             System.out.println("=========="+ state);
+                                            costOfService = 0f;
+                                            System.out.println("Cost of this service is zero");
                                 }else{
                                       customerRemainedFUs.setConsumedQuantity(0);
                                       state=db.UpdateCustomerFUs(customerRemainedFUs,"nothing");
@@ -55,12 +57,15 @@ public class DataFreeUnitsCalc {
                                       profileDataDetails = db.retrieveProfileService(new ProfileService(udr.getProfileID()
                                                 ,udr.getServiceID()));
                                       
-                                      costOfService = (consumedData * profileDataDetails.getFeeSameOperator())/(profileDataDetails.getRoundAmount());
+                                      costOfService = (consumedData * profileDataDetails.getFeeSameOperator())
+                                              /(profileDataDetails.getRoundAmount());
                                       System.out.println("Cost Calcu :" + costOfService);
                                       //call function(give it cost valuein udr table )
                                 }    
                     }else{
                             //external_charges or cost column calculation
+                            costOfService = udr.getCost();
+                            System.out.println("cost of service from Rating module" + costOfService);
                     }            
                 }else{
                     //take External Charges as it to bill sheet
