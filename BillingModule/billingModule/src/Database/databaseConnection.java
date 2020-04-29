@@ -206,6 +206,40 @@ public class databaseConnection {
         }
     }
     
+    public ProfileService retrieveProfileService(ProfileService prof_service){
+        connect();
+        
+        ProfileService profileServiceRow = new ProfileService();
+        try {
+            sqlcommand = "SELECT * FROM retrieveProfileServices(?,?)";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1,prof_service.getProfileID());
+            preparedstatement.setInt(2,prof_service.getServiceID());
+            result = preparedstatement.executeQuery();
+        
+            while(result.next()){
+                profileServiceRow.setProfileServiceID(result.getInt(1));
+                profileServiceRow.setProfileID(result.getInt(2));
+                profileServiceRow.setServiceID(result.getInt(3));
+                profileServiceRow.setRoundAmount(result.getInt(4));
+                profileServiceRow.setFeeSameOperator(result.getFloat(5));
+                profileServiceRow.setFeeAnotherOperator(result.getFloat(6));
+                profileServiceRow.setFeeInternationally(result.getFloat(7));   
+            }
+            System.out.println("Profile Service Information retrieved successfully");
+            return profileServiceRow;
+            
+        } catch (SQLException ex) {
+            
+            System.out.println("Something happened wrong while retrieving profile's services");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+            
+        }finally{
+            stop();
+        }  
+    }
+    
     private void stop(){
         try {
             connection.close();
@@ -239,6 +273,10 @@ public class databaseConnection {
 
 //        Boolean state = db.UpdateCustomerFUs(new CustomerProfile("01215860927",1,2,300),"onNet");
 //        System.out.println("##########################"+state);
+
+//        ProfileService pservice = db.retrieveProfileService(new ProfileService(1, 4));
+//        System.out.println("#####"+ pservice.getProfileServiceID() + "#######"+ pservice.getFeeSameOperator());
+
 
 
     }

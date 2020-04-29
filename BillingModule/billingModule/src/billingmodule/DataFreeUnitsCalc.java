@@ -4,6 +4,7 @@ import Database.databaseConnection;
 import SystemObjects.*;
 import java.util.Vector;
 import Interfaces.NetConnection;
+import static java.lang.Math.abs;
 
 
 public class DataFreeUnitsCalc {
@@ -12,37 +13,60 @@ public class DataFreeUnitsCalc {
     FreeUnit fu = db.ProfileFU(new FreeUnit(1));
     CustomerProfile customerRemainedFUs= db.RemainedFreeUnits(new CustomerProfile(1,"01215860927"));
     Vector<UDR> udrList= db.customerUDRs(new UDR("01215860927",1,4));
+    ProfileService profileDataDetails;
     NetConnection conn;
     Boolean state;
     
+    
     public void fuInternetUpdate(){
             
-        int updatedValue =0;
+        int updatedValue = 0;
+        int consumedData = 0;
+        Float costOfService = 0f;
+        
+        for(UDR udr: udrList){
+            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB());
+        }
 
         if(udrList.isEmpty()){
             System.out.println("Customer Has no Internet Usage");     
         }
         else{
             for(UDR udr:udrList){
-                if(customerRemainedFUs.getFUInternet() > 0){
+                customerRemainedFUs.setServiceID(4);
+                
+                if(udr.getExternalCharges() == 0){
                     
-                        updatedValue = customerRemainedFUs.getFUInternet() - udr.getDurationMsgVolume();
-                        System.out.println("updated Voice On Net Value "+ updatedValue);
-                          
-                        if(updatedValue >= 0){
-                                    customerRemainedFUs.setConsumedQuantity(updatedValue);
-                                    customerRemainedFUs.setServiceID(4);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,"nothing");
-                                    System.out.println("=========="+ state);
-                        }else{
-                              customerRemainedFUs.setFUInternet(0);
-                              //call update function to update customer_profile table
-                              //call function(give it cost valuein udr table )
-                        }    
-                        
+                    if(customerRemainedFUs.getFUInternet() > 0){
+                                
+                                System.out.println("3ayzaaaa 23rf Quantity be kam !" + udr.getDurationMsgVolume());
+                                updatedValue = customerRemainedFUs.getFUInternet() - udr.getDurationMsgVolume();
+                                System.out.println("updated Voice On Net Value "+ updatedValue);
+
+                                if(updatedValue >= 0){
+                                            customerRemainedFUs.setConsumedQuantity(updatedValue);
+                                            state=db.UpdateCustomerFUs(customerRemainedFUs,"nothing");
+                                            System.out.println("=========="+ state);
+                                }else{
+                                      customerRemainedFUs.setConsumedQuantity(0);
+                                      state=db.UpdateCustomerFUs(customerRemainedFUs,"nothing");
+                                      consumedData = abs(updatedValue);
+                                      
+                                      profileDataDetails = db.retrieveProfileService(new ProfileService(udr.getProfileID()
+                                                ,udr.getServiceID()));
+                                      
+                                      costOfService = (consumedData * profileDataDetails.getFeeSameOperator())/(profileDataDetails.getRoundAmount());
+                                      System.out.println("Cost Calcu :" + costOfService);
+                                      //call function(give it cost valuein udr table )
+                                }    
+                    }else{
+                            //external_charges or cost column calculation
+                    }            
                 }else{
-                        //external_charges or cost column calculation
-                }   
+                    //take External Charges as it to bill sheet
+                    costOfService = udr.getExternalCharges();
+                    System.out.println("Cost Calcu :" + costOfService);     
+                }  
             }
         }   
     }
@@ -50,6 +74,7 @@ public class DataFreeUnitsCalc {
     public static void main(String [] args){
         DataFreeUnitsCalc dataFUcalc = new DataFreeUnitsCalc();
         dataFUcalc.fuInternetUpdate();
+        
     }
     
 }

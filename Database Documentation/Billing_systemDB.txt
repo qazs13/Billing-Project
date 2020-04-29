@@ -62,3 +62,13 @@ BEGIN
 END;
 $$LANGUAGE plpgsql;
 -------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION retrieveProfileServices(profileID integer,serviceID integer)RETURNS SETOF profile_services AS $$
+DECLARE
+BEGIN
+	RETURN QUERY(SELECT * FROM profile_services WHERE pid=profileID AND sid=serviceID);
+END;
+$$LANGUAGE plpgsql;
+
+
+SELECT * FROM retrieveProfileServices(1,4);
+-----------------------------------------------------------------------------------------------------------------------------------------------
