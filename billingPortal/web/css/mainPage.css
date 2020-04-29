@@ -365,7 +365,7 @@ header .secondRowHeader
     top: 7%;
     border: 3px outset #FF7900;
     border-radius: 25px;
-    background-color: rgb(0, 0, 0)
+    background-color: rgb(0, 0, 0);
 }
 .fullAreaProfile .secondPageProfile .secondProfilePageTitle
 {
@@ -485,7 +485,7 @@ header .secondRowHeader
     top: 7%;
     border: 3px outset #FF7900;
     border-radius: 25px;
-    background-color: rgb(0, 0, 0)
+    background-color: rgb(0, 0, 0);
 }
 .fullAreaProfile .thirdPageProfile .thirdPageProfilePageTitle
 {
@@ -554,6 +554,32 @@ header .secondRowHeader
     border-radius: 15px;
 }
 /**Profile*/
+/*Profile List*/
+.fullAreaProfileList
+{
+    height: 570px;
+    width: 90%;
+    background-color: white;
+    padding-top: 30px;
+}
+.fullAreaProfileList thead th
+{
+    color: #FF7900;
+}
+.fullAreaProfileList tbody
+{
+    font-weight: bold;
+}
+.fullAreaProfileList tbody .seeMore
+{
+    color: black;
+    text-decoration: none;
+}
+.fullAreaProfileList tbody .seeMore span
+{
+    margin-left: 5px;
+}
+/*Profile List*/
 /*Footer*/
 .footerOrange
 {

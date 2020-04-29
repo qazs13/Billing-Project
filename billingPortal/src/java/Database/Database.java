@@ -245,7 +245,7 @@ public class Database {
             preparedStatment = connection.prepareStatement(sqlCommand);
             preparedStatment.setString(1, profile.getpName());
             preparedStatment.setInt(2, profile.getRenew_Duration());
-            preparedStatment.setFloat(3, profile.getRenew_Duration());
+            preparedStatment.setFloat(3, profile.getpFees());
             preparedStatment.execute();
             operation = true;
         }
@@ -284,6 +284,32 @@ public class Database {
         {
             stop();
             return profileID;
+        }
+    }
+    
+    public Profile getAllProfiles ()
+    {
+        Profile allProfiles = new Profile();
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM profile";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allProfiles.getAllProfiles().add(new Profile(result.getInt(1), result.getString(2)
+                        , result.getInt(3), result.getFloat(4)));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return allProfiles;
         }
     }
     
