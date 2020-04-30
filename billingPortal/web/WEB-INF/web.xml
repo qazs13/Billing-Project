@@ -20,6 +20,10 @@
         <servlet-name>Add_Free_Units</servlet-name>
         <servlet-class>Add_Functions.Add_Free_Units</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>UploadServlet.UploadServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginCheck</servlet-name>
         <url-pattern>/loginCheck</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>Add_Free_Units</servlet-name>
         <url-pattern>/Add_Free_Units</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/UploadServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
