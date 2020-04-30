@@ -1,7 +1,7 @@
 <%@page import="Database_Tables.Profile"%>
 <%@page import="Database.Database"%>
 <%@include file="../header&footer/header.html" %>
-<%!
+<%
     Database db = new Database();
     Profile allProfiles = db.getAllProfiles();
 %>
