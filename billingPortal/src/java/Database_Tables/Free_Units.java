@@ -17,6 +17,15 @@ public class Free_Units
     public Free_Units() 
     {
         allFreeUnits = new Vector();
+    }  
+    
+    public Free_Units(float free_voice_same, float free_voice_diff, float free_sms_same, float free_sms_diff, float free_internet)
+    {
+        this.free_voice_same = free_voice_same;
+        this.free_voice_diff = free_voice_diff;
+        this.free_sms_same = free_sms_same;
+        this.free_sms_diff = free_sms_diff;
+        this.free_internet = free_internet;
     }    
 
     public Free_Units(float free_voice_same, float free_voice_diff, float free_sms_same, float free_sms_diff, float free_internet, int pid)

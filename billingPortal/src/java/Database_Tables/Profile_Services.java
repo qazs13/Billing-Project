@@ -18,6 +18,15 @@ public class Profile_Services
     {
         allProfileServices = new Vector();
     }
+    
+    public Profile_Services(int sid, int round_amount, float fees_local_same, float fees_local_diff, float fees_international) 
+    {
+        this.sid = sid;
+        this.round_Amount = round_amount;
+        this.fees_local_same = fees_local_same;
+        this.fees_local_diff = fees_local_diff;
+        this.fees_international = fees_international;
+    }    
 
     public Profile_Services(int pid, int sid, int round_amount, float fees_local_same, float fees_local_diff, float fees_international) 
     {

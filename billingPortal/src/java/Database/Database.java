@@ -206,6 +206,32 @@ public class Database {
         }
     }
     
+    public String getServiceNameByItsID (int profileID)
+    {
+        String serviceName = null;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT sname FROM services WHERE sid = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, profileID);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                serviceName = result.getString(1);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return serviceName;
+        }        
+    }
+    
     public boolean checkProfileExistance (Profile profile)
     {
         try
@@ -370,6 +396,87 @@ public class Database {
             stop();
             return operation;
         }
+    }
+    
+    public Profile getProfileByItsID (int profileID)
+    {
+        Profile allProfiles = null;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM profile WHERE pid = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, profileID);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allProfiles = new Profile(result.getString(2)
+                        , result.getInt(3), result.getFloat(4));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return allProfiles;
+        }        
+    }
+    
+    public Profile_Services getProfileServicesByItsID (int profileID)
+    {
+        Profile_Services allProfileServices = new Profile_Services();
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM profile_services WHERE pid = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, profileID);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allProfileServices.getAllProfileServices().add(new Profile_Services(result.getInt(3), result.getInt(4),
+                        result.getFloat(5), result.getFloat(6), result.getFloat(7)));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return allProfileServices;
+        }             
+    }
+    
+    public Free_Units getFreeUnitOfProfileByItsID (int profileID)
+    {
+        Free_Units allProfileFreeUnit = null;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM free_units WHERE pid = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, profileID);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allProfileFreeUnit = new Free_Units(result.getFloat(2), result.getFloat(3),
+                        result.getFloat(4), result.getFloat(5), result.getFloat(6));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return allProfileFreeUnit;
+        }          
     }
         
     private void stop()

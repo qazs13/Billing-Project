@@ -580,6 +580,184 @@ header .secondRowHeader
     margin-left: 5px;
 }
 /*Profile List*/
+/*Profile Show*/
+.fullAreaProfileEdit .row
+{
+    height: 570px;
+    background-color: black;
+}
+.fullAreaProfileEdit .row .leftCol
+{
+    height: 100%;
+    border: 1px solid #FF7900;
+}
+.fullAreaProfileEdit .row .leftCol .distance
+{
+    display: block;
+    margin-top: 5%;
+    margin-bottom: 10%;
+}
+.fullAreaProfileEdit .row .leftCol span
+{
+    color: white;
+    font-size: 35px;
+    font-family: sans-serif;
+    text-indent: 5px;
+    font-weight: bold;
+}
+.fullAreaProfileEdit .row .leftCol .profileInfo
+{
+    height: auto;
+    margin-top: 5%;
+    border-top: 1px solid #FF7900;
+    border-bottom: 1px solid #FF7900;
+}
+.fullAreaProfileEdit .row .leftCol .profileInfo .textHeader
+{
+    color: white;
+    margin-top: 5px;
+    display: grid;
+    text-decoration: none;
+    font-size: 30px;
+}
+.fullAreaProfileEdit .row .leftCol .profileInfo .textFooter
+{
+    color: #FF7900;
+    text-decoration: none;
+    font-size: 30px;
+    display: block;
+    height: 30px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.fullAreaProfileEdit .row .middleCol
+{
+    height: 100%;
+    border-top: 1px solid #FF7900;
+    border-bottom: 1px solid #FF7900;
+}
+.fullAreaProfileEdit .row .middleCol .distance
+{
+    display: block;
+    margin-top: 5%;
+    margin-bottom: 10%;
+}
+.fullAreaProfileEdit .row .middleCol span
+{
+    color: white;
+    font-size: 35px;
+    font-family: sans-serif;
+    text-indent: 5px;
+    font-weight: bold;
+}
+.card-header
+{
+    background-color: black;
+}
+.btn-link
+{
+    text-decoration: none;
+    color: #FF7900;
+}
+.btn-link:hover
+{
+    text-decoration: none;
+    color: white;
+}
+.btn-link:active
+{
+    text-decoration: none;
+}
+.card
+{
+    background-color: #FF7900;
+}
+.card-body
+{
+    background-color: #FF7900;
+    color: white;
+    font-weight: bold;
+}
+.card-body .card-body-service
+{
+    height: 25%;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;    
+}
+h6
+{
+    font-size: 17px;
+    text-indent: 5px;
+    display: inline-block;
+    color: black;
+    margin-top: 5%;
+}
+.fullAreaProfileEdit .row .rightCol
+{
+    height: 100%;
+    border: 1px solid #FF7900;
+}
+.fullAreaProfileEdit .row .rightCol .distance
+{
+    display: block;
+    margin-top: 5%;
+    margin-bottom: 10%;
+}
+.fullAreaProfileEdit .row .rightCol span
+{
+    color: white;
+    font-size: 35px;
+    font-family: sans-serif;
+    text-indent: 5px;
+    font-weight: bold;
+}
+.fullAreaProfileEdit .row .rightCol .profileFreeUnit
+{
+    height: auto;
+    margin-top: 5%;
+    border-top: 1px solid #FF7900;
+    border-bottom: 1px solid #FF7900;
+}
+.fullAreaProfileEdit .row .rightCol .profileFreeUnit .textHeader
+{
+    color: white;
+    margin-top: 5px;
+    display: grid;
+    text-decoration: none;
+    font-size: 30px;
+}
+.fullAreaProfileEdit .row .rightCol .profileFreeUnit .divFooter
+{
+    color: #FF7900;
+    text-decoration: none;
+    font-size: 10px;
+    display: block;
+    height: auto;
+    margin-bottom: 15px;
+}
+.fullAreaProfileEdit .row .rightCol .profileFreeUnit .divFooter span
+{
+    display: inline-block;
+    text-align: center;
+    width: 49%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 16.5px;
+    color: #FF7900;
+    text-indent: 0px;
+}
+.fullAreaProfileEdit .row .rightCol .profileFreeUnit .textFooter
+{
+    color: #FF7900;
+    text-decoration: none;
+    font-size: 30px;
+    display: block;
+    height: 30px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+/*Profile Show*/
 /*Footer*/
 .footerOrange
 {

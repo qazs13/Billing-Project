@@ -3,15 +3,9 @@ package org.apache.jsp.pages;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
-import Database_Tables.Services;
-import Database.Database;
 
-public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class uploadCDR_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
-
-
-    Database db = new Database();
-    Services service = db.getAllNotOneTimeServices();
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
 
@@ -43,7 +37,7 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
     PageContext _jspx_page_context = null;
 
     try {
-      response.setContentType("text/html;charset=UTF-8");
+      response.setContentType("text/html");
       pageContext = _jspxFactory.getPageContext(this, request, response,
       			null, true, 8192, true);
       _jspx_page_context = pageContext;
@@ -54,9 +48,6 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html lang=\"en\">\n");
       out.write("<head>\n");
@@ -90,7 +81,7 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                      <a class=\"nav-link\" href=\"#\">Users<span class=\"sr-only\">(current)</span></a>\n");
       out.write("                    </li>\n");
       out.write("                    <li class=\"nav-item active mx-5\">\n");
-      out.write("                        <a class=\"nav-link\" href=\"../pages/addProfile.jsp\">Profile<span class=\"sr-only\">(current)</span></a>\n");
+      out.write("                        <a class=\"nav-link\" href=\"../pages/profile.jsp\">Profile<span class=\"sr-only\">(current)</span></a>\n");
       out.write("                    </li>\n");
       out.write("                    <li class=\"nav-item active mx-5\">\n");
       out.write("                      <a class=\"nav-link\" href=\"../pages/services.jsp\">Services<span class=\"sr-only\">(current)</span></a>\n");
@@ -99,7 +90,7 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                      <a class=\"nav-link\" href=\"#\">Billing<span class=\"sr-only\">(current)</span></a>\n");
       out.write("                    </li>\n");
       out.write("                    <li class=\"nav-item active mx-5\">\n");
-      out.write("                      <a class=\"nav-link\" href=\"#\">Search<span class=\"sr-only\">(current)</span></a>\n");
+      out.write("                        <a class=\"nav-link\" href=\"../pages/uploadCDR.jsp\">Upload CDR<span class=\"sr-only\">(current)</span></a>\n");
       out.write("                    </li>                        \n");
       out.write("                  </ul>\n");
       out.write("                </div>\n");
@@ -107,94 +98,13 @@ public final class addProfile_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("      </div>\n");
       out.write("  </header>\n");
       out.write("<!-- Header -->\n");
-      out.write('\n');
-      out.write("\n");
-      out.write("<!-- Profile Area -->\n");
-      out.write("  <div class=\"container-fluid fullAreaProfile\">\n");
-      out.write("    <form class=\"firstPageProfile\">\n");
-      out.write("      <div class=\"firstProfilePageTitle\">\n");
-      out.write("        <span>Main Profile Info</span>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"firstProfilePageName\">\n");
-      out.write("        <span>Profile Name</span>\n");
-      out.write("        <input id=\"profileName\" type=\"text\" placeholder=\"Enter Profile Name\" required name=\"profileName\"/>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"firstProfilePageFees\">\n");
-      out.write("        <span>Profile Fees</span>\n");
-      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"profileFees\"/>\n");
-      out.write("        <label>LE</label>\n");
-      out.write("      </div> \n");
-      out.write("      <div class=\"firstProfilePageFees\">\n");
-      out.write("        <span>Renew Duration</span>\n");
-      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"renewProfileDuration\"/>\n");
-      out.write("        <label>days</label>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"addFirstPageProfileSubmit\">\n");
-      out.write("        <input id=\"firstPageProfileSubmit\" class=\"sub\" type=\"submit\" value=\"Next Page\">      \n");
-      out.write("      </div>  \n");
-      out.write("    </form>\n");
-      out.write("<!--/////////////////////////////////////////////////////////////////////////////////////////////-->\n");
-      out.write("    <form class=\"secondPageProfile overflow-auto\" id=\"secondPageProfile\">\n");
-      out.write("      <div class=\"secondProfilePageTitle\">\n");
-      out.write("        <span id=\"secondProfilePageTitle\">Add Services to </span>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"secondProfilePageName\">\n");
-      out.write("        <span>Add Service</span>\n");
-      out.write("        <select class=\"secondPageProfileSelectService\" name=\"selectService\" id=\"selectService\">\n");
-for(int i = 0; i < service.getAllServices().size(); i++){
-      out.write("\n");
-      out.write("          <option>");
-      out.print(service.getAllServices().elementAt(i).getSname());
-      out.write("</option>\n");
-}
-      out.write("     \n");
-      out.write("        </select>\n");
-      out.write("        <input type=\"button\" id=\"addServiceButton\" value=\"+\"/>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"allSelectedServices\" id=\"allSelectedServices\"></div>\n");
-      out.write("      <div class=\"addSecondPageProfileSubmit\">\n");
-      out.write("        <input type=\"hidden\" value=\"\" id=\"allServicesNames\" name=\"allServicesName\"/>\n");
-      out.write("        <input type=\"hidden\" value=\"\" id=\"profileNameServices\" name=\"profileNameServices\"/>\n");
-      out.write("        <input id=\"secondPageProfileSubmit\" class=\"sub\" type=\"submit\" value=\"Next Page\"/>  \n");
-      out.write("      </div>  \n");
-      out.write("    </form>\n");
-      out.write("<!--/////////////////////////////////////////////////////////////////////////////////////////////-->\n");
-      out.write("    <form class=\"thirdPageProfile overflow-auto\" id=\"thirdPageProfile\">\n");
-      out.write("      <div class=\"thirdPageProfilePageTitle\">\n");
-      out.write("        <span id=\"thirdPageProfilePageTitle\">Add Free Units to </span>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"thirdProfilePageFreeUnits\">\n");
-      out.write("        <span>Free Unit Voice On Net</span>\n");
-      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"free_Unit_Voice_On_Net\"/>\n");
-      out.write("        <label>Unit</label>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"thirdProfilePageFreeUnits\">\n");
-      out.write("        <span>Free Unit Voice On Cross Net</span>\n");
-      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"free_Unit_Voice_On_Cross_Net\"/>\n");
-      out.write("        <label>Unit</label>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"thirdProfilePageFreeUnits\">\n");
-      out.write("        <span>Free Unit SMS On Net</span>\n");
-      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"free_Unit_SMS_On_Net\"/>\n");
-      out.write("        <label>Unit</label>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"thirdProfilePageFreeUnits\">\n");
-      out.write("        <span>Free Unit SMS On Cross Net</span>\n");
-      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"free_Unit_SMS_On_Cross_Net\"/>\n");
-      out.write("        <label>Unit</label>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"thirdProfilePageFreeUnits\">\n");
-      out.write("        <span>Free Unit for Internet</span>\n");
-      out.write("        <input type=\"number\" required min=\"1\" value=\"0\" name=\"free_Unit_For_Internet\"/>\n");
-      out.write("        <label>Unit</label>\n");
-      out.write("      </div>\n");
-      out.write("      <div class=\"addthirdPageProfileSubmit\">\n");
-      out.write("        <input id=\"thirdPageProfileSubmit\" class=\"sub\" type=\"submit\" value=\"Finish\">  \n");
-      out.write("      </div>  \n");
-      out.write("    </form>\n");
-      out.write("</div>        \n");
-      out.write("  </div>\n");
-      out.write("<!-- Profile Area -->\n");
+      out.write("\r\n");
+      out.write("<!--////////////////////////////////////////////////////////////////////-->\r\n");
+      out.write("<form method=\"post\" action=\"/UploadServlet\" enctype=\"multipart/form-data\">\r\n");
+      out.write("    Choose a file: <input type=\"file\" name=\"ufile\" />\r\n");
+      out.write("    <input type=\"submit\" value=\"Upload\" />\r\n");
+      out.write("</form>\r\n");
+      out.write("<!--////////////////////////////////////////////////////////////////////-->\r\n");
       out.write("<!-- Footer -->\n");
       out.write("  <footer class=\"container-fluid footerOrange\">\n");
       out.write("    <p class=\"text-center\">Welcome to Admin Portal of Orange Mobile Services</ps>\n");
@@ -204,8 +114,8 @@ for(int i = 0; i < service.getAllServices().size(); i++){
       out.write("<script src=\"https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js\" integrity=\"sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo\" crossorigin=\"anonymous\"></script>\n");
       out.write("<script src=\"../js/all.js\"></script>\n");
       out.write("<script src=\"../js/bootstrap.min.js\"></script>    ");
-      out.write("\n");
-      out.write("<script src=\"../js/addProfile.js\"></script>  \n");
+      out.write('\r');
+      out.write('\n');
       out.write("</body>\n");
       out.write("</html>");
     } catch (Throwable t) {

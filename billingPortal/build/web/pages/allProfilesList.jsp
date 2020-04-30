@@ -24,7 +24,7 @@
           <td><%=allProfiles.getAllProfiles().elementAt(i).getpName()%></td>
           <td><%=allProfiles.getAllProfiles().elementAt(i).getRenew_Duration()%></td>
           <td><%=allProfiles.getAllProfiles().elementAt(i).getpFees()%></td>
-          <td><a href="seeAllProfileDetails?pid=<%=allProfiles.getAllProfiles().elementAt(i).getpID()%>" class="seeMore">
+          <td><a href="seeAllProfileDetails.jsp?pid=<%=allProfiles.getAllProfiles().elementAt(i).getpID()%>" class="seeMore">
                   See More <span><i class="fas fa-info-circle"></i></span></a></td>
         </tr>
 <%}%>        
