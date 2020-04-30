@@ -11,7 +11,7 @@ public class DataFreeUnitsCalc {
     
     databaseConnection db = new databaseConnection();
     FreeUnit fu = db.ProfileFU(new FreeUnit(1));
-    CustomerProfile customerRemainedFUs= db.RemainedFreeUnits(new CustomerProfile(1,"01215860927"));
+    CustomerProfile customerRemainedFUs;
     Vector<UDR> udrList= db.customerUDRs(new UDR("01215860927",1,4));
     ProfileService profileDataDetails;
     NetConnection conn;
@@ -33,6 +33,7 @@ public class DataFreeUnitsCalc {
         }
         else{
             for(UDR udr:udrList){
+                customerRemainedFUs= db.RemainedFreeUnits(new CustomerProfile(1,"01215860927"));
                 customerRemainedFUs.setServiceID(4);
                 
                 if(udr.getExternalCharges() == 0){

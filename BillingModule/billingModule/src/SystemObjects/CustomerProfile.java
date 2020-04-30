@@ -19,17 +19,15 @@ public class CustomerProfile {
     public CustomerProfile(int _profileID,String _msisdn){
         this.msisdn = _msisdn;
         this.profileID = _profileID;
-    }
-    
+    }    
     
      public CustomerProfile(String _msisdn,int _profileID,int _serviceID,int _consumedQuantity){
         this.msisdn = _msisdn;
         this.profileID = _profileID;
         this.serviceID = _serviceID;
         this.consumedQuantity = _consumedQuantity;
-    }
-     
-  
+    }   
+
     public CustomerProfile(String _msisdn,int _profileID,
             String _startDateOfContract, String _endDateOfContract,String _blockedServices,
             int _fuVoiceOnNet,int _fuVoiceCrossNet, int _fuSMSOnNet,
