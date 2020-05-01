@@ -22,13 +22,14 @@ public class VoiceFreeUnitsCalc {
         int updatedValue =0;
         int consumedData = 0;
         Float costOfService = 0f;
+        Float TotalUDRsCost = 0f;
         
 //        for(UDR udr: udrList){
 //            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ "#####"+ udr.getOrderedDate());
 //        }
 
         if(udrList.isEmpty()){
-                    System.out.println("Customer Has no SMS Usage");
+                    System.out.println("Customer Has no Voice Usage");
         }else{
             
             for(UDR udr:udrList){
@@ -49,6 +50,7 @@ public class VoiceFreeUnitsCalc {
                                     customerRemainedFUs.setConsumedQuantity(updatedValue);
                                     state=db.UpdateCustomerFUs(customerRemainedFUs,conn.onNet);
                                     costOfService = 0f;
+                                    TotalUDRsCost += costOfService;
                                     System.out.println("Cost of onNet Voice service is zero");
                                     //is_billed ---> true 
                             }else{ // cost of (-50) ---> profile_service
@@ -61,6 +63,7 @@ public class VoiceFreeUnitsCalc {
                                     costOfService = (consumedData * profileVoiceDetails.getFeeSameOperator())
                                             /(profileVoiceDetails.getRoundAmount());
                                     
+                                    TotalUDRsCost += costOfService;
                                     System.out.println("onNeet voice Cost Calcu :" + costOfService);         
                             }
                         }
@@ -68,6 +71,7 @@ public class VoiceFreeUnitsCalc {
                             //has no fu ONNET
                             //call function calculate consumption from cost
                             costOfService = udr.getCost();
+                            TotalUDRsCost += costOfService;
                             System.out.println("cost from Rating Module:" + costOfService);
                         }
                     }else if(!(udr.getDialB().regionMatches(true,0,"+20",0, 3))){
@@ -75,6 +79,9 @@ public class VoiceFreeUnitsCalc {
                                     
                         costOfService = (udr.getDurationMsgVolume() * profileVoiceDetails.getFeeInternationally())
                                 /(profileVoiceDetails.getRoundAmount());
+                        
+                        TotalUDRsCost += costOfService;
+                        
                         System.out.println(" international voice cost from Rating Module:" + costOfService);
                         
                     }else if(!(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 5))){
@@ -88,6 +95,9 @@ public class VoiceFreeUnitsCalc {
                                     customerRemainedFUs.setConsumedQuantity(updatedValue);
                                     state=db.UpdateCustomerFUs(customerRemainedFUs,conn.crossNet);
                                       costOfService = 0f;
+                                      
+                                      TotalUDRsCost += costOfService;
+                                      
                                     System.out.println("cost of crossVoiceNet Service is zero");
                                 
                             }else{
@@ -100,6 +110,8 @@ public class VoiceFreeUnitsCalc {
                                     costOfService = (consumedData * profileVoiceDetails.getFeeAnotherOperator())
                                             /(profileVoiceDetails.getRoundAmount());
                                     
+                                    TotalUDRsCost += costOfService;
+                                    
                                     System.out.println("crossNet voice Cost Calcu :" + costOfService);
                                 
                             }
@@ -107,14 +119,19 @@ public class VoiceFreeUnitsCalc {
                              //has No fu Cross Net
                             //call function calculate consumption from cost
                             costOfService = udr.getCost();
+                            
+                            TotalUDRsCost += costOfService;
+                            
                             System.out.println("crossNet cost from Rating Module:" + costOfService);
                         }
                     }else{
                         System.out.println("#############error msh mtwak3##############");
                     }
             }   
-            //total cost of all cdrs of voice per customer 
-        }       
+          
+        }   
+          //total cost of all cdrs of voice per customer 
+            System.out.println("Total cost of udrs of customer # : "+ TotalUDRsCost);
     }
     
     public static void main(String [] args){

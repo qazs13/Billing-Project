@@ -12,7 +12,7 @@ public class DataFreeUnitsCalc {
     databaseConnection db = new databaseConnection();
     FreeUnit fu = db.ProfileFU(new FreeUnit(1));
     CustomerProfile customerRemainedFUs;
-    Vector<UDR> udrList= db.customerUDRs(new UDR("01215860927",1,4));
+    Vector<UDR> udrList= db.customerUDRs(new UDR("+201215860927",1,4));
     ProfileService profileDataDetails;
     NetConnection conn;
     Boolean state;
@@ -23,10 +23,11 @@ public class DataFreeUnitsCalc {
         int updatedValue = 0;
         int consumedData = 0;
         Float costOfService = 0f;
+        Float TotalUDRsCost = 0f;
         
-        for(UDR udr: udrList){
-            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB());
-        }
+//        for(UDR udr: udrList){
+//            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB());
+//        }
 
         if(udrList.isEmpty()){
             System.out.println("Customer Has no Internet Usage");     
@@ -49,6 +50,7 @@ public class DataFreeUnitsCalc {
                                             state=db.UpdateCustomerFUs(customerRemainedFUs,"nothing");
                                             System.out.println("=========="+ state);
                                             costOfService = 0f;
+                                            TotalUDRsCost += costOfService;
                                             System.out.println("Cost of this service is zero");
                                 }else{
                                       customerRemainedFUs.setConsumedQuantity(0);
@@ -60,21 +62,28 @@ public class DataFreeUnitsCalc {
                                       
                                       costOfService = (consumedData * profileDataDetails.getFeeSameOperator())
                                               /(profileDataDetails.getRoundAmount());
+                                      
+                                      TotalUDRsCost += costOfService;
+                                      
                                       System.out.println("Cost Calcu :" + costOfService);
                                       //call function(give it cost valuein udr table )
                                 }    
                     }else{
                             //external_charges or cost column calculation
                             costOfService = udr.getCost();
+                            TotalUDRsCost += costOfService;
                             System.out.println("cost of service from Rating module" + costOfService);
                     }            
                 }else{
                     //take External Charges as it to bill sheet
                     costOfService = udr.getExternalCharges();
+                    TotalUDRsCost += costOfService;
                     System.out.println("Cost Calcu :" + costOfService);     
                 }  
             }
-        }   
+        } 
+        
+        System.out.println("Total consumption od Data :"+ TotalUDRsCost); 
     }
         
     public static void main(String [] args){
