@@ -18,11 +18,12 @@ public class SMSFreeUnitsCalc {
 
     
     
-    public void fuSMSUpdate(){
+    public void fuSMSUpdate(){//take DialA,serviceID, ProfileID
          
         int updatedValue = 0;
         int consumedData = 0;
         Float costOfService = 0f;
+        Float TotalUDRsCost = 0f;
         
         for(UDR udr: udrList){
             System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ "#####"+ udr.getOrderedDate());
@@ -52,6 +53,7 @@ public class SMSFreeUnitsCalc {
                                     customerRemainedFUs.setConsumedQuantity(updatedValue);
                                     state=db.UpdateCustomerFUs(customerRemainedFUs,conn.onNet);
                                     costOfService = 0f;
+                                    TotalUDRsCost += costOfService;
                                     System.out.println("Cost of this service is zero");
                                 
                             }else{
@@ -62,6 +64,8 @@ public class SMSFreeUnitsCalc {
                                     costOfService = (consumedData * profileSMSDetails.getFeeSameOperator())
                                             /(profileSMSDetails.getRoundAmount());
                                     
+                                    TotalUDRsCost += costOfService;
+                                    
                                     System.out.println("Cost Calcu :" + costOfService);
                                     
                             }
@@ -70,12 +74,18 @@ public class SMSFreeUnitsCalc {
                             //has no fu ONNET
                             //call function calculate consumption from cost
                             costOfService = udr.getCost();
+                            
+                            TotalUDRsCost += costOfService;
+                            
                             System.out.println("onNet sms cost from Rating Module:" + costOfService);
                         }
                 }else if(!(udr.getDialB().regionMatches(true,0,"+20",0, 3))){
                         
                         costOfService = (udr.getDurationMsgVolume() * profileSMSDetails.getFeeInternationally())
                                 /(profileSMSDetails.getRoundAmount());
+                        
+                        TotalUDRsCost += costOfService;
+                        
                         System.out.println("international sms cost from Rating Module:" + costOfService);
                         
                 }else if(!(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 5))){
@@ -91,6 +101,7 @@ public class SMSFreeUnitsCalc {
                                     customerRemainedFUs.setConsumedQuantity(updatedValue);
                                     state=db.UpdateCustomerFUs(customerRemainedFUs,conn.crossNet); 
                                     costOfService = 0f;
+                                    TotalUDRsCost += costOfService;
                                     System.out.println("cost of crossNet sms Service is zero");
                                     
                             }else{
@@ -102,18 +113,20 @@ public class SMSFreeUnitsCalc {
                                     
                                     costOfService = (consumedData * profileSMSDetails.getFeeAnotherOperator())
                                             /(profileSMSDetails.getRoundAmount());
-                                    
+                                    TotalUDRsCost += costOfService;
                                     System.out.println("Cost Calcu :" + costOfService);                  
                             }
                         }else{
                             //has No fu Cross Net
                             //call function calculate consumption from cost
                             costOfService = udr.getCost();
+                            TotalUDRsCost += costOfService;
                             System.out.println("croosNet sms cost from Rating Module:" + costOfService);
                         }  
                 }           
             }       
         }
+        System.out.println("Total consuption of SMS :"+ TotalUDRsCost);
     }
     
     public static void main(String [] args){

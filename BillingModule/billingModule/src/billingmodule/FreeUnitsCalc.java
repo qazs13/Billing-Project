@@ -31,6 +31,9 @@
 //
 ////  
 
+
+//DB function will retrieve all Customers who have udrs 
+//loop on eachone 
 //    public void serviceType(){        
 //        
 //        for(UDR udr:udrList){    
