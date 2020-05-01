@@ -150,7 +150,7 @@ public class billing {
         int duration = 0;
         String start_date = null;
         String start_time = null;
-        int external_charges = 0;
+        float external_charges = 0;
         boolean rated = false;
         int free_voice_same;
         int free_voice_diff;
@@ -230,7 +230,7 @@ public class billing {
         int duration = 0;
         String start_date = null;
         String start_time = null;
-        int external_charges = 0;
+        float external_charges = 0;
         boolean rated = false;
         int pid = 0;
         float local_fees_same = 0;
@@ -298,14 +298,14 @@ public class billing {
 
 //                    System.out.println(dialA.substring(0, 2));
                     if ((dialA.substring(0, 3)).equals(dialB.substring(0, 3))) {
-                        cost = duration * local_fees_same;
+                        cost = (duration/round) * local_fees_same;
 //                        System.out.println(cost);
                     } else if ((dialA.substring(0,2)).equals(dialB.substring(0,2))) {
 
-                        cost = duration * local_fees_diff;
+                        cost = (duration/round) * local_fees_diff;
                         System.out.println(cost);
                     } else if ((dialB.substring(0, 3)).equalsIgnoreCase("www") || (dialB.substring(0, 4).equalsIgnoreCase("http"))) {
-                        cost = duration * local_fees_same;
+                        cost = (duration/round) * local_fees_same;
 //                     System.out.println(cost);
                     } else {
                         cost = duration * fees_international;
