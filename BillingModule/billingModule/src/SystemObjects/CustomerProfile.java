@@ -26,7 +26,7 @@ public class CustomerProfile {
         this.profileID = _profileID;
         this.serviceID = _serviceID;
         this.consumedQuantity = _consumedQuantity;
-    }   
+    } 
 
     public CustomerProfile(String _msisdn,int _profileID,
             String _startDateOfContract, String _endDateOfContract,String _blockedServices,
@@ -51,8 +51,7 @@ public class CustomerProfile {
     public void setMSISDN(String _msisdn){
         this.msisdn = _msisdn;
     }
-   
-
+  
     public void setBlockedServices(String _blockedServices){
         this.blockedServices =_blockedServices;
     }

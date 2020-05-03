@@ -82,12 +82,15 @@ public class databaseConnection {
                 customerRemainedFUs.setProfileID(result.getInt(2));
                 customerRemainedFUs.setStartDateOfContract(result.getString(3));
                 customerRemainedFUs.setEndDateOfContract(result.getString(4));
-                customerRemainedFUs.setFUVoiceOnNet(result.getInt(5));
-                customerRemainedFUs.setFUVoiceCrossNet(result.getInt(6));
-                customerRemainedFUs.setFUSMSOnNet(result.getInt(7));
-                customerRemainedFUs.setFUSMSCrossNet(result.getInt(8));
-                customerRemainedFUs.setFUInternet(result.getInt(9));                  
+                customerRemainedFUs.setBlockedServices(result.getString(5));
+                customerRemainedFUs.setFUVoiceOnNet(result.getInt(6));
+                customerRemainedFUs.setFUVoiceCrossNet(result.getInt(7));
+                customerRemainedFUs.setFUSMSOnNet(result.getInt(8));
+                customerRemainedFUs.setFUSMSCrossNet(result.getInt(9));
+                customerRemainedFUs.setFUInternet(result.getInt(10)); 
+               
             }
+            System.out.println("Database retrievl:"+ customerRemainedFUs.getFUVoiceCrossNet());
             System.out.println("Remained data of customer free Units returned successed");
             return customerRemainedFUs;
         } catch (SQLException ex) {
@@ -135,6 +138,7 @@ public class databaseConnection {
         } 
     }
     
+    //UDRRow Function is Not Used Until Now
     public UDR UDRRow(UDR udr){
         connect();
         UDR udrObj = new UDR();
@@ -175,37 +179,6 @@ public class databaseConnection {
         
     }
     
-    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection){
-        
-        connect();
-        
-        try {
-            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?)";
-            preparedstatement = connection.prepareStatement(sqlcommand);
-            preparedstatement.setString(1,custRemainedFUs.getMSISDN());
-            preparedstatement.setInt(2,custRemainedFUs.getProfileID());
-            preparedstatement.setInt(3,custRemainedFUs.getServiceID());
-            preparedstatement.setInt(4,custRemainedFUs.getConsumedQuantity());
-            preparedstatement.setString(5,netConnection);
-            result = preparedstatement.executeQuery();
-            
-            while(result.next()){
-                state = result.getBoolean(1);
-            }
-            System.out.println("Successfully updating record ");
-            return state;
-            
-        } catch (SQLException ex) {
-            
-            System.out.println("sorry, record can not be updated !");
-            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-            
-        }finally{
-            stop();
-        }
-    }
-    
     public ProfileService retrieveProfileService(ProfileService prof_service){
         connect();
         
@@ -240,6 +213,66 @@ public class databaseConnection {
         }  
     }
     
+    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection){
+        
+        connect();
+        
+        try {
+            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?)";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1,custRemainedFUs.getMSISDN());
+            preparedstatement.setInt(2,custRemainedFUs.getProfileID());
+            preparedstatement.setInt(3,custRemainedFUs.getServiceID());
+            preparedstatement.setInt(4,custRemainedFUs.getConsumedQuantity());
+            System.out.println("Database consumedQuentity"+custRemainedFUs.getConsumedQuantity() );
+            preparedstatement.setString(5,netConnection);
+            result = preparedstatement.executeQuery();
+            
+            while(result.next()){
+                state = result.getBoolean(1);
+            }
+            System.out.println("Updated Database function:"+state);
+            System.out.println("Successfully updating record ");
+            return state;
+            
+        } catch (SQLException ex) {
+            
+            System.out.println("sorry, record can not be updated !");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+            
+        }finally{
+            stop();
+        }
+    }
+    
+    public Vector<UDR> retrieveAllCustomersHaveUDRs(){
+        
+        connect();
+        Vector<UDR> customersDialNums = new Vector();
+          UDR udrDialNum;
+        try {
+            sqlcommand = "SELECT * FROM retrieveAllCustomersHaveUDRs()";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            result = preparedstatement.executeQuery();
+        
+            while(result.next()){
+                udrDialNum = new UDR(result.getString(1),result.getInt(2));
+                customersDialNums.add(udrDialNum);
+            }
+            
+            System.out.println("Customer's Dial Num retrieved successfully");
+            return customersDialNums;
+            
+        } catch (SQLException ex) {
+            System.out.println("Something Wrong happened");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        } 
+    }
+    
     private void stop(){
         try {
             connection.close();
@@ -270,14 +303,30 @@ public class databaseConnection {
 //        UDR udr=db.UDRRow(new UDR(3));
 //        System.out.println("#####"+ udr.getDialB()+ "######" + udr.getDurationMsgVolume());
         
-
-//        Boolean state = db.UpdateCustomerFUs(new CustomerProfile("01215860927",1,2,300),"onNet");
+///////////////////////////////////Test////////////////////////////////////////////////////////////
+//        Boolean state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,50),"crossNet");
 //        System.out.println("##########################"+state);
+//        
+//        CustomerProfile cFreeunits = new CustomerProfile(1,"00201215860927");
+//        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
+//        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
+//        
+////        databaseConnection db2 = new databaseConnection();
+//        
+//        state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,20),"crossNet");
+//        System.out.println("##########################"+state);
+//        
+//        cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
+//        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
+        /////////////////////////////////////////////////////////////////////////
 
 //        ProfileService pservice = db.retrieveProfileService(new ProfileService(1, 4));
 //        System.out.println("#####"+ pservice.getProfileServiceID() + "#######"+ pservice.getFeeSameOperator());
 
-
+//        Vector<UDR> udrs = db.retrieveAllCustomersHaveUDRs();
+//        for(UDR udr:udrs){
+//            System.out.println("#######"+ udr.getDialA() +"#######" +udr.getProfileID());
+//        }
 
     }
     
