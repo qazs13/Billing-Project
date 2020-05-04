@@ -478,6 +478,37 @@ public class Database {
             return allProfileFreeUnit;
         }          
     }
+    
+    public boolean checkCustomerExistance (Customer customer)
+    {
+        try
+        {
+            int counter = 0;
+            connect();
+            sqlCommand = "SELECT COUNT (*) FROM customer WHERE msisdn = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, customer.getMsisdn());
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                counter = result.getInt(1);
+            }
+            if (counter == 1)
+            {
+                operation = true;
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operation = false;
+        }
+        finally
+        {
+            stop();
+            return operation;
+        }
+    }
         
     private void stop()
     {

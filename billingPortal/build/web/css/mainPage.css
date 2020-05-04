@@ -758,6 +758,164 @@ h6
     text-align: center;
 }
 /*Profile Show*/
+/*Cards Display*/
+.fullSize .cardDisplay
+{
+    height: 70%;
+    width: 27%;
+    border-radius: 25px;
+    background-color: black;
+    border: 3px solid #FF7900;
+    display: block;
+    float: left;
+    margin-left: 13%;
+    margin-top: 6%;
+    color: white;
+    text-align: center;
+}
+.fullSize .cardDisplay:hover
+{
+    cursor: pointer;
+    background-color: white;
+    border: 3px solid #FF7900;
+    color: #FF7900;
+}
+.fullSize .cardDisplay .profileIcon
+{
+    width: 30%;
+    height: 30%;
+    display: block;
+    margin: auto;
+    margin-top: 30%;
+    margin-bottom: 5%;
+}
+/*Cards Display*/
+/*Add Customer*/
+.fullSizeCustomer
+{
+    height: 570px;
+    background-color: black;
+}
+.fullSizeCustomer h1
+{
+    padding: 10px;
+    color: #FF7900;
+}
+.fullSizeCustomer .mainAreaCustomer
+{
+    height: 85%;
+    width: 95%;
+    margin: auto;
+    border: 2px dashed #FF7900;
+
+}
+.fullSizeCustomer .mainAreaCustomer .row
+{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer
+{
+    height: 20%;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer span
+{
+    margin-left: 5%;
+    color: white;
+    display: grid;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;    
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer label
+{
+    margin-left: 10%;
+    margin-right: 2%;
+    font-size: 20px;
+    margin-top: 5px;
+    color: white;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer select
+{
+    margin-left: 3%;
+    width: auto;
+    font-size: 20px;
+    margin-top: 5px;
+    color: black;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    border: 1px solid #FF7900;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer select:hover
+{
+    cursor: pointer;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer select option
+{
+    color: black;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: bold;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer input[type="number"]
+{
+    width: 70%;
+    padding-left: 5px;
+    border: 1px solid #FF7900;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer input[type="text"]
+{
+    width: 70%;
+    padding-left: 5px;
+    margin-left: 20%;
+    margin-top: 5px;
+    border: 1px solid #FF7900;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer input[type="email"]
+{
+    width: 70%;
+    padding-left: 5px;
+    margin-left: 20%;
+    margin-top: 5px;
+    border: 1px solid #FF7900;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.fullSizeCustomer input[type="submit"]
+{
+    position: relative;
+    bottom: 95px;
+    left: 80%;
+    width: 14%;
+    height: 11%;
+    background-color: black;
+    border-radius: 25px;
+    border: 1px solid white;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+}
+.fullSizeCustomer input[type="submit"]:hover
+{
+    background-color: #FF7900;
+    border: 1px solid white;
+    color: white;
+}
+/*Add Customer*/
 /*Footer*/
 .footerOrange
 {
