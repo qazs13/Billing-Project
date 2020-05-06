@@ -7,26 +7,27 @@ import Interfaces.NetConnection;
 import static java.lang.Math.abs;
 
 public class SMSFreeUnitsCalc {
-       
-    databaseConnection db = new databaseConnection();
-    FreeUnit fu = db.ProfileFU(new FreeUnit(1));
-    CustomerProfile customerRemainedFUs;
-    Vector<UDR> udrList= db.customerUDRs(new UDR("+201215860927",1,3));
-    ProfileService profileSMSDetails;
-    NetConnection conn;
-    Boolean state;
-
-    
-    
-    public void fuSMSUpdate(){//take DialA,serviceID, ProfileID
+        
+    public Float fuSMSUpdate(UDR customerUDR){//take DialA,serviceID, ProfileID
          
+        
+        databaseConnection db = new databaseConnection();
+        FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
+        Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
+                ,customerUDR.getServiceID()));
+        CustomerProfile customerRemainedFUs;
+        CustomerProfile cProfileupdateFU;
+        ProfileService profileSMSDetails;
+        Boolean state = false;
+        
         int updatedValue = 0;
         int consumedData = 0;
         Float costOfService = 0f;
         Float TotalUDRsCost = 0f;
         
         for(UDR udr: udrList){
-            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ "#####"+ udr.getOrderedDate());
+            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ 
+                    "#####"+ udr.getOrderedDate() + "##########" + udr.getDurationMsgVolume());
         }
             
         if(udrList.isEmpty()){
@@ -36,89 +37,80 @@ public class SMSFreeUnitsCalc {
         }else{
             
             for(UDR udr:udrList){
-                customerRemainedFUs= db.RemainedFreeUnits(new CustomerProfile(1,"01215860927"));
-                customerRemainedFUs.setServiceID(3);
+                
+                customerRemainedFUs= db.RemainedFreeUnits(new CustomerProfile(udr.getProfileID()
+                        ,udr.getDialA()));
+                
                 profileSMSDetails = db.retrieveProfileService(new ProfileService(udr.getProfileID(),
                                             udr.getServiceID()));
                 
-                if(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 5)){
+                if(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 6)){
                     
                         if(customerRemainedFUs.getFUSMSOnNet() > 0){
                             
                             updatedValue = customerRemainedFUs.getFUSMSOnNet() - udr.getDurationMsgVolume();
-                            System.out.println("updated Voice On Net Value "+ updatedValue);
+                            System.out.println("updated SMS OnNet Value "+ updatedValue);
                             
                             if(updatedValue >= 0){
-                                
-                                    customerRemainedFUs.setConsumedQuantity(updatedValue);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.onNet);
+                                    
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);                            
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
-                                    System.out.println("Cost of this service is zero");
-                                
+                                    System.out.println("Cost of SMS onNet service is zero");
+//                                
                             }else{
-                                    customerRemainedFUs.setConsumedQuantity(0);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.onNet);
-                                    consumedData = abs(updatedValue);
-                                    
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0);                            
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
+                                    consumedData = abs(updatedValue);                
                                     costOfService = (consumedData * profileSMSDetails.getFeeSameOperator())
-                                            /(profileSMSDetails.getRoundAmount());
-                                    
-                                    TotalUDRsCost += costOfService;
-                                    
-                                    System.out.println("Cost Calcu :" + costOfService);
-                                    
-                            }
-                            
+                                            /(profileSMSDetails.getRoundAmount());                                   
+                                    TotalUDRsCost += costOfService;                                   
+                                    System.out.println("Cost Calcu for onNet SMS service:" + costOfService);                                   
+                            } 
                         }else{
-                            //has no fu ONNET
-                            //call function calculate consumption from cost
-                            costOfService = udr.getCost();
-                            
-                            TotalUDRsCost += costOfService;
-                            
+                            costOfService = udr.getCost();                           
+                            TotalUDRsCost += costOfService;                           
                             System.out.println("onNet sms cost from Rating Module:" + costOfService);
                         }
-                }else if(!(udr.getDialB().regionMatches(true,0,"+20",0, 3))){
+                }else if(!(udr.getDialB().regionMatches(true,0,"0020",0, 4))){
                         
                         costOfService = (udr.getDurationMsgVolume() * profileSMSDetails.getFeeInternationally())
-                                /(profileSMSDetails.getRoundAmount());
-                        
-                        TotalUDRsCost += costOfService;
-                        
+                                /(profileSMSDetails.getRoundAmount());                       
+                        TotalUDRsCost += costOfService;                        
                         System.out.println("international sms cost from Rating Module:" + costOfService);
                         
-                }else if(!(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 5))){
-                    
-                    
+                }else if(!(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 6))){
+                          
                         if(customerRemainedFUs.getFUSMSCrossNet() > 0){
                             
                             updatedValue = customerRemainedFUs.getFUSMSCrossNet() - udr.getDurationMsgVolume();
-                            System.out.println("updated Voice On Net Value "+ updatedValue);
+                            System.out.println("updated SMS crossNet Value "+ updatedValue);
                             
                              if(updatedValue >= 0){
                                  
-                                    customerRemainedFUs.setConsumedQuantity(updatedValue);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.crossNet); 
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet); 
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("cost of crossNet sms Service is zero");
-                                    
+//                                    
                             }else{
                                  
-                                    customerRemainedFUs.setConsumedQuantity(0);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.crossNet);
-                                    //call function(give it cost valuein udr table )
-                                    consumedData = abs(updatedValue);
-                                    
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
+                                    consumedData = abs(updatedValue);        
                                     costOfService = (consumedData * profileSMSDetails.getFeeAnotherOperator())
                                             /(profileSMSDetails.getRoundAmount());
                                     TotalUDRsCost += costOfService;
-                                    System.out.println("Cost Calcu :" + costOfService);                  
+                                    System.out.println("Cost Calcu for SMS crossNet:" + costOfService);                  
                             }
                         }else{
-                            //has No fu Cross Net
-                            //call function calculate consumption from cost
+
                             costOfService = udr.getCost();
                             TotalUDRsCost += costOfService;
                             System.out.println("croosNet sms cost from Rating Module:" + costOfService);
@@ -127,10 +119,11 @@ public class SMSFreeUnitsCalc {
             }       
         }
         System.out.println("Total consuption of SMS :"+ TotalUDRsCost);
+        return TotalUDRsCost;
     }
     
-    public static void main(String [] args){
-        SMSFreeUnitsCalc smsFUcalc = new SMSFreeUnitsCalc();
-        smsFUcalc.fuSMSUpdate();
-    }
+//    public static void main(String [] args){
+//        SMSFreeUnitsCalc smsFUcalc = new SMSFreeUnitsCalc();
+//        smsFUcalc.fuSMSUpdate(new UDR("00201215860927",1,2));
+//    }
 }

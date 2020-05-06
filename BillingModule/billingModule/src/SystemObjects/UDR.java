@@ -20,10 +20,10 @@ public class UDR {
         this.udrID = _udrID;
     }
     
-//    public UDR(String _dialA,int _profileID){
-//        this.dialA = _dialA;
-//        this.profileID = _profileID;
-//    }
+    public UDR(String _dialA, int _profileID){
+        this.dialA = _dialA;
+        this.profileID = _profileID;
+    }
     
     public UDR(String _dialA,int _profileID, int _serviceID){
         this.dialA = _dialA;

@@ -9,119 +9,113 @@ import java.util.Vector;
 
 public class VoiceFreeUnitsCalc {
     
-    databaseConnection db = new databaseConnection();
-    FreeUnit fu = db.ProfileFU(new FreeUnit(1));
-    CustomerProfile customerRemainedFUs;
-    Vector<UDR> udrList= db.customerUDRs(new UDR("+201215860927",1,2));
-    ProfileService profileVoiceDetails;
-    NetConnection conn;
-    Boolean state;
     
-    public void fuVoiceUpdate(){
+   
+   
+    public Float fuVoiceUpdate(UDR customerUDR){//contains dialA,pid,sid
+        
+        databaseConnection db = new databaseConnection();
+        FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
+        Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
+                ,customerUDR.getServiceID()));
+        CustomerProfile customerRemainedFUs;
+        CustomerProfile cProfileupdateFU;
+        ProfileService profileVoiceDetails;
+        Boolean state = false ;
         
         int updatedValue =0;
         int consumedData = 0;
         Float costOfService = 0f;
         Float TotalUDRsCost = 0f;
         
-//        for(UDR udr: udrList){
-//            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ "#####"+ udr.getOrderedDate());
-//        }
+        for(UDR udr: udrList){
+            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ 
+                    "#####"+ udr.getOrderedDate()+ "##########" + udr.getDurationMsgVolume());
+        }
 
         if(udrList.isEmpty()){
                     System.out.println("Customer Has no Voice Usage");
         }else{
             
             for(UDR udr:udrList){
-                    customerRemainedFUs= db.RemainedFreeUnits(new CustomerProfile(1,"01215860927"));
-                    customerRemainedFUs.setServiceID(2);
+                  
+                    // customerRemainedFUs obj from constuctor "new CustomerProfile();"
+                    customerRemainedFUs= db.RemainedFreeUnits(new CustomerProfile(
+                            udr.getProfileID(),udr.getDialA()));
+                    
                      profileVoiceDetails = db.retrieveProfileService(new ProfileService(udr.getProfileID(),
                                             udr.getServiceID()));
                     
-                    if(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 5)){//same operator
-                        
+                    if(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 6)){//same operator
+
                         if(customerRemainedFUs.getFUVoiceOnNet() > 0){ // has free units 
                             
                             updatedValue = customerRemainedFUs.getFUVoiceOnNet() - udr.getDurationMsgVolume();//100-150=-50
                             System.out.println("updated Voice On Net Value "+ updatedValue);
                             
                             if(updatedValue >= 0){
-                                    
-                                    customerRemainedFUs.setConsumedQuantity(updatedValue);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.onNet);
+
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("Cost of onNet Voice service is zero");
-                                    //is_billed ---> true 
+//                                    //is_billed ---> true 
                             }else{ // cost of (-50) ---> profile_service
-                                
-                                    customerRemainedFUs.setConsumedQuantity(0);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.onNet);
-                                    //call function(give it cost valuein udr table )
-                                    consumedData = abs(updatedValue);
-                                    
+
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
+                                    consumedData = abs(updatedValue);  
                                     costOfService = (consumedData * profileVoiceDetails.getFeeSameOperator())
-                                            /(profileVoiceDetails.getRoundAmount());
-                                    
+                                            /(profileVoiceDetails.getRoundAmount()); 
                                     TotalUDRsCost += costOfService;
-                                    System.out.println("onNeet voice Cost Calcu :" + costOfService);         
+                                    System.out.println("onNet voice Cost Calcu :" + costOfService);         
                             }
-                        }
-                        else{
-                            //has no fu ONNET
-                            //call function calculate consumption from cost
+                        }else{
+
                             costOfService = udr.getCost();
                             TotalUDRsCost += costOfService;
                             System.out.println("cost from Rating Module:" + costOfService);
                         }
-                    }else if(!(udr.getDialB().regionMatches(true,0,"+20",0, 3))){
-                        
+                    }else if(!(udr.getDialB().regionMatches(true,0,"0020",0, 4))){
                                     
                         costOfService = (udr.getDurationMsgVolume() * profileVoiceDetails.getFeeInternationally())
-                                /(profileVoiceDetails.getRoundAmount());
-                        
-                        TotalUDRsCost += costOfService;
-                        
+                                /(profileVoiceDetails.getRoundAmount());                       
+                        TotalUDRsCost += costOfService;                       
                         System.out.println(" international voice cost from Rating Module:" + costOfService);
                         
-                    }else if(!(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 5))){
+                    }else if(!(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 6))){
+                        
                         if(customerRemainedFUs.getFUVoiceCrossNet() > 0){
-                            
+//                            
                             updatedValue = customerRemainedFUs.getFUVoiceCrossNet() - udr.getDurationMsgVolume();
+                            System.out.println("fuVoiceCrossNet :" +customerRemainedFUs.getFUVoiceCrossNet());
                             System.out.println("updated Voice On Net Value "+ updatedValue);
-                            
+//                            
                             if(updatedValue >= 0){
-                                
-                                    customerRemainedFUs.setConsumedQuantity(updatedValue);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.crossNet);
-                                      costOfService = 0f;
-                                      
-                                      TotalUDRsCost += costOfService;
-                                      
+//                                  
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
+                                    costOfService = 0f;
+                                    TotalUDRsCost += costOfService;                                     
                                     System.out.println("cost of crossVoiceNet Service is zero");
-                                
+              
                             }else{
-                                    
-                                    customerRemainedFUs.setConsumedQuantity(0);
-                                    state=db.UpdateCustomerFUs(customerRemainedFUs,conn.crossNet);
-                                    //call function(give it cost valuein udr table )
-                                    consumedData = abs(updatedValue);
-                                    
+                                    cProfileupdateFU = new CustomerProfile(
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
+                                    consumedData = abs(updatedValue);  
                                     costOfService = (consumedData * profileVoiceDetails.getFeeAnotherOperator())
-                                            /(profileVoiceDetails.getRoundAmount());
-                                    
-                                    TotalUDRsCost += costOfService;
-                                    
-                                    System.out.println("crossNet voice Cost Calcu :" + costOfService);
-                                
+                                            /(profileVoiceDetails.getRoundAmount());                                    
+                                    TotalUDRsCost += costOfService;                                   
+                                    System.out.println("crossNet voice Cost Calcu :" + costOfService);                              
                             }
                         }else{
-                             //has No fu Cross Net
-                            //call function calculate consumption from cost
-                            costOfService = udr.getCost();
-                            
-                            TotalUDRsCost += costOfService;
-                            
+                            costOfService = udr.getCost();  
+                            TotalUDRsCost += costOfService;   
                             System.out.println("crossNet cost from Rating Module:" + costOfService);
                         }
                     }else{
@@ -132,11 +126,12 @@ public class VoiceFreeUnitsCalc {
         }   
           //total cost of all cdrs of voice per customer 
             System.out.println("Total cost of udrs of customer # : "+ TotalUDRsCost);
+            return TotalUDRsCost;
     }
     
-    public static void main(String [] args){
-        VoiceFreeUnitsCalc voiceFUcalc = new VoiceFreeUnitsCalc();
-        voiceFUcalc.fuVoiceUpdate();
-    }
+//    public static void main(String [] args){
+//        VoiceFreeUnitsCalc voiceFUcalc = new VoiceFreeUnitsCalc();
+//        voiceFUcalc.fuVoiceUpdate(new UDR("00201215860927",1,1));
+//    }
     
 }
