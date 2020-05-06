@@ -140,6 +140,28 @@ public class billing {
             return inserted;
         }
     }
+    
+        public int insert_customer_profile(String msisdn,int pid,String start_date) {
+
+        try {
+            connect();
+            SQLcommand = "insert into customer_profile (msisdn,pid,start_date) values (?,?,?);";
+            ps = connection.prepareStatement(SQLcommand);
+            ps.setString(1,msisdn);
+            ps.setInt(2, pid);
+            ps.setString(3, start_date);
+            inserted = ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            disconnect();
+            inserted = 0;
+        } finally {
+
+            return inserted;
+        }
+    }
+    
 
     public int select_cdr() {
 //       Vector<String[]> cdr = new Vector();
@@ -322,8 +344,8 @@ public class billing {
 //                    System.out.println(start_time);
 //                    System.out.println(external_charges);
 //                    System.out.println(cost);
-                    int x = insert_into_udr(pid, dialA, dialB, sid, duration, start_date, start_time, external_charges, cost);
-                    System.out.println(x);
+//                    int x = insert_into_udr(pid, dialA, dialB, sid, duration, start_date, start_time, external_charges, cost);
+//                    System.out.println(x);
 //                 }
 //                 
 //                 else 
@@ -332,6 +354,8 @@ public class billing {
 //                 }
 
                 }
+                  int x = insert_into_udr(pid, dialA, dialB, sid, duration, start_date, start_time, external_charges, cost);
+                    System.out.println(x);
 
             }
             inserted = 1;
