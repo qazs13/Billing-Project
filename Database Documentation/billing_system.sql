@@ -186,9 +186,9 @@ ALTER SEQUENCE public.free_units_fid_seq OWNED BY public.free_units.fid;
 
 CREATE TABLE public.occ (
     occ_id integer NOT NULL,
-    msisdn text,
-    one_time_service_id integer,
-    service_processed boolean
+    service_processed boolean,
+    one_recurring_id integer,
+    type_of_service text
 );
 
 
@@ -477,6 +477,7 @@ Menna	1234
 --
 
 COPY public.cdr (cdr_id, diala, dialb, sid, duration_msg_volume, start_date, start_time, external_charges, is_rated) FROM stdin;
+1	01221234567	01001234567	1	100	20190301	10:03:20	0	f
 \.
 
 
@@ -485,6 +486,7 @@ COPY public.cdr (cdr_id, diala, dialb, sid, duration_msg_volume, start_date, sta
 --
 
 COPY public.customer (msisdn, f_name, l_name, email, address) FROM stdin;
+01221234567	Amr	Walid	amrwsk@gmail.com	El-mohandeseen
 \.
 
 
@@ -493,6 +495,7 @@ COPY public.customer (msisdn, f_name, l_name, email, address) FROM stdin;
 --
 
 COPY public.customer_profile (msisdn, pid, start_date, end_date, blocked_services, free_voice_same, free_voice_diff, free_sms_same, free_sms_diff, free_internet) FROM stdin;
+01221234567	1	20190301	\N	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -509,6 +512,8 @@ COPY public.customer_profile_services (msisdn, pid, occ_id) FROM stdin;
 --
 
 COPY public.free_units (fid, free_voice_same, free_voice_diff, free_sms_same, free_sms_diff, free_internet, pid) FROM stdin;
+1	10	20	30	40	50	1
+2	10	10	10	10	10	2
 \.
 
 
@@ -516,7 +521,7 @@ COPY public.free_units (fid, free_voice_same, free_voice_diff, free_sms_same, fr
 -- Data for Name: occ; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.occ (occ_id, msisdn, one_time_service_id, service_processed) FROM stdin;
+COPY public.occ (occ_id, service_processed, one_recurring_id, type_of_service) FROM stdin;
 \.
 
 
@@ -534,6 +539,8 @@ COPY public.one_time_service (one_time_service_id, osname, osfee) FROM stdin;
 --
 
 COPY public.profile (pid, pname, renew_duration, pfees) FROM stdin;
+1	Ramdan offer	10	30
+2	Ramadan's offer	30	20
 \.
 
 
@@ -542,6 +549,8 @@ COPY public.profile (pid, pname, renew_duration, pfees) FROM stdin;
 --
 
 COPY public.profile_services (profile_services_id, pid, sid, round_amount, fees_local_same, fees_local_diff, fees_international) FROM stdin;
+1	1	1	1	0.5	2	30
+2	2	1	0	0.20000000298023224	0.5	20
 \.
 
 
@@ -559,6 +568,7 @@ COPY public.services (sid, sname, is_recurring, recurring_fees) FROM stdin;
 --
 
 COPY public.udr (udr_id, pid, diala, dialb, sid, duration_msg_volume, start_date, start_time, external_charges, has_freeunits, cost, is_billed) FROM stdin;
+6	1	01221234567	01001234567	1	100	20190301	10:03:20	0	\N	200	f
 \.
 
 
@@ -566,14 +576,14 @@ COPY public.udr (udr_id, pid, diala, dialb, sid, duration_msg_volume, start_date
 -- Name: cdr_cdr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cdr_cdr_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cdr_cdr_id_seq', 1, true);
 
 
 --
 -- Name: free_units_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.free_units_fid_seq', 1, false);
+SELECT pg_catalog.setval('public.free_units_fid_seq', 2, true);
 
 
 --
@@ -594,14 +604,14 @@ SELECT pg_catalog.setval('public.one_time_service_one_time_service_id_seq', 1, t
 -- Name: profile_pid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.profile_pid_seq', 1, false);
+SELECT pg_catalog.setval('public.profile_pid_seq', 2, true);
 
 
 --
 -- Name: profile_services_profile_services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.profile_services_profile_services_id_seq', 1, false);
+SELECT pg_catalog.setval('public.profile_services_profile_services_id_seq', 2, true);
 
 
 --
@@ -615,7 +625,7 @@ SELECT pg_catalog.setval('public.services_sid_seq', 1, true);
 -- Name: udr_udr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.udr_udr_id_seq', 1, false);
+SELECT pg_catalog.setval('public.udr_udr_id_seq', 6, true);
 
 
 --
@@ -776,22 +786,6 @@ ALTER TABLE ONLY public.customer_profile_services
 
 ALTER TABLE ONLY public.free_units
     ADD CONSTRAINT my_fk FOREIGN KEY (pid) REFERENCES public.profile(pid);
-
-
---
--- Name: occ occ_msisdn_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.occ
-    ADD CONSTRAINT occ_msisdn_fkey FOREIGN KEY (msisdn) REFERENCES public.customer(msisdn);
-
-
---
--- Name: occ occ_one_time_service_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.occ
-    ADD CONSTRAINT occ_one_time_service_id_fkey FOREIGN KEY (one_time_service_id) REFERENCES public.one_time_service(one_time_service_id);
 
 
 --
