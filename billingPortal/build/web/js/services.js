@@ -1,6 +1,12 @@
 document.getElementById('su').addEventListener("click",function(e)
 {   
-    if (e.path[2][0].value != "" && (e.path[2][1].value != e.path[2][2].value))
+    var check = 0;
+    if (e.path[2][1].value == "true" && e.path[2][2].value == "true")
+    {
+        check = 1;
+    }
+    
+    if (e.path[2][0].value != "" && check === 0)
     {
         e.preventDefault();
         url = "/billingPortal/Add_Services";
