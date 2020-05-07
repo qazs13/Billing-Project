@@ -7,8 +7,8 @@ import java.util.Vector;
 
 public class FreeUnitsCalc {
     
-    public void CustomerServicesCalculations(){
-        databaseConnection db = new databaseConnection();
+    public CustomerProfile CustomerServicesCalculations(UDR customer){
+//        databaseConnection db = new databaseConnection();
         DataFreeUnitsCalc dataObject = new DataFreeUnitsCalc();
         SMSFreeUnitsCalc smsObject = new SMSFreeUnitsCalc();
         VoiceFreeUnitsCalc voiceObject = new VoiceFreeUnitsCalc();
@@ -16,13 +16,16 @@ public class FreeUnitsCalc {
         Float totalSMSServiceCost = 0f;
         Float totalVoiceServiceCost = 0f;
         
-        Vector<UDR> allCustomersInUDRTable = db.retrieveAllCustomersHaveUDRs();
         
-        for(UDR customer:allCustomersInUDRTable){
+        
+//        Vector<UDR> allCustomersInUDRTable = db.retrieveAllCustomersHaveUDRs();
+        
+//        for(UDR customer:allCustomersInUDRTable){
  
-            System.out.println("element1:" + customer.getDialA());
-            System.out.println("element2:"+ customer.getProfileID());
-            System.out.println("############################################");
+//            System.out.println("element1:" + customer.getDialA());
+//            System.out.println("element2:"+ customer.getProfileID());
+//            System.out.println("############################################");
+
             totalVoiceServiceCost=voiceObject.fuVoiceUpdate(new UDR(customer.getDialA(),customer.getProfileID(),1));
             System.out.println("############################################");
             System.out.println("############################################");
@@ -35,13 +38,18 @@ public class FreeUnitsCalc {
             System.out.println("###############"+totalSMSServiceCost+"###############");
             System.out.println("###############"+totalDataServiceCost+"###############");
             System.out.println("############################################");
+            
+            CustomerProfile customerReccuringServices = new CustomerProfile(customer.getDialA(),
+                    customer.getProfileID(), totalVoiceServiceCost, totalSMSServiceCost, totalDataServiceCost);
+            
+            return customerReccuringServices;
 
-        }
+//        }
      
     }
         
-    public static void main(String [] args){     
-        FreeUnitsCalc fucalc = new FreeUnitsCalc();  
-        fucalc.CustomerServicesCalculations();
-    }
+//    public static void main(String [] args){     
+//        FreeUnitsCalc fucalc = new FreeUnitsCalc();  
+//        fucalc.CustomerServicesCalculations();
+//    }
 }

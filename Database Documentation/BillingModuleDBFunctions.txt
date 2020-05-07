@@ -99,5 +99,14 @@ $$LANGUAGE plpgsql;
 
 SELECT * FROM retrieveAllCustomersHaveUDRs();
 ----------------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION retieveProfileDetails(profileID integer) RETURNS SETOF profile AS $$
+DECLARE
+BEGIN
+	RETURN QUERY(SELECT * FROM profile WHERE pid = profileID);
+END;
+$$LANGUAGE plpgsql;
 
+
+SELECT * FROM retieveProfileDetails(1);
+-------------------------------------------------------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////END//////////////////////////////////////////////////////////////////////////
