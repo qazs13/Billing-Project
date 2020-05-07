@@ -180,7 +180,58 @@ public class Database {
         }
     }
     
-    public int getServiceIDByItsName (String serviceName)
+    public One_Time_Service getAllOneTimeServices ()
+    {
+        One_Time_Service one_time_service = new One_Time_Service();
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM one_time_service";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                one_time_service.getAllOneTimeServices().add(new One_Time_Service(result.getInt(1), result.getString(2)
+                        , result.getFloat(3)));
+            }            
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            return one_time_service;
+        }
+    }
+    
+    public Services getAllRecurringAndNotRecurringServices()
+    {
+        Services allServices = new Services();
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM services";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allServices.getAllServices().add(new Services(result.getInt(1), result.getString(2),
+                        result.getBoolean(3),result.getFloat(4)));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return allServices;
+        }
+    }        
+    
+    public int getServiceIDByItsName (String normalOrRecurringServiceName)
     {
         int serviceNumber = 0;
         try
@@ -188,7 +239,7 @@ public class Database {
             connect();
             sqlCommand = "SELECT sid FROM services WHERE sname = ?";
             preparedStatment = connection.prepareStatement(sqlCommand);
-            preparedStatment.setString(1, serviceName);
+            preparedStatment.setString(1, normalOrRecurringServiceName);
             result = preparedStatment.executeQuery();
             while (result.next())
             {
@@ -206,7 +257,33 @@ public class Database {
         }
     }
     
-    public String getServiceNameByItsID (int profileID)
+    public int getOneTimeServiceIDByItsName (String oneTimeServiceName)
+    {
+        int serviceNumber = 0;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT one_time_service_id FROM one_time_service WHERE osname = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, oneTimeServiceName);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                serviceNumber = result.getInt(1);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return serviceNumber;
+        }
+    }    
+    
+    public String getServiceNameByItsID (int serviceRecurringOrNormalID)
     {
         String serviceName = null;
         try
@@ -214,7 +291,7 @@ public class Database {
             connect();
             sqlCommand = "SELECT sname FROM services WHERE sid = ?";
             preparedStatment = connection.prepareStatement(sqlCommand);
-            preparedStatment.setInt(1, profileID);
+            preparedStatment.setInt(1, serviceRecurringOrNormalID);
             result = preparedStatment.executeQuery();
             while (result.next())
             {
@@ -509,7 +586,95 @@ public class Database {
             return operation;
         }
     }
+    
+    public boolean addCustomer (Customer customer)
+    {
+        try
+        {
+            connect();
+            sqlCommand = "INSERT INTO customer VALUES (?,?,?,?,?)";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, customer.getMsisdn());
+            preparedStatment.setString(2, customer.getF_name());
+            preparedStatment.setString(3, customer.getL_name());
+            preparedStatment.setString(4, customer.getEmail());
+            preparedStatment.setString(5, customer.getAddress());
+            preparedStatment.execute();
+            operation = true;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operation = false;
+        }
+        finally
+        {
+            stop();
+            return operation;
+        }
+    }
         
+    public boolean addCustomerProfile (Customer_Profile customer_profile)
+    {
+        try
+        {
+            connect();
+            sqlCommand = "INSERT INTO customer_profile VALUES (?,?,?,?,?,?,?,?,?,?)";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, customer_profile.getMsisdn());
+            preparedStatment.setInt(2, customer_profile.getPid());
+            preparedStatment.setString(3, customer_profile.getStart_date());
+            preparedStatment.setString(4, customer_profile.getEnd_date());
+            preparedStatment.setInt(5, customer_profile.getBlocked_services());
+            preparedStatment.setFloat(6, customer_profile.getFree_voice_same());
+            preparedStatment.setFloat(7, customer_profile.getFree_voice_diff());
+            preparedStatment.setFloat(8, customer_profile.getFree_sms_same());
+            preparedStatment.setFloat(9, customer_profile.getFree_sms_diff());
+            preparedStatment.setFloat(10, customer_profile.getFree_internet());
+            preparedStatment.execute();
+            operation = true;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operation = false;
+        }
+        finally
+        {
+            stop();
+            return operation;
+        }
+    }
+    
+    public boolean addOCCToCustomer (OCC occ)
+    {
+        int occID = 0;
+        try
+        {
+            connect();
+            sqlCommand = "INSERT INTO occ (msisdn,one_recurring_id,type_of_service,is_service_processed,service_processed_date)"
+                    + "VALUES (?,?,?,?,?)";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, occ.getMsisdn());
+            preparedStatment.setInt(2, occ.getOne_recurring_id());            
+            preparedStatment.setString(3, occ.getType_of_service());
+            preparedStatment.setBoolean(4, occ.getService_processed());
+            preparedStatment.setDate(5,occ.getService_processed_date());
+            preparedStatment.execute();
+            operation = true;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            operation = false;
+        }
+        finally
+        {
+            stop();
+            return operation;
+        }
+    }
+
     private void stop()
     {
         try 

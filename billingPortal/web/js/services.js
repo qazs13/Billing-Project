@@ -1,6 +1,6 @@
 document.getElementById('su').addEventListener("click",function(e)
-{
-    if (e.path[2][0].value != "")
+{   
+    if (e.path[2][0].value != "" && (e.path[2][1].value != e.path[2][2].value))
     {
         e.preventDefault();
         url = "/billingPortal/Add_Services";
@@ -35,5 +35,9 @@ document.getElementById('su').addEventListener("click",function(e)
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xmlhttp.send($('form').serialize());
+    }
+    else
+    {
+        alert("You Can't Select Recurring and One Time");
     }
 });

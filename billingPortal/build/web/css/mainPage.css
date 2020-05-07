@@ -807,7 +807,8 @@ h6
     width: 95%;
     margin: auto;
     border: 2px dashed #FF7900;
-
+    overflow-x: hidden;
+    overflow-y: no-display;
 }
 .fullSizeCustomer .mainAreaCustomer .row
 {
@@ -895,11 +896,52 @@ h6
     font-weight: bold;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
-.fullSizeCustomer input[type="submit"]
+.fullSizeCustomer .mainAreaCustomer .row .inputCustomer input[type="button"]
 {
-    position: relative;
-    bottom: 95px;
-    left: 80%;
+    width: 40px;
+    margin-left: 5px;
+    margin-top: 5px;
+    border: 1px solid #FF7900;
+    border-radius: 25px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.fullSizeCustomer .mainAreaCustomer .row .allRecurringServices span
+{
+    color: white;
+    display: grid;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;       
+}
+.fullSizeCustomer .mainAreaCustomer .row .allRecurringServices div
+{
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: auto;
+    border: 1px solid #FF7900;
+    border-radius: 25px;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.fullSizeCustomer .mainAreaCustomer .row .allRecurringServices div:hover
+{
+    border: 1px solid #FF7900;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+.fullSizeCustomer .mainAreaCustomer input[type="submit"]
+{
+    float: right;
+    margin-bottom: 10px;
+    margin-right: 10px;
     width: 14%;
     height: 11%;
     background-color: black;
@@ -909,13 +951,39 @@ h6
     color: white;
     font-weight: bold;
 }
-.fullSizeCustomer input[type="submit"]:hover
+.fullSizeCustomer .mainAreaCustomer input[type="submit"]:hover
 {
     background-color: #FF7900;
     border: 1px solid white;
     color: white;
 }
 /*Add Customer*/
+/*Tool Bar*/
+/* width */
+::-webkit-scrollbar 
+{
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track 
+{
+  background: #fffffff2;
+  border-radius: 25px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb 
+{
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover 
+{
+  background: #555;
+}
+/*Tool Bar*/
 /*Footer*/
 .footerOrange
 {
