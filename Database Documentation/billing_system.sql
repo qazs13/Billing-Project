@@ -53,6 +53,28 @@ CREATE TABLE public.admin (
 ALTER TABLE public.admin OWNER TO postgres;
 
 --
+-- Name: bill_id; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.bill_id (
+    f_name text,
+    l_name text,
+    address text,
+    pfees double precision,
+    osfee double precision,
+    recurring_fees double precision,
+    total_voice_cost double precision,
+    total_sms_cost double precision,
+    total_data_cost double precision,
+    tax double precision,
+    total_invoice double precision,
+    start_date text
+);
+
+
+ALTER TABLE public.bill_id OWNER TO postgres;
+
+--
 -- Name: cdr; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -473,11 +495,21 @@ Menna	1234
 
 
 --
+-- Data for Name: bill_id; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.bill_id (f_name, l_name, address, pfees, osfee, recurring_fees, total_voice_cost, total_sms_cost, total_data_cost, tax, total_invoice, start_date) FROM stdin;
+\.
+
+
+--
 -- Data for Name: cdr; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.cdr (cdr_id, diala, dialb, sid, duration_msg_volume, start_date, start_time, external_charges, is_rated) FROM stdin;
-1	01221234567	01001234567	1	100	20190301	10:03:20	0	f
+1	01221234567	01001234567	1	100	20190301	10:03:20	0	t
+3	01221235677	01001234567	1	100	20190301	10:03:20	0	t
+2	01221234567	01234567890	1	100	20190301	10:03:20	0	t
 \.
 
 
@@ -487,6 +519,7 @@ COPY public.cdr (cdr_id, diala, dialb, sid, duration_msg_volume, start_date, sta
 
 COPY public.customer (msisdn, f_name, l_name, email, address) FROM stdin;
 01221234567	Amr	Walid	amrwsk@gmail.com	El-mohandeseen
+01221235677	Rim	Amr	wkldjw;q	wl;dkq;;
 \.
 
 
@@ -496,6 +529,7 @@ COPY public.customer (msisdn, f_name, l_name, email, address) FROM stdin;
 
 COPY public.customer_profile (msisdn, pid, start_date, end_date, blocked_services, free_voice_same, free_voice_diff, free_sms_same, free_sms_diff, free_internet) FROM stdin;
 01221234567	1	20190301	\N	\N	\N	\N	\N	\N	\N
+01221235677	1	'20190301	\N	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -568,7 +602,9 @@ COPY public.services (sid, sname, is_recurring, recurring_fees) FROM stdin;
 --
 
 COPY public.udr (udr_id, pid, diala, dialb, sid, duration_msg_volume, start_date, start_time, external_charges, has_freeunits, cost, is_billed) FROM stdin;
-6	1	01221234567	01001234567	1	100	20190301	10:03:20	0	\N	200	f
+16	1	01221234567	01001234567	1	100	20190301	10:03:20	0	\N	200	f
+17	1	01221235677	01001234567	1	100	20190301	10:03:20	0	\N	200	f
+18	1	01221234567	01234567890	1	100	20190301	10:03:20	0	\N	50	f
 \.
 
 
@@ -576,7 +612,7 @@ COPY public.udr (udr_id, pid, diala, dialb, sid, duration_msg_volume, start_date
 -- Name: cdr_cdr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cdr_cdr_id_seq', 1, true);
+SELECT pg_catalog.setval('public.cdr_cdr_id_seq', 3, true);
 
 
 --
@@ -625,7 +661,7 @@ SELECT pg_catalog.setval('public.services_sid_seq', 1, true);
 -- Name: udr_udr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.udr_udr_id_seq', 6, true);
+SELECT pg_catalog.setval('public.udr_udr_id_seq', 18, true);
 
 
 --
