@@ -4,7 +4,13 @@ import Database.databaseConnection;
 import Interfaces.NetConnection;
 import SystemObjects.*;
 import static java.lang.Math.abs;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class VoiceFreeUnitsCalc {
@@ -27,10 +33,30 @@ public class VoiceFreeUnitsCalc {
         int consumedData = 0;
         Float costOfService = 0f;
         Float TotalUDRsCost = 0f;
+        Date start_date;
+        Date end_date;
         
         for(UDR udr: udrList){
-            System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ 
+           
+                System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ 
                     "#####"+ udr.getOrderedDate()+ "##########" + udr.getDurationMsgVolume());
+//            try {
+//                start_date=(Date) new SimpleDateFormat("yyyy-MM-dd").parse(customerRemainedFUs.getStartDateOfContract());
+//                end_date=(Date) new SimpleDateFormat("yyyy-MM-dd").parse(customerRemainedFUs.getEndDateOfContract()); 
+//                
+//                if((!udr.getOrderedDate().before(start_date)) && (!udr.getOrderedDate().after(end_date))){
+//                
+//                System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ 
+//                    "#####"+ udr.getOrderedDate()+ "##########" + udr.getDurationMsgVolume());
+//                }
+//            } catch (ParseException ex) {
+//                Logger.getLogger(VoiceFreeUnitsCalc.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//             start_date = To_Date(customerRemainedFUs.getStartDateOfContract(),"YYYY-MM-DD");
+//             System.out.println("###" + start_date);
+
+            
+        
         }
 
         if(udrList.isEmpty()){

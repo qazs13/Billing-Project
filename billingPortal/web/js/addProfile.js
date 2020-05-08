@@ -143,7 +143,7 @@ document.getElementById('thirdPageProfileSubmit').addEventListener("click",funct
                 var status = xmlhttp.status;
                 if (status === 0 || (status >= 200 && status < 400)) 
                 {
-                    location.reload();
+                    window.location.assign("allProfilesList.jsp");
                     alert ("Third Step Free Units Added to Profile Successfully");
                 }
                 else

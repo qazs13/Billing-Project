@@ -1,7 +1,7 @@
 <%@include file="../header&footer/header.html" %>
 <!-- Cards Details -->
   <div class="container fullSize">
-    <a href="#" class="cardDisplay">
+    <a href="./addCustomer.jsp" class="cardDisplay">
       <i class="fas fa-user-plus profileIcon"></i>
       <h4>Add New User</h4>
     </a>

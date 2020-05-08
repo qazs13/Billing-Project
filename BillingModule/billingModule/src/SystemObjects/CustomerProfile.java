@@ -11,6 +11,9 @@ public class CustomerProfile {
     String blockedServices;
     int fuVoiceOnNet,fuVoiceCrossNet;
     int fuSMSOnNet,fuSMSCrossNet,fuInternet;
+    Float totalVoiceServiceCost;
+    Float totalSMSServiceCost;
+    Float totalDataServiceCost;
     
     
     public CustomerProfile(){
@@ -42,6 +45,16 @@ public class CustomerProfile {
         this.fuSMSOnNet = _fuSMSOnNet;
         this.fuSMSCrossNet = _fuSMSCrossNet;
         this.fuInternet = _fuInternet;
+    }
+    
+    
+    public CustomerProfile(String _msisdn,int _profileID,Float _totalVoiceServiceCost,
+            Float _totalSMSServiceCost,Float _totalDataServiceCost){
+        this.msisdn = _msisdn;
+        this.profileID = _profileID;
+        this.totalVoiceServiceCost = _totalVoiceServiceCost;
+        this.totalSMSServiceCost = _totalSMSServiceCost;
+        this.totalDataServiceCost = _totalDataServiceCost;
     }
     
     public void setProfileID(int _profileID){
@@ -92,6 +105,17 @@ public class CustomerProfile {
         this.consumedQuantity = _consumedQuantity;
     }
 
+    public void setTotalVoiceServiceCost(Float _totalVoiceServiceCost){
+        this.totalVoiceServiceCost = _totalVoiceServiceCost;
+    }
+    
+    public void setTotalSMSServiceCost(Float _totalSMSServiceCost){
+        this.totalSMSServiceCost = _totalSMSServiceCost;
+    }
+    
+    public void setTotalDataServiceCost(Float _totalDataServiceCost){
+        this.totalDataServiceCost = _totalDataServiceCost;
+    }
     
     
     
@@ -143,5 +167,15 @@ public class CustomerProfile {
         return this.consumedQuantity;
     }
 
-
+    public Float getTotalVoiceServiceCost(){
+        return this.totalVoiceServiceCost;
+    }
+    
+    public Float getTotalSMSServiceCost(){
+        return this.totalSMSServiceCost;
+    }
+    
+    public Float getTotalDataServiceCost(){
+        return this.totalDataServiceCost;
+    }
 }

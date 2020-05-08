@@ -273,6 +273,39 @@ public class databaseConnection {
         } 
     }
     
+    public Profile retieveProfileDetails(Profile profile){
+        
+        connect();
+        
+        Profile profileDetails = new Profile();    
+        try {
+            sqlcommand = "SELECT * FROM retieveProfileDetails(?)";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1, profile.getProfileID());
+            result = preparedstatement.executeQuery();
+            
+            while(result.next()){
+                profileDetails.setProfileID(result.getInt(1));
+                profileDetails.setProfileName(result.getString(2));
+                profileDetails.setRenewDuration(result.getInt(3));
+                profileDetails.setProfileFees(result.getFloat(4));
+            }
+            
+            System.out.println("Profile Details retrieved successfully");
+            return profileDetails;
+            
+        } catch (SQLException ex) {
+            
+            System.out.println("Profile Details could not be retrieved !!!!");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        }
+  
+        
+    }
+    
     private void stop(){
         try {
             connection.close();
@@ -328,6 +361,9 @@ public class databaseConnection {
 //            System.out.println("#######"+ udr.getDialA() +"#######" +udr.getProfileID());
 //        }
 
+
+//        Profile p = db.retieveProfileDetails(new Profile(1));
+//        System.out.println("#####" + p.getProfileName() + "######" + p.getProfileFees());
     }
     
     
