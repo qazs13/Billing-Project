@@ -20,6 +20,12 @@ public class Profile
     {
         this.pName = pName;
     }
+    
+    public Profile(int pID) 
+    {
+                this.pID = pID;
+
+    }
 
     public Profile(int pID, String pName) 
     {

@@ -5,7 +5,7 @@
       <i class="fas fa-user-plus profileIcon"></i>
       <h4>Add New User</h4>
     </a>
-    <a href="#" class="cardDisplay">
+      <a href="searchpage.jsp" class="cardDisplay">
       <i class="fas fa-search profileIcon"></i>
       <h4>Search</h4>      
     </a>
