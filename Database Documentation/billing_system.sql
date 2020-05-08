@@ -151,19 +151,6 @@ CREATE TABLE public.customer_profile (
 ALTER TABLE public.customer_profile OWNER TO postgres;
 
 --
--- Name: customer_profile_services; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.customer_profile_services (
-    msisdn text NOT NULL,
-    pid integer NOT NULL,
-    occ_id integer NOT NULL
-);
-
-
-ALTER TABLE public.customer_profile_services OWNER TO postgres;
-
---
 -- Name: free_units; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -208,9 +195,11 @@ ALTER SEQUENCE public.free_units_fid_seq OWNED BY public.free_units.fid;
 
 CREATE TABLE public.occ (
     occ_id integer NOT NULL,
-    service_processed boolean,
+    msisdn text NOT NULL,
     one_recurring_id integer,
-    type_of_service text
+    type_of_service text,
+    is_service_processed boolean,
+    service_processed_date date
 );
 
 
@@ -534,14 +523,6 @@ COPY public.customer_profile (msisdn, pid, start_date, end_date, blocked_service
 
 
 --
--- Data for Name: customer_profile_services; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.customer_profile_services (msisdn, pid, occ_id) FROM stdin;
-\.
-
-
---
 -- Data for Name: free_units; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -555,7 +536,7 @@ COPY public.free_units (fid, free_voice_same, free_voice_diff, free_sms_same, fr
 -- Data for Name: occ; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.occ (occ_id, service_processed, one_recurring_id, type_of_service) FROM stdin;
+COPY public.occ (occ_id, msisdn, one_recurring_id, type_of_service, is_service_processed, service_processed_date) FROM stdin;
 \.
 
 
@@ -697,14 +678,6 @@ ALTER TABLE ONLY public.customer_profile
 
 
 --
--- Name: customer_profile_services customer_profile_services_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.customer_profile_services
-    ADD CONSTRAINT customer_profile_services_pkey PRIMARY KEY (msisdn, pid, occ_id);
-
-
---
 -- Name: free_units free_units_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -717,7 +690,7 @@ ALTER TABLE ONLY public.free_units
 --
 
 ALTER TABLE ONLY public.occ
-    ADD CONSTRAINT occ_pkey PRIMARY KEY (occ_id);
+    ADD CONSTRAINT occ_pkey PRIMARY KEY (occ_id, msisdn);
 
 
 --
@@ -769,14 +742,6 @@ ALTER TABLE ONLY public.cdr
 
 
 --
--- Name: customer_profile customer_profile_blocked_services_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.customer_profile
-    ADD CONSTRAINT customer_profile_blocked_services_fkey FOREIGN KEY (blocked_services) REFERENCES public.services(sid);
-
-
---
 -- Name: customer_profile customer_profile_msisdn_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -793,35 +758,19 @@ ALTER TABLE ONLY public.customer_profile
 
 
 --
--- Name: customer_profile_services customer_profile_services_msisdn_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.customer_profile_services
-    ADD CONSTRAINT customer_profile_services_msisdn_fkey FOREIGN KEY (msisdn) REFERENCES public.customer(msisdn);
-
-
---
--- Name: customer_profile_services customer_profile_services_occ_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.customer_profile_services
-    ADD CONSTRAINT customer_profile_services_occ_id_fkey FOREIGN KEY (occ_id) REFERENCES public.occ(occ_id);
-
-
---
--- Name: customer_profile_services customer_profile_services_pid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.customer_profile_services
-    ADD CONSTRAINT customer_profile_services_pid_fkey FOREIGN KEY (pid) REFERENCES public.profile(pid);
-
-
---
 -- Name: free_units my_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.free_units
     ADD CONSTRAINT my_fk FOREIGN KEY (pid) REFERENCES public.profile(pid);
+
+
+--
+-- Name: occ occ_msisdn_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.occ
+    ADD CONSTRAINT occ_msisdn_fkey FOREIGN KEY (msisdn) REFERENCES public.customer(msisdn);
 
 
 --
