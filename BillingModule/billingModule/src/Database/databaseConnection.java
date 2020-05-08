@@ -341,6 +341,43 @@ public class databaseConnection {
         }
         return onetimefee;
     }
+    public int getonetimeid(OCC occ) throws SQLException{
+        int osid=0;
+        connect();
+        String sql = "select  *from one_time_service where one_time_service_id =? ";
+        preparedstatement = connection.prepareStatement(sql);
+        preparedstatement.setInt(1, occ.one_rec_id);
+        System.out.println(occ.one_rec_id);
+        result = preparedstatement.executeQuery();
+        while(result.next()){
+            osid = result.getInt("one_time_service_id");
+            
+        
+        }
+        
+    
+    
+    return osid;
+    
+    }
+    public int getRecurringid(OCC occ) throws SQLException{
+        int reid=0;
+        connect();
+        String sql = "select  *from services where sid =? and is_recurring=true ";
+        preparedstatement = connection.prepareStatement(sql);
+        preparedstatement.setInt(1, occ.one_rec_id);
+        result = preparedstatement.executeQuery();
+        while(result.next()){
+            reid = result.getInt("sid");
+            
+        
+        }
+        
+    
+    
+    return reid;
+    
+    }
 
     private void stop() {
         try {

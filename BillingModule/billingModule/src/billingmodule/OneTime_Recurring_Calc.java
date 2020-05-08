@@ -17,21 +17,41 @@ import java.util.Vector;
  */
 public class OneTime_Recurring_Calc {
 
-    public float fuInternetUpdate(UDR customerUDR) throws SQLException {
-
+    public void getOneTimeRecurringFee(UDR customerUDR) throws SQLException {
+        double onetimecost =0;
+        double recurringcost =0;
         databaseConnection db = new databaseConnection();
         Vector<OCC> alloccs =db.getAllOcc(customerUDR);
         for (OCC occ : alloccs){
-            System.out.println(occ.msisdn);
+            System.out.println(occ.type_of_service);
+            if(occ.type_of_service .equals("onetime")){
+                
+                if( occ.one_rec_id== db.getonetimeid(occ))  { //onetime
+                    System.out.println(db.getOneTimeFees(occ));
+                    onetimecost=db.getOneTimeFees(occ);
+                    System.out.println(onetimecost);
+                }
+            }
+            else if(occ.type_of_service.equals("recurring"))  {  
+                 if(  occ.one_rec_id ==db.getRecurringid(occ) ) {
+                
+                    recurringcost = db.getRecurringFees(occ);
+                     System.out.println(recurringcost);
+                }
+                
+                
+            }
+        
         }
+        
+    }
+        
     
-        return 0;
-    }
+    
     public static void main(String[] args) throws SQLException {
-        databaseConnection db = new databaseConnection();
-        Vector<OCC> alloccs =db.getAllOcc(new UDR("01221234567", 1));
-        for (OCC occ : alloccs){
-            System.out.println(occ.msisdn);
-        }
+        OneTime_Recurring_Calc o = new OneTime_Recurring_Calc();
+        o.getOneTimeRecurringFee(new UDR("0122123456",1));
     }
-}
+    
+    
+    }
