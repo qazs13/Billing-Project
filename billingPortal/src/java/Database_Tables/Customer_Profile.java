@@ -27,6 +27,10 @@ public class Customer_Profile
         this.free_internet = free_internet;
     }
 
+    public Customer_Profile() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public void setMsisdn(String msisdn) 
     {
         this.msisdn = msisdn;

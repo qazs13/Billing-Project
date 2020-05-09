@@ -62,7 +62,7 @@ public class Rating_Module
                     try
                     {
                         System.out.println("No CDRs to Be Rated");
-                        TimeUnit.SECONDS.sleep(10);
+                        Thread.sleep(3000);
                     }
                     catch (InterruptedException ex) 
                     {
