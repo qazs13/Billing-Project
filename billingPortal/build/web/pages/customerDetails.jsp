@@ -64,20 +64,24 @@
                     <p id="free_internet"> Internet units  :  <% out.println(c_p.elementAt(j).getFree_internet()); %> </p>
 
                     <%
-                                            if (occ.elementAt(y).getType_of_service().equals("recurring")) {
-                                                services = db.select_from_services(occ.elementAt(y).getOne_recurring_id());%>
+                     if (occ.elementAt(y).getType_of_service().equals("recurring")) {
+                          services = db.select_from_services(occ.elementAt(y).getOne_recurring_id());
+                          for(y=0;y<services.size();y++){
+                    
+                    %>
 
                     <p id="services"> Recurring Service name  :  <% out.println(services.elementAt(y).getSname()); %> </p>
 
                     <%
 
-                    } else if (occ.elementAt(y).getType_of_service().equals("onetime")) {
-                                                       oservice = db.select_from_one_time(occ.elementAt(y).getOne_recurring_id());%>
+                     } } if (occ.elementAt(y).getType_of_service().equals("onetime")) {
+                             oservice = db.select_from_one_time(occ.elementAt(y).getOne_recurring_id());
+                                for(y=0;y<oservice.size();y++) {%>
 
                     <p id="oservice"> One time Service name  :  <% out.println(oservice.elementAt(y).getOsname()); %> </p>
 
                     <%
-                        } else {
+                        } }else {
                             System.out.println("No services found");
                         }
 

@@ -351,7 +351,7 @@ public class Database1 {
           
             rs = ps.executeQuery();
             while (rs.next()) {
-                service.add(new Services(rs.getString("sname"),rs.getBoolean("isRecurring"),rs.getFloat("serviceFees")));
+                service.add(new Services(rs.getString("sname"),rs.getBoolean("is_recurring"),rs.getFloat("recurring_fees")));
             }
 
         } catch (Exception e) {
