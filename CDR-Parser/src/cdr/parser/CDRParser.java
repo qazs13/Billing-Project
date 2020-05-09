@@ -74,7 +74,7 @@ public class CDRParser {
                 cdr.duration_msg_vol = Integer.parseInt(splited[3]);
                 cdr.start_date = splited[4];
                 cdr.start_time = splited[5];
-                cdr.external_charges = splited[6];
+                cdr.external_charges = Double.parseDouble(splited[6]);
                 con.insertCdr(cdr);
             }
         }
@@ -112,7 +112,7 @@ public class CDRParser {
         String archivePath = path.concat("/archivecdr");
         File cdrdir = new File(cdrPath);
         File archivedir = new File(archivePath);
-        if (!cdrdir.exists() && !archivedir.exists()) {
+        if (!cdrdir.exists() || !archivedir.exists()) {
             cdrdir.mkdir();
             archivedir.mkdir();
 

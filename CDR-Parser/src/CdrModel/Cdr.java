@@ -20,10 +20,10 @@ public class Cdr {
     public int duration_msg_vol;
     public String start_date;
     public String start_time;
-    public String external_charges;
+    public double external_charges;
     public boolean is_rated;
 
-    public Cdr(String diala, String dialb, int sid, int duration_msg_vol, String start_date, String start_time, String external_charges, boolean is_rated) {
+    public Cdr(String diala, String dialb, int sid, int duration_msg_vol, String start_date, String start_time, double  external_charges, boolean is_rated) {
         this.diala = diala;
         this.dialb = dialb;
         this.sid = sid;

@@ -45,7 +45,7 @@ public class ConnectDB {
         pst.setInt(4, cdr.duration_msg_vol);
         pst.setString(5, cdr.start_date);
         pst.setString(6,cdr.start_time);
-        pst.setString(7,cdr.external_charges);
+        pst.setDouble(7,cdr.external_charges);
         pst.setBoolean(8,cdr.is_rated);
         pst.executeUpdate();
         System.out.println("inserted");
