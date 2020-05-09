@@ -12,6 +12,9 @@ package Database;
 import Database_Tables.CDR;
 import Database_Tables.Customer_Profile;
 import Database_Tables.Profile;
+import Database_Tables.OCC;
+import Database_Tables.Services;
+import Database_Tables.One_Time_Service;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -312,5 +315,78 @@ public class Database1 {
         }
 
     }
+     
+        public Vector<OCC> select_from_occ(String msisdn) {
+
+        Vector<OCC> occ = new Vector();
+
+        try {
+            connect();
+            SQLcommand = "select * from occ where msisdn =?";
+            ps = connection.prepareStatement(SQLcommand);
+            ps.setString(1, msisdn);
+          
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                occ.add(new OCC(rs.getString("msisdn"),rs.getInt("one_recurring_id"),rs.getString("type_of_service"),rs.getDate("service_processed_date")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            disconnect();
+        } finally {
+
+            return occ;
+        } }
+        
+         public Vector<Services> select_from_services(int sid) {
+
+        Vector<Services> service = new Vector();
+
+        try {
+            connect();
+            SQLcommand = "select * from services where sid =?";
+            ps = connection.prepareStatement(SQLcommand);
+            ps.setInt(1, sid);
+          
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                service.add(new Services(rs.getString("sname"),rs.getBoolean("is_recurring"),rs.getFloat("recurring_fees")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            disconnect();
+        } finally {
+
+            return service;
+        }
+
+    }
+         
+                public Vector<One_Time_Service> select_from_one_time(int sid) {
+
+        Vector<One_Time_Service> oservice = new Vector();
+
+        try {
+            connect();
+            SQLcommand = "select * from one_time_service where one_time_service_id =?";
+            ps = connection.prepareStatement(SQLcommand);
+            ps.setInt(1, sid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                oservice.add(new One_Time_Service(rs.getString("osname"),rs.getFloat("osfee")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            disconnect();
+        } finally {
+
+            return oservice;
+        }
+                }
+
+
 
 }
