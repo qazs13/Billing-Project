@@ -16,10 +16,13 @@ import java.util.Vector;
  * @author ahmed
  */
 public class OneTime_Recurring_Calc {
+    
+    //recurring_service 
+//one_time_service 
 
-    public void getOneTimeRecurringFee(UDR customerUDR) throws SQLException {
-        double onetimecost =0;
-        double recurringcost =0;
+    public OCC getOneTimeRecurringFee(UDR customerUDR) throws SQLException {
+        float totalonetimecost =0;
+        float totalrecurringcost =0;
         databaseConnection db = new databaseConnection();
         Vector<OCC> alloccs =db.getAllOcc(customerUDR);
         for (OCC occ : alloccs){
@@ -28,29 +31,31 @@ public class OneTime_Recurring_Calc {
                 
                 if( occ.one_rec_id== db.getonetimeid(occ))  { //onetime
                     System.out.println(db.getOneTimeFees(occ));
-                    onetimecost=db.getOneTimeFees(occ);
-                    System.out.println(onetimecost);
+                    totalonetimecost+=db.getOneTimeFees(occ);
+                    System.out.println(totalonetimecost);
                 }
             }
             else if(occ.type_of_service.equals("recurring"))  {  
                  if(  occ.one_rec_id ==db.getRecurringid(occ) ) {
                 
-                    recurringcost = db.getRecurringFees(occ);
-                     System.out.println(recurringcost);
+                    totalrecurringcost += db.getRecurringFees(occ);
+                     System.out.println(totalrecurringcost);
                 }
                 
                 
             }
-        
+            db.updateOCC(occ);
         }
-        
+        return new OCC(totalonetimecost, totalrecurringcost);
     }
         
     
     
     public static void main(String[] args) throws SQLException {
         OneTime_Recurring_Calc o = new OneTime_Recurring_Calc();
-        o.getOneTimeRecurringFee(new UDR("0122123456",1));
+        OCC occ = new OCC();
+        occ =o.getOneTimeRecurringFee(new UDR("01221234567",1));
+        System.out.println(occ.totalonetime +" "+occ.totalrecurring);
     }
     
     

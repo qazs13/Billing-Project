@@ -306,77 +306,86 @@ public class databaseConnection {
         String sql = "select * from occ where msisdn= ? and is_service_processed=false";
         preparedstatement = connection.prepareStatement(sql);
         preparedstatement.setString(1, udr.getDialA());
-       result= preparedstatement.executeQuery();
-        while(result.next()){
-            occ= new OCC(result.getInt(1),result.getString(2),result.getInt(3),
-            result.getString(4),result.getBoolean(5),result.getDate(6));
+        result = preparedstatement.executeQuery();
+        while (result.next()) {
+            occ = new OCC(result.getInt(1), result.getString(2), result.getInt(3),
+                    result.getString(4), result.getBoolean(5), result.getDate(6));
             retrievedOccs.add(occ);
-        
-        
+
         }
+        stop();
         return retrievedOccs;
     }
-    
-    public double getRecurringFees(OCC occ) throws SQLException{
+
+    public double getRecurringFees(OCC occ) throws SQLException {
         connect();
-        double recurringfee=0;
+        double recurringfee = 0;
         String sql = "select recurring_fees from services where sid = ? ";
         preparedstatement = connection.prepareStatement(sql);
         preparedstatement.setInt(1, occ.one_rec_id);
         result = preparedstatement.executeQuery();
-        while(result.next()){
-            recurringfee=result.getDouble(1);
+        while (result.next()) {
+            recurringfee = result.getDouble(1);
         }
+        stop();
         return recurringfee;
     }
-    public double getOneTimeFees(OCC occ) throws SQLException{
+
+    public double getOneTimeFees(OCC occ) throws SQLException {
         connect();
-        double onetimefee=0;
+        double onetimefee = 0;
         String sql = "select osfee from one_time_service where one_time_service_id = ? ";
         preparedstatement = connection.prepareStatement(sql);
         preparedstatement.setInt(1, occ.one_rec_id);
         result = preparedstatement.executeQuery();
-        while(result.next()){
-            onetimefee=result.getDouble(1);
+        while (result.next()) {
+            onetimefee = result.getDouble(1);
         }
+        stop();
         return onetimefee;
     }
-    public int getonetimeid(OCC occ) throws SQLException{
-        int osid=0;
+
+    public int getonetimeid(OCC occ) throws SQLException {
+        int osid = 0;
         connect();
         String sql = "select  *from one_time_service where one_time_service_id =? ";
         preparedstatement = connection.prepareStatement(sql);
         preparedstatement.setInt(1, occ.one_rec_id);
         System.out.println(occ.one_rec_id);
         result = preparedstatement.executeQuery();
-        while(result.next()){
+        while (result.next()) {
             osid = result.getInt("one_time_service_id");
-            
-        
+
         }
-        
-    
-    
-    return osid;
-    
+        stop();
+        return osid;
+
     }
-    public int getRecurringid(OCC occ) throws SQLException{
-        int reid=0;
+
+    public int getRecurringid(OCC occ) throws SQLException {
+        int reid = 0;
         connect();
         String sql = "select  *from services where sid =? and is_recurring=true ";
         preparedstatement = connection.prepareStatement(sql);
         preparedstatement.setInt(1, occ.one_rec_id);
         result = preparedstatement.executeQuery();
-        while(result.next()){
+        while (result.next()) {
             reid = result.getInt("sid");
-            
-        
+
         }
-        
-    
-    
-    return reid;
-    
+        stop();
+        return reid;
+
+    }
+
+    public void updateOCC(OCC occ) throws SQLException {
+        connect();
+        String sql = "update occ set is_service_processed=true where occ_id=?";
+        preparedstatement = connection.prepareStatement(sql);
+        preparedstatement.setInt(1, occ.occ_id);
+        preparedstatement.execute();
+        stop();
+
     }
 
     private void stop() {
@@ -391,14 +400,13 @@ public class databaseConnection {
 
     public static void main(String[] args) throws SQLException {
         databaseConnection db = new databaseConnection();
-        
 
 //        FreeUnit fu =db.ProfileFU(new FreeUnit(1)); 
 //        System.out.println("##########"+ fu.getFUSMSCrossNet() + "#############");
 //        CustomerProfile cFreeunits = new CustomerProfile(1,"01215860927");
 //        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
 //        System.out.println("###########"+cPFreeUnits.getEndDateOfContract()+"###############");
- //       UDR udr=new UDR("01221234567",1,4);
+        //       UDR udr=new UDR("01221234567",1,4);
 //        Vector<UDR> udrList=db.customerUDRs(udr);
 //        for(UDR udr2 : udrList)
 //        {
@@ -430,18 +438,13 @@ public class databaseConnection {
 //        }
 //        Profile p = db.retieveProfileDetails(new Profile(1));
 //        System.out.println("#####" + p.getProfileName() + "######" + p.getProfileFees());
-   
-        UDR udr= new UDR("01221234567", 1);
-        Vector<OCC> occs =db.getAllOcc(udr);
-        for(OCC occ : occs){
-            System.out.println(occ.occ_id+""+occ.msisdn+""+occ.type_of_service +" "+occ.one_rec_id);
-        
+        UDR udr = new UDR("01221234567", 1);
+        Vector<OCC> occs = db.getAllOcc(udr);
+        for (OCC occ : occs) {
+            System.out.println(occ.occ_id + "" + occ.msisdn + "" + occ.type_of_service + " " + occ.one_rec_id);
+
         }
-        
+
     }
-    
-    
-    
-    
 
 }
