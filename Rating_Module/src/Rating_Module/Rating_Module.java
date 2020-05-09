@@ -2,9 +2,6 @@ package Rating_Module;
 
 import Database.Database;
 import Database_Tables.CDR;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class Rating_Module 
@@ -62,7 +59,7 @@ public class Rating_Module
                     try
                     {
                         System.out.println("No CDRs to Be Rated");
-                        Thread.sleep(3000);
+                        Thread.sleep(10000);
                     }
                     catch (InterruptedException ex) 
                     {
