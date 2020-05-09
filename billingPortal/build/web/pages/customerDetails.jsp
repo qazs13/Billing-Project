@@ -55,12 +55,12 @@
         <p id="pfees"> Fees  :  <% out.println(profile.elementAt(x).getpFees());
                         out.println("L.E"); %> </p>
         <p id="renew"> Renew Duration  :  <% out.println(profile.elementAt(x).getRenew_Duration());
-                        out.println("days"); %> </p>                        
-    <p id="free_voice_same"> Voice units for same network :  <% out.println(c_p.elementAt(j).getFree_voice_same()); %> </p>
-    <p id="free_voice_diff"> Voice units for different network :  <% out.println(c_p.elementAt(j).getFree_voice_diff()); %> </p>
+                        out.println("Days"); %> </p>                        
+    <p id="free_voice_same"> Voice units for same network :  <% out.println(c_p.elementAt(j).getFree_voice_same()); out.println("Minutes"); %> </p>
+    <p id="free_voice_diff"> Voice units for different network :  <% out.println(c_p.elementAt(j).getFree_voice_diff());  out.println("Minutes ");%> </p>
     <p id="free_sms_same"> SMS units for same network :  <% out.println(c_p.elementAt(j).getFree_sms_same()); %> </p>
     <p id="free_sms_diff"> SMS units for different network :  <% out.println(c_p.elementAt(j).getFree_sms_diff()); %> </p>
-    <p id="free_internet"> Internet units  :  <% out.println(c_p.elementAt(j).getFree_internet()); %> </p>
+    <p id="free_internet"> Internet units  :  <% out.println(c_p.elementAt(j).getFree_internet());  out.println("MegaBytes");%> </p>
 
     <%
         if (occ.size() > 0) {
@@ -72,7 +72,7 @@
     %>
 
     <p id="services"> Recurring Service name  :  <% out.println(services.elementAt(y).getSname()); %> </p>
-
+    
     <%
 
             }
@@ -82,6 +82,7 @@
                             for (y = 0; y < oservice.size(); y++) {%>
 
     <p id="oservice"> One time Service name  :  <% out.println(oservice.elementAt(y).getOsname()); %> </p>
+    <p id="oservice"> <% out.println(oservice.elementAt(y).getOsname()); %> Service fees  :  <% out.println(oservice.elementAt(y).getOsfee()); out.println("L.E"); %> </p>
 
     <%
             }
