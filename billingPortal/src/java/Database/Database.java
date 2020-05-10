@@ -2,6 +2,7 @@ package Database;
 
 import Database_Tables.*;
 import java.sql.*;
+import java.util.Vector;
 
 public class Database {
 
@@ -674,7 +675,206 @@ public class Database {
             return operation;
         }
     }
+    
+    public Customer searchOfAllCustomersData(String key) 
+    {
+        Customer allCustomers = new Customer();
+        try {
+            connect();
+            sqlCommand = "SELECT * FROM customer WHERE msisdn ILIKE ? or f_name ILIKE ? or l_name ILIKE ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, "%" +key+ "%");
+            preparedStatment.setString(2, "%" +key+ "%");
+            preparedStatment.setString(3, "%" +key+ "%");
+            result = preparedStatment.executeQuery();
+            while (result.next()) 
+            {
+                allCustomers.getAllCustomers().add(new Customer(result.getString("msisdn"), result.getString("f_name"), 
+                        result.getString("l_name"), result.getString("email"), result.getString("address")));
+            }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+            stop();
+            return allCustomers;
+        }
+    }
+    
+    public Customer getCustomerByMSISDN (Customer customer) 
+    {
+        try {
+            connect();
+            sqlCommand = "SELECT * FROM customer WHERE msisdn = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, customer.getMsisdn());
+            result = preparedStatment.executeQuery();
+            while (result.next()) 
+            {
+                customer.setF_name(result.getString("f_name"));
+                customer.setL_name(result.getString("l_name"));
+                customer.setEmail(result.getString("email"));
+                customer.setAddress(result.getString("address"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+            stop();
+            return customer;
+        }
+    }
+    
+   public Customer_Profile getCustomerProfileByMSISDN (Customer customer) 
+    {
+        Customer_Profile customer_profile = null;
+        try
+        {
+            connect();
+            sqlCommand = "select * from customer_profile where msisdn = ? AND end_date  = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, customer.getMsisdn());
+            preparedStatment.setString(2, "");
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                customer_profile = new Customer_Profile(result.getString("msisdn"),
+                        result.getInt("pid"),
+                        result.getString("start_date"),
+                        result.getString("end_date"),
+                        result.getInt("blocked_services"),
+                        result.getFloat("free_voice_same"),
+                        result.getFloat("free_voice_diff"),
+                        result.getFloat("free_sms_same"),
+                        result.getFloat("free_sms_diff"),
+                        result.getFloat("free_internet"));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally 
+        {
+            stop();
+            return customer_profile;
+        }
+    }
+   
+     public Profile select_from_profile(int pid) 
+     {
+        Profile profile = null;
+        try 
+        {
+            connect();
+            sqlCommand = "SELECT * FROM profile WHERE pid = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, pid);
+          
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                profile = new Profile(result.getInt("pid"), result.getString("pname"), 
+                        result.getInt("renew_duration"), result.getFloat("pfees"));
+            }
+
+        }
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace();
+        } 
+        finally
+        {
+            stop();
+            return profile;
+        }
+    }   
+
+    public OCC select_from_occ(String msisdn)
+    {
+        OCC allOCCs = new OCC();
+        try 
+        {
+            connect();
+            sqlCommand = "SELECT * FROM occ WHERE msisdn = ?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setString(1, msisdn);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allOCCs.getAllOCCs().add(new OCC(result.getString("msisdn"),
+                        result.getInt("one_recurring_id"),result.getString("type_of_service"),
+                        result.getDate("service_processed_date")));
+            }
+
+        } 
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace();
+        } 
+        finally 
+        {
+            stop();
+            return allOCCs;
+        }
+    }
+    
+    public Services select_from_services(int sid) {
+        Services service = null;
+        try {
+            connect();
+            sqlCommand = "select * from services where sid =?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, sid);
+            result = preparedStatment.executeQuery();
+            while (result.next()) 
+            {
+                service = new Services(result.getString("sname"),result.getBoolean("is_recurring"),result.getFloat("recurring_fees"));
+            }
+        }
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace();
+
+        } 
+        finally
+        {
+            stop();
+            return service;
+        }
+    }    
+    
+    public One_Time_Service select_from_one_time(int sid) 
+    {
+        One_Time_Service oservice = null;
+        try 
+        {
+            connect();
+            sqlCommand = "select * from one_time_service where one_time_service_id =?";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            preparedStatment.setInt(1, sid);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                oservice = new One_Time_Service(result.getString("osname"),result.getFloat("osfee"));
+            }
+
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally 
+        {
+            stop();
+            return oservice;
+        }
+    }    
+     
     private void stop()
     {
         try 

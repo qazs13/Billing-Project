@@ -968,7 +968,7 @@ h6
 /* Track */
 ::-webkit-scrollbar-track 
 {
-  background: #fffffff2;
+  background: #fffffff;
   border-radius: 25px;
 }
 
@@ -984,6 +984,174 @@ h6
   background: #555;
 }
 /*Tool Bar*/
+/*Search*/
+.fullSizeSearch
+{
+    height: 570px;
+    background-color: black;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.fullSizeSearch h1
+{
+    padding: 10px;
+    color: #FF7900;
+}
+.fullSizeSearch .mainAreaSearch
+{
+    height: 70%;
+    width: 40%;
+    margin: auto;
+    border: 2px solid #FF7900;
+    border-radius: 25px;
+    background-color: black;
+}
+.fullSizeSearch .mainAreaSearch lable
+{
+    color: #FF7900;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    padding-top: 30px;
+    font-size: 50px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;    
+}
+.fullSizeSearch .mainAreaSearch .search-box
+{
+    display: inline-block;    
+    width: 50%;
+    padding-left: 5px;
+    margin-left: 4.5%;
+    margin-right: 1%;
+    margin-top: 20%;
+    border: 1px solid #FF7900;
+    border-radius: 25px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;    
+}
+
+.fullSizeSearch .mainAreaSearch .addCustomer[type="submit"]
+{
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: 40%;
+    height: 11%;
+    background-color: black;
+    border-radius: 25px;
+    border: 1px solid white;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+}
+.fullSizeSearch .mainAreaSearch .addCustomer[type="submit"]:hover
+{
+    background-color: #FF7900;
+    border: 1px solid white;
+    color: white;
+}
+/*Search Page*/
+/*Search Result*/
+#customer_data
+{
+    margin: 6% 1% 1% 1%;
+    align-items: center;
+    display: inline-block;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+    border: solid;
+    border-color: #FF7900;
+    border-radius: 25px;
+    width:22%;
+    background-color: black;
+    color: white;
+}
+#customer_data .anch
+{
+    margin-left: 20%;
+    color: #FF7900;
+    text-decoration: none;
+}
+
+#customer_data .anch:hover
+{
+    text-decoration: underline;
+}
+/*Search Result*/
+/*Customer Details*/
+#customer_data1
+{
+    margin: 1% 1% 1% 32%;
+    align-items: center;
+    display: inline-block;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+    border: solid;
+    border-color: #FF7900;
+    border-radius:11%;
+    width:40%;
+    background-color: black;
+    color: white;
+}
+
+#f_name{
+    text-align: center;
+    color: white;
+}
+
+#msisdn{
+    text-align: center;
+    color: white;
+}
+
+#email{
+    text-align: center;
+    color: white;
+}
+
+#address{
+    text-align: center;
+    color: white;
+}
+
+#start_date{
+    text-align: center;
+    color: white;
+}
+
+#end_date{
+    text-align: center;
+    color: white;
+}
+
+#free_voice_same,#services,#oservice
+{
+     text-align: center;
+    color: white;
+}
+
+#free_voice_diff,#free_sms_same,#free_sms_diff,#free_internet,#pfees,#pname,#renew
+{
+     text-align: center;
+    color: white;
+}
+
+#productpic
+{
+    width:54%;
+    height:25%;
+    align-self: center;
+    margin-right: 54%;
+    margin-left: 24%;
+}
+/*Customer Details*/
 /*Footer*/
 .footerOrange
 {
