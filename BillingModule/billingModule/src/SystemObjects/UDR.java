@@ -6,7 +6,8 @@ public class UDR {
     
     int udrID,profileID;
     String dialA,dialB;
-    int serviceID,duration_msg_volume;
+    int serviceID;
+    Float duration_msg_volume;
     String start_date,start_time;
     Float external_charges;
     Boolean has_fu,is_billed;
@@ -37,7 +38,7 @@ public class UDR {
         this.orderedDate = _orderedDate;
     }
     
-    public UDR(int _udrID,int _profileID,String _dialA,String _dialB,int _serviceID,int _duration_msg_volume
+    public UDR(int _udrID,int _profileID,String _dialA,String _dialB,int _serviceID,Float _duration_msg_volume
         ,String _startDate, String _startTime,Float _externalCharges, Boolean _hasFU, Float _cost, Boolean _isBilled){
         
         this.udrID = _udrID;
@@ -54,7 +55,7 @@ public class UDR {
         this.is_billed = _isBilled;
     }
     
-      public UDR(int _udrID,int _profileID,String _dialA,String _dialB,int _serviceID,int _duration_msg_volume
+      public UDR(int _udrID,int _profileID,String _dialA,String _dialB,int _serviceID,Float _duration_msg_volume
         ,Timestamp _orderedDate,Float _externalCharges, Boolean _hasFU, Float _cost, Boolean _isBilled){
         
         this.udrID = _udrID;
@@ -86,7 +87,7 @@ public class UDR {
     public void setServiceID(int _serviceID){
         this.serviceID = _serviceID;
     }
-    public void setDurationMsgVolume(int _duration_msg_volume){
+    public void setDurationMsgVolume(Float _duration_msg_volume){
         this.duration_msg_volume = _duration_msg_volume;
     }
     public void setStartDate(String _startDate){
@@ -127,7 +128,7 @@ public class UDR {
     public int getServiceID(){
         return this.serviceID;
     }
-    public int getDurationMsgVolume(){
+    public Float getDurationMsgVolume(){
         return this.duration_msg_volume;
     }
     public String getStartDate(){

@@ -6,11 +6,11 @@ public class CustomerProfile {
     String msisdn;
     int profileID;
     int serviceID;
-    int consumedQuantity;
+    Float consumedQuantity;
     String startDateOfContract,endDateOfContract;
     String blockedServices;
-    int fuVoiceOnNet,fuVoiceCrossNet;
-    int fuSMSOnNet,fuSMSCrossNet,fuInternet;
+    Float fuVoiceOnNet,fuVoiceCrossNet;
+    Float fuSMSOnNet,fuSMSCrossNet,fuInternet;
     Float totalVoiceServiceCost;
     Float totalSMSServiceCost;
     Float totalDataServiceCost;
@@ -24,7 +24,7 @@ public class CustomerProfile {
         this.profileID = _profileID;
     }    
     
-     public CustomerProfile(String _msisdn,int _profileID,int _serviceID,int _consumedQuantity){
+     public CustomerProfile(String _msisdn,int _profileID,int _serviceID,Float _consumedQuantity){
         this.msisdn = _msisdn;
         this.profileID = _profileID;
         this.serviceID = _serviceID;
@@ -33,8 +33,8 @@ public class CustomerProfile {
 
     public CustomerProfile(String _msisdn,int _profileID,
             String _startDateOfContract, String _endDateOfContract,String _blockedServices,
-            int _fuVoiceOnNet,int _fuVoiceCrossNet, int _fuSMSOnNet,
-            int _fuSMSCrossNet,int _fuInternet){
+            Float _fuVoiceOnNet,Float _fuVoiceCrossNet, Float _fuSMSOnNet,
+            Float _fuSMSCrossNet,Float _fuInternet){
         this.msisdn = _msisdn;
         this.profileID= _profileID;
         this.startDateOfContract =_startDateOfContract;
@@ -77,23 +77,23 @@ public class CustomerProfile {
         this.endDateOfContract = _endDateOfContract;
     }
     
-    public void setFUVoiceOnNet(int _fuVoiceOnNet){
+    public void setFUVoiceOnNet(Float _fuVoiceOnNet){
         this.fuVoiceOnNet = _fuVoiceOnNet;
     }
 
-    public void setFUVoiceCrossNet(int _fuVoiceCrossNet){
+    public void setFUVoiceCrossNet(Float _fuVoiceCrossNet){
         this.fuVoiceCrossNet =_fuVoiceCrossNet;
     }
 
-    public void setFUSMSOnNet(int _fuSMSOnNet){
+    public void setFUSMSOnNet(Float _fuSMSOnNet){
         this.fuSMSOnNet = _fuSMSOnNet;
     }
     
-    public void setFUSMSCrossNet(int _fuSMSCrossNet){
+    public void setFUSMSCrossNet(Float _fuSMSCrossNet){
         this.fuSMSCrossNet = _fuSMSCrossNet;
     }
     
-    public void setFUInternet(int _fuInternet){
+    public void setFUInternet(Float _fuInternet){
        this.fuInternet = _fuInternet; 
     }
 
@@ -101,7 +101,7 @@ public class CustomerProfile {
         this.serviceID = _serviceID;
     }
     
-    public void setConsumedQuantity(int _consumedQuantity){
+    public void setConsumedQuantity(Float _consumedQuantity){
         this.consumedQuantity = _consumedQuantity;
     }
 
@@ -139,23 +139,23 @@ public class CustomerProfile {
         return this.endDateOfContract;
     }
     
-    public int getFUVoiceOnNet(){
+    public Float getFUVoiceOnNet(){
         return this.fuVoiceOnNet;
     }
 
-    public int getFUVoiceCrossNet(){
+    public Float getFUVoiceCrossNet(){
         return this.fuVoiceCrossNet;
     }
 
-    public int getFUSMSOnNet(){
+    public Float getFUSMSOnNet(){
         return this.fuSMSOnNet;
     }
     
-    public int getFUSMSCrossNet(){
+    public Float getFUSMSCrossNet(){
         return this.fuSMSCrossNet;
     }
     
-    public int getFUInternet(){
+    public Float getFUInternet(){
        return this.fuInternet; 
     }
 
@@ -163,7 +163,7 @@ public class CustomerProfile {
         return this.serviceID;
     }
     
-    public int getConsumedQuantity(){
+    public Float getConsumedQuantity(){
         return this.consumedQuantity;
     }
 

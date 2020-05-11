@@ -2,9 +2,10 @@ package SystemObjects;
 
 public class FreeUnit {
     int FU_ID;
-    int fuVoiceOnNet,fuVoiceCrossNet;
-    int fuSMSOnNet,fuSMSCrossNet;
-    int fuInternet,profileID;
+    Float fuVoiceOnNet,fuVoiceCrossNet;
+    Float fuSMSOnNet,fuSMSCrossNet;
+    Float fuInternet;
+    int profileID;
     
     
     public FreeUnit(){ 
@@ -14,8 +15,8 @@ public class FreeUnit {
         this.profileID = _profileID;
     }
     
-    public FreeUnit(int _FU_ID,int _fuVoiceOnNet, int _fuVoiceCrossNet,int _fuSMSOnNet
-    ,int _fuSMSCrossNet, int _fuInternet, int _profileID){
+    public FreeUnit(int _FU_ID,Float _fuVoiceOnNet, Float _fuVoiceCrossNet,Float _fuSMSOnNet
+    ,Float _fuSMSCrossNet, Float _fuInternet, int _profileID){
         this.FU_ID=_FU_ID;
         this.fuVoiceOnNet = _fuVoiceOnNet;
         this.fuVoiceCrossNet = _fuVoiceCrossNet;
@@ -29,23 +30,23 @@ public class FreeUnit {
         this.FU_ID = _FU_ID;
     }
     
-    public void setFUVoiceOnNet(int _fuVoiceOnNet){
+    public void setFUVoiceOnNet(Float _fuVoiceOnNet){
         this.fuVoiceOnNet = _fuVoiceOnNet;
     }
     
-    public void setFUVoiceCrossNet(int _fuVoiceCrossNet){
+    public void setFUVoiceCrossNet(Float _fuVoiceCrossNet){
         this.fuVoiceCrossNet = _fuVoiceCrossNet;
     }
     
-     public void setFUSMSOnNet(int _fuSMSOnNet){
+     public void setFUSMSOnNet(Float _fuSMSOnNet){
         this.fuSMSOnNet = _fuSMSOnNet;
     }
     
-    public void setFUSMSCrossNet(int _fuSMSCrossNet){
+    public void setFUSMSCrossNet(Float _fuSMSCrossNet){
         this.fuSMSCrossNet = _fuSMSCrossNet;
     }
      
-    public void setFUInternet(int _fuInternet){
+    public void setFUInternet(Float _fuInternet){
         this.fuInternet = _fuInternet;
     }
     
@@ -58,23 +59,23 @@ public class FreeUnit {
         return this.FU_ID;
     }
     
-    public int getFUVoiceOnNet(){
+    public Float getFUVoiceOnNet(){
         return this.fuVoiceOnNet;
     }
     
-    public int getFUVoiceCrossNet(){
+    public Float getFUVoiceCrossNet(){
         return this.fuVoiceCrossNet;
     }
     
-    public int getFUSMSOnNet(){
+    public Float getFUSMSOnNet(){
        return this.fuSMSOnNet;
    }
 
-    public int getFUSMSCrossNet(){
+    public Float getFUSMSCrossNet(){
         return this.fuSMSCrossNet;
     }
 
-    public int getFUInternet(){
+    public Float getFUInternet(){
         return  this.fuInternet;
     }
 

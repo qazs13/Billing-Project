@@ -50,11 +50,11 @@ public class databaseConnection {
             FreeUnit fuObject=new FreeUnit();
             while(result.next()){
                 fuObject.setFUID(result.getInt(1));
-                fuObject.setFUVoiceOnNet(result.getInt(2));
-                fuObject.setFUVoiceCrossNet(result.getInt(3));
-                fuObject.setFUSMSOnNet(result.getInt(4));
-                fuObject.setFUSMSCrossNet(result.getInt(5));
-                fuObject.setFUInternet(result.getInt(6));
+                fuObject.setFUVoiceOnNet(result.getFloat(2));
+                fuObject.setFUVoiceCrossNet(result.getFloat(3));
+                fuObject.setFUSMSOnNet(result.getFloat(4));
+                fuObject.setFUSMSCrossNet(result.getFloat(5));
+                fuObject.setFUInternet(result.getFloat(6));
                 fuObject.setProfileID(result.getInt(7));
             }
             System.out.println("Data retrieved successfully");
@@ -86,11 +86,11 @@ public class databaseConnection {
                 customerRemainedFUs.setStartDateOfContract(result.getString(3));
                 customerRemainedFUs.setEndDateOfContract(result.getString(4));
                 customerRemainedFUs.setBlockedServices(result.getString(5));
-                customerRemainedFUs.setFUVoiceOnNet(result.getInt(6));
-                customerRemainedFUs.setFUVoiceCrossNet(result.getInt(7));
-                customerRemainedFUs.setFUSMSOnNet(result.getInt(8));
-                customerRemainedFUs.setFUSMSCrossNet(result.getInt(9));
-                customerRemainedFUs.setFUInternet(result.getInt(10)); 
+                customerRemainedFUs.setFUVoiceOnNet(result.getFloat(6));
+                customerRemainedFUs.setFUVoiceCrossNet(result.getFloat(7));
+                customerRemainedFUs.setFUSMSOnNet(result.getFloat(8));
+                customerRemainedFUs.setFUSMSCrossNet(result.getFloat(9));
+                customerRemainedFUs.setFUInternet(result.getFloat(10)); 
                
             }
             System.out.println("Database retrievl:"+ customerRemainedFUs.getFUVoiceCrossNet());
@@ -125,7 +125,7 @@ public class databaseConnection {
             
             while(result.next()){
                 udrRow=new UDR(result.getInt(1),result.getInt(2),result.getString(3),
-                        result.getString(4),result.getInt(5),result.getInt(6),
+                        result.getString(4),result.getInt(5),result.getFloat(6),
                         result.getTimestamp(7),result.getFloat(8),result.getBoolean(9),
                 result.getFloat(10),result.getBoolean(11));
                 retrievedUDRs.add(udrRow);
@@ -159,7 +159,7 @@ public class databaseConnection {
                 udrObj.setDialA(result.getString(3));
                 udrObj.setDialB(result.getString(4));
                 udrObj.setServiceID(result.getInt(5));
-                udrObj.setDurationMsgVolume(result.getInt(6));
+                udrObj.setDurationMsgVolume(result.getFloat(6));
                 udrObj.setStartDate(result.getString(7));
                 udrObj.setStartTime(result.getString(8));
                 udrObj.setExternalCharges(result.getFloat(9));
@@ -228,8 +228,8 @@ public class databaseConnection {
             preparedstatement.setString(1,custRemainedFUs.getMSISDN());
             preparedstatement.setInt(2,custRemainedFUs.getProfileID());
             preparedstatement.setInt(3,custRemainedFUs.getServiceID());
-            preparedstatement.setInt(4,custRemainedFUs.getConsumedQuantity());
-            System.out.println("Database consumedQuentity"+custRemainedFUs.getConsumedQuantity() );
+            preparedstatement.setFloat(4,custRemainedFUs.getConsumedQuantity());
+//            System.out.println("Database consumedQuentity"+custRemainedFUs.getConsumedQuantity() );
             preparedstatement.setString(5,netConnection);
             result = preparedstatement.executeQuery();
             

@@ -36,7 +36,7 @@ $$LANGUAGE plpgsql;
 
 SELECT * FROM udrRow(3);
 -------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION updateCustomerFUs(dialNum text,profileID integer,serviceID integer,quantity integer, netConnection text)RETURNS Boolean AS $$
+CREATE OR REPLACE FUNCTION updateCustomerFUs(dialNum text,profileID integer,serviceID integer,quantity float, netConnection text)RETURNS Boolean AS $$
 DECLARE
 BEGIN
 	if  serviceID = 1  THEN
@@ -119,13 +119,13 @@ $$LANGUAGE plpgsql;
 
 SELECT * FROM retrieveCustomerDetails('00201215860927');
 -----------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION insertBillSheet(customerName text,cAddress text,pName text, profileFees float, oneTimeFee float,recurringFees float,
+CREATE OR REPLACE FUNCTION insertBillSheet(customerName text,cNumber text,cAddress text,pName text, profileFees float, oneTimeFee float,recurringFees float,
  totalVoiceCost float, totalSMSCost float , totalDataCost float,totalInvoiceBefore float, totalInvoiceAfter float , billDate date) RETURNS Boolean AS $$
 DECLARE
 BEGIN
-	INSERT INTO invoiceSheet (customer_name, address, p_name, pfees, osfee, recurring_fees, total_voice_cost, total_sms_cost,
+	INSERT INTO invoiceSheet (customer_name,customer_number,address, p_name, pfees, osfee, recurring_fees, total_voice_cost, total_sms_cost,
 		total_data_cost,total_invoice_before, total_invoice_after, bill_date) 
-		VALUES (customerName, cAddress, pName, profileFees, oneTimeFee, recurringFees, totalVoiceCost, totalSMSCost, totalDataCost,
+		VALUES (customerName, cNumber, cAddress, pName, profileFees, oneTimeFee, recurringFees, totalVoiceCost, totalSMSCost, totalDataCost,
 		totalInvoiceBefore, totalInvoiceAfter, billDate);
 
  	RETURN true;

@@ -20,8 +20,8 @@ public class SMSFreeUnitsCalc {
         ProfileService profileSMSDetails;
         Boolean state = false;
         
-        int updatedValue = 0;
-        int consumedData = 0;
+        Float updatedValue = 0f;
+        Float consumedData = 0f;
         Float costOfService = 0f;
         Float TotalUDRsCost = 0f;
         
@@ -62,7 +62,7 @@ public class SMSFreeUnitsCalc {
 //                                
                             }else{
                                     cProfileupdateFU = new CustomerProfile(
-                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0);                            
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);                            
                                     state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     consumedData = abs(updatedValue);                
                                     costOfService = (consumedData * profileSMSDetails.getFeeSameOperator())
@@ -101,7 +101,7 @@ public class SMSFreeUnitsCalc {
                             }else{
                                  
                                     cProfileupdateFU = new CustomerProfile(
-                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0);
+                                                udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
                                     state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
                                     consumedData = abs(updatedValue);        
                                     costOfService = (consumedData * profileSMSDetails.getFeeAnotherOperator())
