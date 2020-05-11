@@ -6,9 +6,10 @@ create table free_units (fid serial primary key,free_voice_same int,free_voice_d
 Create table services (sid serial primary key ,sname text,is_recurring boolean,recurring_fees float);
 create table one_time_service (one_time_service_id serial primary key,osname text,osfee float);
 create table profile_services (profile_services_id serial primary key,pid int references profile(pid) ON DELETE CASCADE ,sid int references services(sid) ON DELETE CASCADE,round_amount int,fees_local_same float,fees_local_diff float,fees_international float);
-create table occ (occ_id serial primary key, msisdn text references customer(msisdn) ON DELETE CASCADE,one_time_service_id int references one_time_service(one_time_service_id) ON DELETE CASCADE,service_processed boolean);
+create table occ (occ_id serial ,msisdn text REFERENCES customer(msisdn),one_recurring_id int,type_of_service text, is_service_processed boolean, service_processed_date date, primary key (occ_id,msisdn));
 create table customer_profile (msisdn text references customer(msisdn),pid int references profile(pid),start_date text,end_date text,blocked_services text,free_voice_same integer,free_voice_diff integer,free_sms_same integer,free_sms_diff integer,free_internet integer, primary key(msisdn,pid));
-create table customer_profile_services (msisdn text references customer(msisdn),pid int references profile(pid),occ_id int references occ (occ_id), primary key(msisdn,pid, occ_id));
+create table invoiceSheet(bill_id serial primary key ,customer_name text,customer_number text, address text,p_name text, pfees float, osfee float,recurring_fees float,
+    total_voice_cost float, total_sms_cost float , total_data_cost float,total_invoice_before float,total_invoice_after float , bill_date date);
 --------------------------------------------------------------------------------------------------------------------------
 TRUNCATE TABLE customer_profile_services;
 TRUNCATE TABLE customer_profile;
@@ -39,8 +40,10 @@ INSERT INTO free_units (free_voice_same,free_voice_diff,free_sms_same,free_sms_d
 INSERT INTO services(sname,is_recurring,recurring_fees) VALUES('voice',false,0);
 INSERT INTO services(sname,is_recurring,recurring_fees) VALUES('sms',false,0);
 INSERT INTO services(sname,is_recurring,recurring_fees) VALUES('internet',false,0);
+INSERT INTO services(sname,is_recurring,recurring_fees) VALUES('Anghami',true,50);
+INSERT INTO services(sname,is_recurring,recurring_fees) VALUES('NetFlex',true,200);
 
-INSERT INTO one_time_service(osname,osfee) VALUES('Bill sheet',10);
+INSERT INTO one_time_service(osname,osfee) VALUES('Billing Fees',50);
 
 INSERT INTO profile_services(pid,sid,round_amount,fees_local_same,
 	fees_local_diff,fees_international) VALUES
@@ -67,8 +70,10 @@ INSERT INTO profile_services(pid,sid,round_amount,fees_local_same,
 (1G--->1.15LE)
 
 
-INSERT INTO occ(msisdn,one_time_service_id,service_processed)VALUES('00201215860927',1,false);
-INSERT INTO occ(msisdn,one_time_service_id,service_processed)VALUES('00201289753456',1,false);
+INSERT INTO occ(msisdn,one_recurring_id,type_of_service,is_service_processed,service_processed_date)VALUES('00201215860927',4,'recurring_service',false,'2020-04-20');
+INSERT INTO occ(msisdn,one_recurring_id,type_of_service,is_service_processed,service_processed_date)VALUES('00201215860927',5,'recurring_service',false,'2020-04-01');
+INSERT INTO occ(msisdn,one_recurring_id,type_of_service,is_service_processed,service_processed_date)VALUES('00201215860927',2,'one_time_service',false,'2020-04-15');
+INSERT INTO occ(msisdn,one_recurring_id,type_of_service,is_service_processed,service_processed_date)VALUES('00201289753456',4,'recurring_service',false,'2020-04-10');
 
 INSERT INTO customer_profile(msisdn,pid,start_date,end_date,free_voice_same,
 	free_voice_diff,free_sms_same,free_sms_diff,free_internet) 
@@ -173,6 +178,8 @@ INSERT INTO udr(pid,dialA,dialB,sid,duration_msg_volume ,start_date,start_time,e
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 INSERT INTO cdr(dialA,dialB,sid,duration_msg_volume,start_date,start_time,external_charges,is_rated) 
 	VALUES('00201289753456','https://www.google.com/',3,8,'20200528','3:30:00',28,false);
+
+
 INSERT INTO udr(pid,dialA,dialB,sid,duration_msg_volume ,start_date,start_time,external_charges,cost,is_billed) 
 	VALUES(2,'00201289753456','https://www.google.com/',3,8,'20200528','3:30:00',28,16,false);
 

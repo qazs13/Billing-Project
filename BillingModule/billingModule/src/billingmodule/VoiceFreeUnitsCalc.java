@@ -13,17 +13,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 public class VoiceFreeUnitsCalc {
     
     
    
    
-    public Float fuVoiceUpdate(UDR customerUDR){//contains dialA,pid,sid
+    public Float fuVoiceUpdate(UDR customerUDR, BillDateInterval intervalDate){//contains dialA,pid,sid
         
         databaseConnection db = new databaseConnection();
         FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
         Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
-                ,customerUDR.getServiceID()));
+                ,customerUDR.getServiceID()), intervalDate);
         CustomerProfile customerRemainedFUs;
         CustomerProfile cProfileupdateFU;
         ProfileService profileVoiceDetails;
@@ -39,24 +40,7 @@ public class VoiceFreeUnitsCalc {
         for(UDR udr: udrList){
            
                 System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ 
-                    "#####"+ udr.getOrderedDate()+ "##########" + udr.getDurationMsgVolume());
-//            try {
-//                start_date=(Date) new SimpleDateFormat("yyyy-MM-dd").parse(customerRemainedFUs.getStartDateOfContract());
-//                end_date=(Date) new SimpleDateFormat("yyyy-MM-dd").parse(customerRemainedFUs.getEndDateOfContract()); 
-//                
-//                if((!udr.getOrderedDate().before(start_date)) && (!udr.getOrderedDate().after(end_date))){
-//                
-//                System.out.println("####"+ udr.getDialA() + "#####" + udr.getDialB()+ 
-//                    "#####"+ udr.getOrderedDate()+ "##########" + udr.getDurationMsgVolume());
-//                }
-//            } catch (ParseException ex) {
-//                Logger.getLogger(VoiceFreeUnitsCalc.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//             start_date = To_Date(customerRemainedFUs.getStartDateOfContract(),"YYYY-MM-DD");
-//             System.out.println("###" + start_date);
-
-            
-        
+                    "#####"+ udr.getOrderedDate()+ "##########" + udr.getDurationMsgVolume());     
         }
 
         if(udrList.isEmpty()){

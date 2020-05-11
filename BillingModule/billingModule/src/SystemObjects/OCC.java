@@ -1,16 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package SystemObjects;
 
 import java.sql.Date;
 
-/**
- *
- * @author ahmed
- */
+
 public class OCC {
     
     public int occ_id;
@@ -19,8 +11,21 @@ public class OCC {
     public String type_of_service;
     public boolean is_service_processed;
     public Date serviceprocessed_date;
-    public float totalonetime;
-    public float totalrecurring;
+    Float totalOneTimeFees;
+    Float totalRecurringFees;
+
+    public OCC(){
+        
+    }
+    
+    public OCC(int _occ_id){
+        this.occ_id = _occ_id;
+    }
+    
+    public OCC(Float _totalOneTimeFees, Float _totalRecurringFees){
+        this.totalOneTimeFees = _totalOneTimeFees;
+        this.totalRecurringFees = _totalRecurringFees;
+    }
     
     public OCC(int occ_id, String msisdn, int one_rec_id, String type_of_service, boolean is_service_processed, Date serviceprocessed_date) {
         this.occ_id = occ_id;
@@ -29,16 +34,21 @@ public class OCC {
         this.type_of_service = type_of_service;
         this.is_service_processed = is_service_processed;
         this.serviceprocessed_date = serviceprocessed_date;
-    }
-
-    public OCC(float totalonetime, float totalrecurring) {
-        this.totalonetime = totalonetime;
-        this.totalrecurring = totalrecurring;
-    }
+    } 
     
-    public OCC (){
+    public void setTotalOneTimeFees(Float _totalOneTimeFees){
+        this.totalOneTimeFees = _totalOneTimeFees;
     }
     
+    public void setTotalRecurringFees(Float _totalRecurringFees){
+        this.totalRecurringFees = _totalRecurringFees;
+    }
     
+    public Float getTotalOneTimeFees(){
+        return this.totalOneTimeFees;
+    }
     
+    public Float getTotalRecurringFees(){
+        return this.totalRecurringFees;
+    }
 }

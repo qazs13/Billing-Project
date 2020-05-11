@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package SystemObjects;
 
-/**
- *
- * @author ahmed
- */
+
 public class One_Time {
     
     public int one_time_id;

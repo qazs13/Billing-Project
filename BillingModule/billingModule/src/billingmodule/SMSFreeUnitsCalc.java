@@ -8,13 +8,13 @@ import static java.lang.Math.abs;
 
 public class SMSFreeUnitsCalc {
         
-    public Float fuSMSUpdate(UDR customerUDR){//take DialA,serviceID, ProfileID
+    public Float fuSMSUpdate(UDR customerUDR, BillDateInterval intervalDate){//take DialA,serviceID, ProfileID
          
         
         databaseConnection db = new databaseConnection();
         FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
         Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
-                ,customerUDR.getServiceID()));
+                ,customerUDR.getServiceID()), intervalDate);
         CustomerProfile customerRemainedFUs;
         CustomerProfile cProfileupdateFU;
         ProfileService profileSMSDetails;

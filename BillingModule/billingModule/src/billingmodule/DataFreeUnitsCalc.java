@@ -11,12 +11,14 @@ public class DataFreeUnitsCalc {
      
    
     
-    public Float fuInternetUpdate(UDR customerUDR){
+    public Float fuInternetUpdate(UDR customerUDR, BillDateInterval intervalDate){
+        //dialA & profileID & serviceID & YYYYMM
         
         databaseConnection db = new databaseConnection();
         FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
+        
         Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
-                ,customerUDR.getServiceID()));
+                ,customerUDR.getServiceID()), intervalDate); //add yyyyMM
         CustomerProfile customerRemainedFUs;
         CustomerProfile cProfileupdateFU;
         ProfileService profileDataDetails;
@@ -29,7 +31,7 @@ public class DataFreeUnitsCalc {
         
         for(UDR udr: udrList){
             System.out.println("####"+ udr.getDialA() + "#####" + udr.getDurationMsgVolume()
-            + "##########" + udr.getDurationMsgVolume());
+            + "##########" + udr.getOrderedDate());
         }
         
 
