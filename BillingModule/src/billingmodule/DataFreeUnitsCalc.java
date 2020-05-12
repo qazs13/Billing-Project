@@ -15,8 +15,6 @@ public class DataFreeUnitsCalc {
         //dialA & profileID & serviceID & YYYYMM
         
         databaseConnection db = new databaseConnection();
-        FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
-        
         Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
                 ,customerUDR.getServiceID()), intervalDate); //add yyyyMM
         CustomerProfile customerRemainedFUs;
@@ -67,9 +65,10 @@ public class DataFreeUnitsCalc {
                                         cProfileupdateFU = new CustomerProfile(
                                                     udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);  
                                         state=db.UpdateCustomerFUs(cProfileupdateFU,"nothing",udr.getUdrID());
-                                        consumedData = abs(updatedValue);                                          
-                                        costOfService = (consumedData * profileDataDetails.getFeeSameOperator())
-                                                  /(profileDataDetails.getRoundAmount());                                   
+                                        consumedData = abs(updatedValue);  
+                                        float round = ((float) consumedData) / profileDataDetails.getRoundAmount(); 
+                                        round =   (float) Math.ceil(round);                                                                      
+                                        costOfService = profileDataDetails.getFeeSameOperator() * round;
                                         TotalUDRsCost += costOfService;   
                                         System.out.println("Cost Calcu :" + costOfService);
                                 }    
@@ -90,10 +89,4 @@ public class DataFreeUnitsCalc {
         System.out.println("Total consumption od Data :"+ TotalUDRsCost); 
         return TotalUDRsCost;
     }
-        
-//    public static void main(String [] args){
-//        DataFreeUnitsCalc dataFUcalc = new DataFreeUnitsCalc();
-//        dataFUcalc.fuInternetUpdate(new UDR("00201215860927",1,3));       
-//    }
-    
 }

@@ -4,7 +4,6 @@ import Database.databaseConnection;
 import Interfaces.NetConnection;
 import SystemObjects.*;
 import static java.lang.Math.abs;
-import java.sql.Date;
 import java.util.Vector;
 
 
@@ -17,7 +16,6 @@ public class VoiceFreeUnitsCalc {
     public Float fuVoiceUpdate(UDR customerUDR, BillDateInterval intervalDate){//contains dialA,pid,sid
         
         databaseConnection db = new databaseConnection();
-        FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
         Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
                 ,customerUDR.getServiceID()), intervalDate);
         CustomerProfile customerRemainedFUs;
@@ -29,8 +27,6 @@ public class VoiceFreeUnitsCalc {
         Float consumedData = 0f;
         Float costOfService = 0f;
         Float TotalUDRsCost = 0f;
-        Date start_date;
-        Date end_date;
         
         for(UDR udr: udrList){
            
@@ -73,9 +69,10 @@ public class VoiceFreeUnitsCalc {
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
                                     state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet,udr.getUdrID());
-                                    consumedData = abs(updatedValue);  
-                                    costOfService = (consumedData * profileVoiceDetails.getFeeSameOperator())
-                                            /(profileVoiceDetails.getRoundAmount()); 
+                                    consumedData = abs(updatedValue);
+                                    float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
+                                    round =   (float) Math.ceil(round);                                    
+                                    costOfService = profileVoiceDetails.getFeeSameOperator() * round;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("onNet voice Cost Calcu :" + costOfService);         
                             }
@@ -87,8 +84,9 @@ public class VoiceFreeUnitsCalc {
                         }
                     }else if(!(udr.getDialB().regionMatches(true,0,"0020",0, 4))){
                                     
-                        costOfService = (udr.getDurationMsgVolume() * profileVoiceDetails.getFeeInternationally())
-                                /(profileVoiceDetails.getRoundAmount());                       
+                        float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
+                        round =   (float) Math.ceil(round);                        
+                        costOfService = profileVoiceDetails.getFeeInternationally() * round;
                         TotalUDRsCost += costOfService;                       
                         System.out.println(" international voice cost from Rating Module:" + costOfService);
                         
@@ -113,10 +111,11 @@ public class VoiceFreeUnitsCalc {
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
                                     state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
-                                    consumedData = abs(updatedValue);  
-                                    costOfService = (consumedData * profileVoiceDetails.getFeeAnotherOperator())
-                                            /(profileVoiceDetails.getRoundAmount());                                    
-                                    TotalUDRsCost += costOfService;                                   
+                                    consumedData = abs(updatedValue);
+                                    float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
+                                    round =   (float) Math.ceil(round);
+                                    costOfService = profileVoiceDetails.getFeeAnotherOperator() * round;
+                                    TotalUDRsCost += costOfService;
                                     System.out.println("crossNet voice Cost Calcu :" + costOfService);                              
                             }
                         }else{
@@ -135,10 +134,4 @@ public class VoiceFreeUnitsCalc {
             System.out.println("Total cost of udrs of customer # : "+ TotalUDRsCost);
             return TotalUDRsCost;
     }
-    
-//    public static void main(String [] args){
-//        VoiceFreeUnitsCalc voiceFUcalc = new VoiceFreeUnitsCalc();
-//        voiceFUcalc.fuVoiceUpdate(new UDR("00201215860927",1,1));
-//    }
-    
 }

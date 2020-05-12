@@ -12,7 +12,6 @@ public class SMSFreeUnitsCalc {
          
         
         databaseConnection db = new databaseConnection();
-        FreeUnit fu = db.ProfileFU(new FreeUnit(customerUDR.getProfileID()));
         Vector<UDR> udrList= db.customerUDRs(new UDR(customerUDR.getDialA(),customerUDR.getProfileID()
                 ,customerUDR.getServiceID()), intervalDate);
         CustomerProfile customerRemainedFUs;
@@ -62,9 +61,10 @@ public class SMSFreeUnitsCalc {
                             }else{
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);                            
-                                    consumedData = abs(updatedValue);                
-                                    costOfService = (consumedData * profileSMSDetails.getFeeSameOperator())
-                                            /(profileSMSDetails.getRoundAmount());                                   
+                                    consumedData = abs(updatedValue);
+                                    float round = ((float) consumedData) / profileSMSDetails.getFeeSameOperator(); 
+                                    round =   (float) Math.ceil(round);
+                                    costOfService = profileSMSDetails.getFeeSameOperator() * round;
                                     TotalUDRsCost += costOfService;                                   
                                     System.out.println("Cost Calcu for onNet SMS service:" + costOfService);                                   
                             }
@@ -75,9 +75,9 @@ public class SMSFreeUnitsCalc {
                             System.out.println("onNet sms cost from Rating Module:" + costOfService);
                         }
                 }else if(!(udr.getDialB().regionMatches(true,0,"0020",0, 4))){
-                        
-                        costOfService = (udr.getDurationMsgVolume() * profileSMSDetails.getFeeInternationally())
-                                /(profileSMSDetails.getRoundAmount());                       
+                        float round = ((float) consumedData) / profileSMSDetails.getFeeInternationally(); 
+                        round =   (float) Math.ceil(round);                        
+                        costOfService = profileSMSDetails.getFeeInternationally() * round;
                         TotalUDRsCost += costOfService;                        
                         System.out.println("international sms cost from Rating Module:" + costOfService);
                         
@@ -102,9 +102,10 @@ public class SMSFreeUnitsCalc {
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
                                     state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
-                                    consumedData = abs(updatedValue);        
-                                    costOfService = (consumedData * profileSMSDetails.getFeeAnotherOperator())
-                                            /(profileSMSDetails.getRoundAmount());
+                                    consumedData = abs(updatedValue);      
+                                    float round = ((float) consumedData) / profileSMSDetails.getRoundAmount(); 
+                                    round =   (float) Math.ceil(round);
+                                    costOfService = profileSMSDetails.getFeeAnotherOperator() * round;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("Cost Calcu for SMS crossNet:" + costOfService);                  
                             }
@@ -121,9 +122,4 @@ public class SMSFreeUnitsCalc {
         System.out.println("Total consuption of SMS :"+ TotalUDRsCost);
         return TotalUDRsCost;
     }
-    
-//    public static void main(String [] args){
-//        SMSFreeUnitsCalc smsFUcalc = new SMSFreeUnitsCalc();
-//        smsFUcalc.fuSMSUpdate(new UDR("00201215860927",1,2));
-//    }
 }
