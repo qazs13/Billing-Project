@@ -32,7 +32,7 @@ public class ConnectDB {
         try {
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/billing_system", "postgres", "ahmed");
+                    "jdbc:postgresql://localhost:5432/billing_system", "postgres", "amrwsk13");
             System.out.println("connection success");
         } catch (SQLException ex) {
             System.out.println(ex);

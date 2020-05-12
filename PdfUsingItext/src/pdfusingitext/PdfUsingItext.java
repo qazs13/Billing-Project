@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pdfusingitext;
 
 import Database.ConnectDB;
+import SystemObjects.InvoiceSheet;
 import SystemObjects.OCC;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
@@ -15,18 +11,20 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Date;
 import java.util.List;
 
-/**
- *
- * @author ahmed
- */
-public class PdfUsingItext {
 
-    public static void main(String[] args) {
-        String FILE_NAME = "/home/ahmed/Desktop/aa.pdf";
+public class PdfUsingItext 
+{
+    
+    public void start (InvoiceSheet oneCustomerIvoice)
+    {
+        String FILE_NAME = "src" + File.separatorChar+ "allPDFs" +File.separatorChar + oneCustomerIvoice.getCustomerName()+ ";"+ 
+                java.time.LocalDate.now() + ".pdf";
         Document document = new Document();
-        try {
+        try 
+        {
             Font f = new Font();
             PdfWriter.getInstance(document, new FileOutputStream(new File(FILE_NAME)));
             document.open();
@@ -40,12 +38,13 @@ public class PdfUsingItext {
             p2.add("Date of Bill: " + java.time.LocalDate.now()); //no alignment
             document.add(p2);
             document.add(new Paragraph("Time: "+java.time.LocalTime.now()));
-            document.add(new Paragraph("Customer id: "));
-            document.add(new Paragraph("Customer Name: Ahmed Alsum"));
-            document.add(new Paragraph("Bill ID: "));
-            document.add(new Paragraph("     "));
+            document.add(new Paragraph("Bill Number: " + oneCustomerIvoice.getBillId()));
+            document.add(new Paragraph("Customer Name: " + oneCustomerIvoice.getCustomerName()));
+            document.add(new Paragraph("Address: " + oneCustomerIvoice.getAddress()));
+            document.add(new Paragraph("Customer on Profile: "+oneCustomerIvoice.getProfileName()));
+            document.add(new Paragraph(" "));
 
-            Image image = Image.getInstance("/home/ahmed/Desktop/orange.png");
+            Image image = Image.getInstance("src"+File.separatorChar+"img"+File.separatorChar+"logo-orange.png");
             image.scaleAbsolute(50, 50);
             image.setAbsolutePosition(500f, 750f);
             document.add(image);
@@ -92,7 +91,14 @@ public class PdfUsingItext {
             System.out.println("Done");
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }        
+    }
+
+    public static void main(String[] args) 
+    {
+        PdfUsingItext itext = new PdfUsingItext();
+        itext.start(new InvoiceSheet(2, "Amr Walid", "00201222728511", "Agouza", "Orange 100", 100f, 50f, 30f,
+                573.6f, 0f, 100f,773.6f, 851f, new Date(20200512)));
     }
 
 }
