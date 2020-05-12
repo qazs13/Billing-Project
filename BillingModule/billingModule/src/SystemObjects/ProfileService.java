@@ -16,6 +16,11 @@ public class ProfileService {
      public ProfileService(){       
     }
      
+    public ProfileService(int roundAmount)
+    {
+        this.roundAmount = roundAmount;
+    }     
+     
     public ProfileService(int _profileID,int _serviceID){
         this.profileID = _profileID;
         this.serviceID = _serviceID;

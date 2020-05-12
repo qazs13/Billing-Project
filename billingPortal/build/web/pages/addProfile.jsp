@@ -58,27 +58,27 @@
       </div>
       <div class="thirdProfilePageFreeUnits">
         <span>Free Unit Voice On Net</span>
-        <input type="number" required min="1" value="0" name="free_Unit_Voice_On_Net"/>
+        <input type="number" required min="0" value="0" name="free_Unit_Voice_On_Net"/>
         <label>Unit</label>
       </div>
       <div class="thirdProfilePageFreeUnits">
         <span>Free Unit Voice On Cross Net</span>
-        <input type="number" required min="1" value="0" name="free_Unit_Voice_On_Cross_Net"/>
+        <input type="number" required min="0" value="0" name="free_Unit_Voice_On_Cross_Net"/>
         <label>Unit</label>
       </div>
       <div class="thirdProfilePageFreeUnits">
         <span>Free Unit SMS On Net</span>
-        <input type="number" required min="1" value="0" name="free_Unit_SMS_On_Net"/>
+        <input type="number" required min="0" value="0" name="free_Unit_SMS_On_Net"/>
         <label>Unit</label>
       </div>
       <div class="thirdProfilePageFreeUnits">
         <span>Free Unit SMS On Cross Net</span>
-        <input type="number" required min="1" value="0" name="free_Unit_SMS_On_Cross_Net"/>
+        <input type="number" required min="0" value="0" name="free_Unit_SMS_On_Cross_Net"/>
         <label>Unit</label>
       </div>
       <div class="thirdProfilePageFreeUnits">
         <span>Free Unit for Internet</span>
-        <input type="number" required min="1" value="0" name="free_Unit_For_Internet"/>
+        <input type="number" required min="0" value="0" name="free_Unit_For_Internet"/>
         <label>Unit</label>
       </div>
       <div class="addthirdPageProfileSubmit">

@@ -55,7 +55,6 @@ public class SMSFreeUnitsCalc {
                                     
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);                            
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("Cost of SMS onNet service is zero");
@@ -63,13 +62,13 @@ public class SMSFreeUnitsCalc {
                             }else{
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);                            
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     consumedData = abs(updatedValue);                
                                     costOfService = (consumedData * profileSMSDetails.getFeeSameOperator())
                                             /(profileSMSDetails.getRoundAmount());                                   
                                     TotalUDRsCost += costOfService;                                   
                                     System.out.println("Cost Calcu for onNet SMS service:" + costOfService);                                   
-                            } 
+                            }
+                            state = db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet, udr.getUdrID());
                         }else{
                             costOfService = udr.getCost();                           
                             TotalUDRsCost += costOfService;                           
@@ -93,7 +92,7 @@ public class SMSFreeUnitsCalc {
                                  
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet); 
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID()); 
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("cost of crossNet sms Service is zero");
@@ -102,7 +101,7 @@ public class SMSFreeUnitsCalc {
                                  
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
                                     consumedData = abs(updatedValue);        
                                     costOfService = (consumedData * profileSMSDetails.getFeeAnotherOperator())
                                             /(profileSMSDetails.getRoundAmount());
@@ -115,7 +114,8 @@ public class SMSFreeUnitsCalc {
                             TotalUDRsCost += costOfService;
                             System.out.println("croosNet sms cost from Rating Module:" + costOfService);
                         }  
-                }           
+                }
+                state = db.updateUDRwithFalse(udr.getUdrID());
             }       
         }
         System.out.println("Total consuption of SMS :"+ TotalUDRsCost);

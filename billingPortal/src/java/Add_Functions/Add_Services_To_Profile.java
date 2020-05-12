@@ -27,9 +27,9 @@ public class Add_Services_To_Profile extends HttpServlet
             {
                 int serviceID = db.getServiceIDByItsName(allServices[i]);
                 int round_Amount = Integer.parseInt(req.getParameter("serviceRound"+allServices[i]));
-                float fees_local_same = Float.parseFloat(req.getParameter("serviceFeesSameLocal"+allServices[i]));
-                float fees_local_diff = Float.parseFloat(req.getParameter("serviceFeesOtherLocal"+allServices[i]));
-                float fees_international = Float.parseFloat(req.getParameter("serviceFeesInternational"+allServices[i]));
+                float fees_local_same = Float.parseFloat(req.getParameter("serviceFeesSameLocal"+allServices[i])) * round_Amount;
+                float fees_local_diff = Float.parseFloat(req.getParameter("serviceFeesOtherLocal"+allServices[i])) * round_Amount;
+                float fees_international = Float.parseFloat(req.getParameter("serviceFeesInternational"+allServices[i])) * round_Amount;
                 
                 Profile_Services profile_Services = new Profile_Services(profileID, serviceID,
                         round_Amount, fees_local_same, fees_local_diff, fees_international);

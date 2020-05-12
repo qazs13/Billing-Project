@@ -15,11 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 
-public class databaseConnection {
+public class databaseConnection
+{
     
     private final String url = "jdbc:postgresql://localhost:5432/billing_system";
     private final String user = "postgres";
-    private final String password = "postgres";
+    private final String password = "amrwsk13";
      
     private Connection connection;
     private String sqlcommand;
@@ -218,12 +219,11 @@ public class databaseConnection {
         }  
     }
     
-    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection){
-        
-        connect();
-        
+    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection, int udrID){
+
         try {
-            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?)";
+            connect();
+            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1,custRemainedFUs.getMSISDN());
             preparedstatement.setInt(2,custRemainedFUs.getProfileID());
@@ -231,6 +231,7 @@ public class databaseConnection {
             preparedstatement.setFloat(4,custRemainedFUs.getConsumedQuantity());
 //            System.out.println("Database consumedQuentity"+custRemainedFUs.getConsumedQuantity() );
             preparedstatement.setString(5,netConnection);
+            preparedstatement.setInt(6,udrID);
             result = preparedstatement.executeQuery();
             
             while(result.next()){
@@ -524,7 +525,28 @@ public class databaseConnection {
         }finally{
             stop();
         }
-   
+    }
+    
+    public boolean updateUDRwithFalse (int udrID)
+    {
+        try
+        {
+            connect();
+            sqlcommand = "UPDATE udr SET is_billed = true WHERE udr_id = ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1, udrID);
+            preparedstatement.execute();
+            return true;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+        finally
+        {
+            stop();
+        }
     }
     
     private void stop(){

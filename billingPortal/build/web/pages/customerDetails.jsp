@@ -15,7 +15,7 @@
 %>
 <div id="customer_data1">
     <img id="productpic" src= "../img/profile_pic1.jpg">
-    <p id="msisdn"> Msisdn : <% out.println(customer.getMsisdn()); %> </p>
+    <p id="msisdn1"> Msisdn : <% out.println(customer.getMsisdn()); %> </p>
         <p id="f_name"> Name :  <% out.println(customer.getF_name());
                         out.println(customer.getL_name()); %> </p>
     <p id="email"> Email :  <% out.println(customer.getEmail()); %> </p>

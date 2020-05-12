@@ -5,12 +5,7 @@ import Interfaces.NetConnection;
 import SystemObjects.*;
 import static java.lang.Math.abs;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 
@@ -55,6 +50,7 @@ public class VoiceFreeUnitsCalc {
                     
                      profileVoiceDetails = db.retrieveProfileService(new ProfileService(udr.getProfileID(),
                                             udr.getServiceID()));
+
                     
                     if(udr.getDialB().regionMatches(true,0,udr.getDialA(),0, 6)){//same operator
 
@@ -67,16 +63,16 @@ public class VoiceFreeUnitsCalc {
 
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet, udr.getUdrID());
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
-                                    System.out.println("Cost of onNet Voice service is zero");
+                                    System.out.println("Cost of onNet Voice service is zero "+state);
 //                                    //is_billed ---> true 
                             }else{ // cost of (-50) ---> profile_service
 
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet,udr.getUdrID());
                                     consumedData = abs(updatedValue);  
                                     costOfService = (consumedData * profileVoiceDetails.getFeeSameOperator())
                                             /(profileVoiceDetails.getRoundAmount()); 
@@ -108,7 +104,7 @@ public class VoiceFreeUnitsCalc {
 //                                  
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;                                     
                                     System.out.println("cost of crossVoiceNet Service is zero");
@@ -116,7 +112,7 @@ public class VoiceFreeUnitsCalc {
                             }else{
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
                                     consumedData = abs(updatedValue);  
                                     costOfService = (consumedData * profileVoiceDetails.getFeeAnotherOperator())
                                             /(profileVoiceDetails.getRoundAmount());                                    
@@ -131,6 +127,7 @@ public class VoiceFreeUnitsCalc {
                     }else{
                         System.out.println("#############error msh mtwak3##############");
                     }
+                    state = db.updateUDRwithFalse(udr.getUdrID());
             }   
           
         }   

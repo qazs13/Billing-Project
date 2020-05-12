@@ -16,11 +16,11 @@ public class FreeUnitsCalc {
         Float totalSMSServiceCost = 0f;
         Float totalVoiceServiceCost = 0f;
         
-        System.out.println("element1:" + customer.getDialA());
-        System.out.println("element2:"+ customer.getProfileID());
+        System.out.println("Dial A: " + customer.getDialA());
+        System.out.println("Profile ID: "+ customer.getProfileID());
         System.out.println("############################################");
 
-        totalVoiceServiceCost=voiceObject.fuVoiceUpdate(new UDR(customer.getDialA(),customer.getProfileID(),1),
+        totalVoiceServiceCost = voiceObject.fuVoiceUpdate(new UDR(customer.getDialA(),customer.getProfileID(),1),
                 billIntervalDate);
         System.out.println("############################################");
         System.out.println("############################################");
