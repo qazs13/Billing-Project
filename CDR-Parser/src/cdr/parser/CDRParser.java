@@ -26,7 +26,7 @@ import java.sql.SQLException;
  */
 public class CDRParser {
 
-    public static void getFile() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException, InterruptedException {
+    public  void getFile() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException, InterruptedException {
         
         String path = new File(".").getCanonicalPath();
         String cdrPath = path.concat("/cdr");
@@ -60,7 +60,7 @@ public class CDRParser {
         }
     }
 
-    public static void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException {
+    public  void readFile(BufferedReader br) throws IOException, ClassNotFoundException, SQLException {
         Cdr cdr = new Cdr();
         String strline = null;
         while ((strline = br.readLine()) != null) {
@@ -81,7 +81,7 @@ public class CDRParser {
 
     }
 
-    public static void monitorDirectory() throws IOException, InterruptedException, FileNotFoundException, ClassNotFoundException, SQLException {
+    public  void monitorDirectory() throws IOException, InterruptedException, FileNotFoundException, ClassNotFoundException, SQLException {
         String path = new File(".").getCanonicalPath();
         String cdrPath = path.concat("/cdr");
         Path cdrFolder = Paths.get(cdrPath);
@@ -106,7 +106,7 @@ public class CDRParser {
 
     }
 
-    public static void mkcdrDirs() throws IOException {
+    public  void mkcdrDirs() throws IOException {
         String path = new File(".").getCanonicalPath();
         String cdrPath = path.concat("/cdr");
         String archivePath = path.concat("/archivecdr");
@@ -120,8 +120,8 @@ public class CDRParser {
     }
 
     public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException, SQLException, InterruptedException {
-        mkcdrDirs();
-        monitorDirectory();
+        new CDRParser().mkcdrDirs();
+        new CDRParser().monitorDirectory();
 
     }
 
