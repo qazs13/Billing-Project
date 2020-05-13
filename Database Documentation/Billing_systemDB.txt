@@ -36,7 +36,7 @@ $$LANGUAGE plpgsql;
 
 SELECT * FROM udrRow(3);
 -------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION updateCustomerFUs(dialNum text,profileID integer,serviceID integer,quantity float, netConnection text, udrNum int)RETURNS Boolean AS $$
+CREATE OR REPLACE FUNCTION updateCustomerFUs(dialNum text,profileID integer,serviceID integer,quantity float, netConnection text)RETURNS Boolean AS $$
 DECLARE
 BEGIN
 	if  serviceID = 1  THEN
@@ -44,20 +44,17 @@ BEGIN
 			UPDATE customer_profile SET free_voice_same = quantity WHERE msisdn = dialNum AND pid = profileID;
 		ELSIF netConnection = 'crossNet' THEN
 			UPDATE customer_profile SET free_voice_diff = quantity WHERE msisdn = dialNum AND pid = profileID;
-		END IF;
-		UPDATE udr SET is_billed = true WHERE udr_id = udrNum;	
+		END IF;	
 		RETURN true; 
 	elsif serviceID = 2 THEN
 		IF netConnection = 'onNet' THEN 
 			UPDATE customer_profile SET free_sms_same = quantity WHERE msisdn = dialNum AND pid = profileID;
 		ELSIF netConnection = 'crossNet' THEN
 			UPDATE customer_profile SET free_sms_diff = quantity WHERE msisdn = dialNum AND pid = profileID;
-		END IF;
-		UPDATE udr SET is_billed = true WHERE udr_id = udrNum;	
+		END IF;	
 		RETURN true;
 	elsif serviceID = 3 THEN 
 		UPDATE customer_profile SET free_internet = quantity WHERE msisdn = dialNum AND pid = profileID;
-		UPDATE udr SET is_billed = true WHERE udr_id = udrNum;	
 		RETURN true;
 	ELSE 
 		RETURN false;
@@ -75,6 +72,10 @@ UPDATE 1
 billing_system=# update customer_profile set free_sms_same=100 WHERE msisdn='00201215860927' AND pid=1;
 UPDATE 1
 billing_system=# update customer_profile set free_internet=50 WHERE msisdn='00201215860927' AND pid=1;
+
+billing_system=# update customer_profile set free_voice_same=300 , free_voice_diff=100  WHERE msisdn='00201215860927' AND pid=1;
+update customer_profile set free_sms_same=100 , free_sms_diff=50  WHERE msisdn='00201215860927' AND pid=1;
+update customer_profile set free_internet=50  WHERE msisdn='00201215860927' AND pid=1;
 ----------------------
 
 SELECT updateCustomerFUs('00201215860927',1,3,50,'cros');
@@ -120,13 +121,14 @@ $$LANGUAGE plpgsql;
 SELECT * FROM retrieveCustomerDetails('00201215860927');
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION insertBillSheet(customerName text,cNumber text,cAddress text,pName text, profileFees float, oneTimeFee float,recurringFees float,
- totalVoiceCost float, totalSMSCost float , totalDataCost float,totalInvoiceBefore float, totalInvoiceAfter float , billDate date) RETURNS Boolean AS $$
+ totalVoiceCost float, totalSMSCost float , totalDataCost float,totalInvoiceBefore float, totalInvoiceAfter float ,
+	startDate text, endDate text, billDate date) RETURNS Boolean AS $$
 DECLARE
 BEGIN
 	INSERT INTO invoiceSheet (customer_name,customer_number,address, p_name, pfees, osfee, recurring_fees, total_voice_cost, total_sms_cost,
-		total_data_cost,total_invoice_before, total_invoice_after, bill_date) 
+		total_data_cost,total_invoice_before, total_invoice_after,start_date, end_date, bill_date) 
 		VALUES (customerName, cNumber, cAddress, pName, profileFees, oneTimeFee, recurringFees, totalVoiceCost, totalSMSCost, totalDataCost,
-		totalInvoiceBefore, totalInvoiceAfter, billDate);
+		totalInvoiceBefore, totalInvoiceAfter,startDate ,endDate, billDate);
 
  	RETURN true;
 END;
@@ -140,11 +142,11 @@ INSERT INTO invoiceSheet (customer_name, address,p_name, pfees, osfee, recurring
 		VALUES ('Mayar Hassan', 'sadnaskjd@jjkas','Red200', 200, 250, 50, 100.95, 150.34, 70.54,
 		821.83, 904.013, '2020-04-30');
 --------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION checkIfCustomerBilledBefore(dialNum text,billDate date) RETURNS Boolean AS $$
+CREATE OR REPLACE FUNCTION checkIfCustomerBilledBefore(dialNum text,startDate text, endDate text) RETURNS Boolean AS $$
 DECLARE
 	is_billed integer;
 BEGIN
-	SELECT COUNT(customer_name) INTO is_billed FROM invoicesheet WHERE customer_number = dialNum AND  bill_date = billDate;
+	SELECT COUNT(customer_name) INTO is_billed FROM invoicesheet WHERE customer_number = dialNum AND  start_date = startDate AND end_date = endDate;
 	IF is_billed = 0
 	THEN
 		return true;
@@ -157,4 +159,14 @@ $$LANGUAGE plpgsql;
 
 SELECT checkIfCustomerBilledBefore('0020100343453','2020-04-30');
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION renewCustomerFreeunits(DialNum text,profileID integer,voicefu_onNet float,voicefu_crossNet float,
+	smsfu_onNet float,smsfu_crossNet float, internetfu float)RETURNS Boolean AS $$
+DECLARE
+BEGIN
+	update customer_profile set free_voice_same = voicefu_onNet, free_voice_diff = voicefu_crossNet, free_sms_same = smsfu_onNet, 
+	free_sms_diff = smsfu_crossNet, free_internet = internetfu  WHERE msisdn=DialNum AND pid=profileID;	
+	return true;		
+END;
+$$LANGUAGE plpgsql;
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////END//////////////////////////////////////////////////////////////////////////
