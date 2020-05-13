@@ -1,17 +1,8 @@
 package Database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import SystemObjects.*;
-import Interfaces.NetConnection;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.*;
 import java.util.Vector;
 
 
@@ -638,8 +629,35 @@ public class databaseConnection
         }finally{
             stop();
         }
-   
     }
+    
+    public int getBillID (String customerNumber, Date billDate)
+    {
+        int billID = 0;
+        try
+        {
+            connect();
+            sqlcommand = "SELECT bill_id FROM invoicesheet WHERE customer_number = ? AND bill_date = ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1, customerNumber);
+            preparedstatement.setDate(2, billDate);
+            result = preparedstatement.executeQuery();
+            while (result.next())
+            {
+                billID = result.getInt(1);
+            }
+        }
+        catch(SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return billID;
+        }
+    }
+    
     private void stop(){
         try {
             connection.close();
@@ -648,78 +666,5 @@ public class databaseConnection
             System.out.println("databaseconnection.database.stop()error");
             Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }  
-    }
-     
- 
-    
-//    public static void main(String [] args){
-//        databaseConnection db = new databaseConnection();
-//        
-////        FreeUnit fu =db.ProfileFU(new FreeUnit(1)); 
-////        System.out.println("##########"+ fu.getFUSMSCrossNet() + "#############");
-//        
-////        CustomerProfile cFreeunits = new CustomerProfile(1,"01215860927");
-////        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
-////        System.out.println("###########"+cPFreeUnits.getEndDateOfContract()+"###############");
-//        
-////        UDR udr=new UDR("00201215860927",1,1);
-////        Vector<UDR> udrList=db.customerUDRs(udr,"20200401","20200430");
-////        for(UDR udr2 : udrList)
-////        {
-////            System.out.println("#######"+ udr2.getOrderedDate()+"#########" + udr2.getDurationMsgVolume());
-////        }
-//        
-////        UDR udr=db.UDRRow(new UDR(3));
-////        System.out.println("#####"+ udr.getDialB()+ "######" + udr.getDurationMsgVolume());
-//        
-/////////////////////////////////////Test////////////////////////////////////////////////////////////
-////        Boolean state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,50),"crossNet");
-////        System.out.println("##########################"+state);
-////        
-////        CustomerProfile cFreeunits = new CustomerProfile(1,"00201215860927");
-////        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
-////        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
-////        
-//////        databaseConnection db2 = new databaseConnection();
-////        
-////        state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,20),"crossNet");
-////        System.out.println("##########################"+state);
-////        
-////        cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
-////        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
-//        /////////////////////////////////////////////////////////////////////////
-//
-////        ProfileService pservice = db.retrieveProfileService(new ProfileService(1, 4));
-////        System.out.println("#####"+ pservice.getProfileServiceID() + "#######"+ pservice.getFeeSameOperator());
-//
-////        Vector<UDR> udrs = db.retrieveAllCustomersHaveUDRs();
-////        for(UDR udr:udrs){
-////            System.out.println("#######"+ udr.getDialA() +"#######" +udr.getProfileID());
-////        }
-//
-//
-////        Profile p = db.retieveProfileDetails(new Profile(1));
-////        System.out.println("#####" + p.getProfileName() + "######" + p.getProfileFees());
-    
-//        UDR udr= new UDR("00201215860927", 1);
-//        Vector<OCC> occs;
-//        occs = db.getAllOcc(udr, "20200401", "20200430");
-//        for(OCC occ : occs){
-//            System.out.println(occ.occ_id+" "+occ.msisdn+" "+occ.type_of_service +" "+occ.one_rec_id);
-//        }
-            
-
-//          Customer cust = db.retrieveCustomerInfo(new Customer("00201215860927"));
-//          System.out.println("#####" + cust.getF_name() + "#####" + cust.getEmail());
-    
-//            long millis=System.currentTimeMillis();  
-//            Date date=new Date(millis);  
-//            InvoiceSheet customerInvoiceObject = new InvoiceSheet("Mohamed Hassan", "sadn@jjkas","Res200", 
-//                  200f, 250f, 50f, 100.95f, 150.34f, 70.54f,821.83f, 904.013f, date);  
-//            Boolean s = db.insertCustomerbillData(customerInvoiceObject);
-//            System.out.println("########" + s);         
-//    }
-    
-    
-    
+    } 
 }

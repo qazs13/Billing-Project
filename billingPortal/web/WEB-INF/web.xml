@@ -28,6 +28,10 @@
         <servlet-name>Add_Customer</servlet-name>
         <servlet-class>Add_Functions.Add_Customer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>openPDF</servlet-name>
+        <servlet-class>CheckServlets.openPDF</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginCheck</servlet-name>
         <url-pattern>/loginCheck</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>Add_Customer</servlet-name>
         <url-pattern>/Add_Customer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>openPDF</servlet-name>
+        <url-pattern>/openPDF</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

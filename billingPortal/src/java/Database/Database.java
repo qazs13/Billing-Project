@@ -155,7 +155,33 @@ public class Database {
             stop();
             return allServices;
         }
-    }    
+    } 
+    
+    public Services getAllNormalServices()
+    {
+        Services allServices = new Services();
+        try
+        {
+            connect();
+            sqlCommand = "SELECT * FROM services WHERE is_recurring = false";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                allServices.getAllServices().add(new Services(result.getInt(1), result.getString(2),
+                        result.getBoolean(3),result.getFloat(4)));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            stop();
+            return allServices;
+        }
+    }       
     
     private Services getOneTimeServices (Services allServices)
     {
@@ -873,7 +899,111 @@ public class Database {
             stop();
             return oservice;
         }
-    }    
+    }
+    
+    public int countAllUsers ()
+    {
+        int totalNumberOfUsers = 0;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT COUNT(*) FROM customer";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                totalNumberOfUsers = result.getInt(1);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            totalNumberOfUsers = 0;
+        }
+        finally
+        {
+            stop();
+            return totalNumberOfUsers;
+        }
+    }
+    
+    public int countAllProfiles ()
+    {
+        int totalNumberOfProfiles = 0;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT COUNT(*) FROM profile";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                totalNumberOfProfiles = result.getInt(1);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            totalNumberOfProfiles = 0;
+        }
+        finally
+        {
+            stop();
+            return totalNumberOfProfiles;
+        }
+    }
+
+    public int countAllServices ()
+    {
+        int totalNumberOfServices = 0;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT COUNT(*) FROM services";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                totalNumberOfServices = result.getInt(1);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            totalNumberOfServices = 0;
+        }
+        finally
+        {
+            stop();
+            return totalNumberOfServices;
+        }
+    }
+
+    public int countAllCDRs ()
+    {
+        int totalNumberOfCDRs = 0;
+        try
+        {
+            connect();
+            sqlCommand = "SELECT COUNT(*) FROM cdr";
+            preparedStatment = connection.prepareStatement(sqlCommand);
+            result = preparedStatment.executeQuery();
+            while (result.next())
+            {
+                totalNumberOfCDRs = result.getInt(1);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            totalNumberOfCDRs = 0;
+        }
+        finally
+        {
+            stop();
+            return totalNumberOfCDRs;
+        }
+    }
      
     private void stop()
     {

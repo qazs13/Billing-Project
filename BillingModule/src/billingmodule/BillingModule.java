@@ -5,7 +5,7 @@ import SystemObjects.UDR;
 import SystemObjects.*;
 import java.sql.Date;
 import java.sql.SQLException;
-import pdfusingitext.PdfUsingItext2;
+import pdfusingitext.PdfUsingItext;
 
 
 public class BillingModule {
@@ -73,19 +73,22 @@ public class BillingModule {
                 String cName = retrieveCustomerData.getF_name() + " " + retrieveCustomerData.getL_name();
  
                 //create InvoiceSheetObject
-                customerInvoiceObject = new InvoiceSheet(cName,customer.getDialA(),retrieveCustomerData.getAddress(),
+                customerInvoiceObject = new InvoiceSheet(0,cName,customer.getDialA(),retrieveCustomerData.getAddress(),
                         customerProfile.getProfileName(),profileRecurringFees,oneTimeRecurringFees.getTotalOneTimeFees(), 
                         oneTimeRecurringFees.getTotalRecurringFees(), cProfile.getTotalVoiceServiceCost(), 
                         cProfile.getTotalSMSServiceCost(), cProfile.getTotalDataServiceCost(),
                         totalInvoiceBeforeTaxs,totalInvoiceAfterTaxs,intervalDate.getStartDate(),
                         intervalDate.getEndDate(), date);
-
+                
                 Boolean state = db.insertCustomerbillData(customerInvoiceObject);
+                
+                customerInvoiceObject.setBillId(db.getBillID(customer.getDialA(), date));
+                
 
                 if(state){
                     //---> move to pdf generation carring "InvoiceSheetObject"
                     
-                     PdfUsingItext2 itext = new PdfUsingItext2();
+                     PdfUsingItext itext = new PdfUsingItext();
                      itext.start(customerInvoiceObject);
                      
                     System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + state + "@@@@@@@@@@@@@@@@@@");
@@ -103,18 +106,5 @@ public class BillingModule {
         }else{
          System.out.println("This customer has been already billed ");
         }
-    }
-    
-//    public static void main(String [] args){
-//        BillingModule module = new BillingModule();
-//        
-//        try {
-//            module.InvoiceGeneration(new BillDateInterval("20200401", "20200430"));
-//        } catch (SQLException ex) {
-//            Logger.getLogger(BillingModule.class.getName()).log(Level.SEVERE, null, ex);
-//        }     
-//    }
-    
-
-    
+    }    
 }

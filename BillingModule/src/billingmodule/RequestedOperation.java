@@ -34,11 +34,14 @@ public class RequestedOperation {
             
             Vector<UDR> allCustomersInUDRTable = db.retrieveAllCustomersHaveUDRs();
             
-            for(UDR customer:allCustomersInUDRTable){
+            for(UDR customer:allCustomersInUDRTable)
+            {
                 
-                    module.InvoiceGeneration(customer,intervalBill);
+                module.InvoiceGeneration(customer,intervalBill);
             }
-        }else{
+        }
+        else
+        {
             //wrong request  
             System.out.println("Wrong request !!!!!, please try again");
         }

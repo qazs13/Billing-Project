@@ -68,5 +68,5 @@
     %>    
 </div>
 <%@include file="../header&footer/scripts.html"%>
-<script src="../js/changeBodyColor.js"></script>  
+<script src="../js/changeBodyColor.js"></script>
 <%@include file="../header&footer/footer.html"%>

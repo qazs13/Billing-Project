@@ -968,7 +968,7 @@ h6
 /* Track */
 ::-webkit-scrollbar-track 
 {
-  background: #fffffff;
+  background: #ffffff;
   border-radius: 25px;
 }
 
@@ -1152,6 +1152,117 @@ h6
     margin-left: 24%;
 }
 /*Customer Details*/
+/*Main Page*/
+.fullSizeMainPage
+{
+    height: 570px;
+    background-color: white;
+}
+.fullSizeMainPage h1
+{
+    padding: 10px;
+    color: #FF7900;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.fullSizeMainPage .row
+{
+    height: 85%;
+}
+.fullSizeMainPage .row .mainStatic
+{
+    margin-top: 2%;
+    height: 80%;
+    width: 20%;
+    background-color: black;
+    border: 2px solid #FF7900;
+    border-radius: 25px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    transition: 0.5s;
+}
+.fullSizeMainPage .row .mainStatic:hover
+{
+    cursor: pointer;
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(255, 119, 0, 0.5);
+}
+.fullSizeMainPage .row .mainStatic:before
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+.fullSizeMainPage .row .mainStatic h2
+{
+    margin-top: 20%;
+    text-align: center;
+    color: #FF7900;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.fullSizeMainPage .row .mainStatic .precent
+{
+    width: 100%;
+}
+.fullSizeMainPage .row .mainStatic .precent .number
+{
+    position: relative;
+    top: -105px;
+    left: 0px;
+    color: white;
+    transition: 0.5s;
+}
+.fullSizeMainPage .row .mainStatic:hover .precent .number h3
+{
+    position: relative;
+    top: -20px;
+    left: 0;
+    font-size: 60px;
+}
+.fullSizeMainPage .row .mainStatic .precent svg
+{
+    position: relative;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 200px;
+}
+.fullSizeMainPage .row .mainStatic .precent svg circle
+{
+    fill: none;
+    stroke: white;
+    stroke-width: 10;
+    stroke-linecap: round;
+}
+.fullSizeMainPage .row .mainStatic .precent svg circle:nth-child(2)
+{
+    stroke-dashoffset: 440;
+    stroke-dasharray: 440;
+}
+.fullSizeMainPage .row .mainStatic:nth-child(1) svg circle:nth-child(2)
+{
+    stroke: #FF7900;
+}
+.fullSizeMainPage .row .mainStatic:nth-child(2) svg circle:nth-child(2)
+{
+    stroke: #FF7900;
+}
+.fullSizeMainPage .row .mainStatic:nth-child(3) svg circle:nth-child(2)
+{
+    stroke: #FF7900;
+}
+.fullSizeMainPage .row .mainStatic:nth-child(4) svg circle:nth-child(2)
+{
+    stroke: #FF7900;
+}
+/*Main Page*/
 /*Footer*/
 .footerOrange
 {

@@ -8,7 +8,6 @@ package UploadServlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -37,14 +36,15 @@ public class UploadServlet extends HttpServlet {
         String applicationpath = System.getProperty("user.home");
         
         System.out.println(applicationpath);
-        String uploadPath = applicationpath +"/NetBeansProjects/Billing-Project/CDR-Parser/cdr"; //want to generic
+        String uploadPath = "C:\\Users\\amrws\\Desktop\\CDR-Parser\\cdr"; //want to generic
         System.out.println("applicationPath:" + applicationpath);
         String savePath = uploadPath + File.separator + fileName;
         System.out.println("savePath: " + savePath);
 
         part.write(savePath + File.separator);
-        File fileSaveDir1 = new File(savePath);
         part.write(savePath + File.separator);
+        
+        resp.sendRedirect("/billingPortal/pages/uploadCDR.jsp");
 
     }
 

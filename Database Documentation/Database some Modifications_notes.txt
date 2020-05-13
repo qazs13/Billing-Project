@@ -195,4 +195,3 @@ INSERT INTO cdr(dialA,dialB,sid,duration_msg_volume,start_date,start_time,extern
 
 INSERT INTO udr(pid,dialA,dialB,sid,duration_msg_volume ,start_date,start_time,external_charges,cost,is_billed) 
 	VALUES(2,'00201289753456','https://www.google.com/',3,8,'20200528','3:30:00',28,16,false);
-

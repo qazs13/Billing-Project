@@ -147,8 +147,9 @@ public class Database
         try 
         {
             connect();
-            sqlCommand = "INSERT INTO udr (pid,dialA,dialB,sid,duration_msg_volume,start_date,start_time,external_charges,cost,is_billed)"
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?)";
+            sqlCommand = "INSERT INTO udr (pid,dialA,dialB,sid,duration_msg_volume,start_date,start_time,external_charges,"
+                    + "has_freeunits,cost,is_billed)"
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             preparedStatment = connection.prepareStatement(sqlCommand);
             preparedStatment.setInt(1, pid);
             preparedStatment.setString(2, cdr_one.getDiala());
@@ -158,8 +159,9 @@ public class Database
             preparedStatment.setString(6, cdr_one.getStart_date());
             preparedStatment.setString(7, cdr_one.getStart_time());
             preparedStatment.setFloat(8, cdr_one.getExternal_charges());
-            preparedStatment.setFloat(9, cost);
-            preparedStatment.setBoolean(10, false);
+            preparedStatment.setBoolean(9, false);
+            preparedStatment.setFloat(10, cost);
+            preparedStatment.setBoolean(11, false);
             preparedStatment.execute();
             System.out.println("*************************************************");              
             System.out.println("Inserted Successfully INTO UDR Table");              

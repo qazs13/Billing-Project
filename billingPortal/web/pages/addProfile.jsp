@@ -4,7 +4,7 @@
 <%@include file="../header&footer/header.html"%>
 <%!
     Database db = new Database();
-    Services service = db.getAllNotOneTimeServices();
+    Services service = db.getAllNormalServices();
 %>
 <!-- Profile Area -->
   <div class="container-fluid fullAreaProfile">
