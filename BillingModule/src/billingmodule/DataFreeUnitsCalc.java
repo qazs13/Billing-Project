@@ -56,7 +56,7 @@ public class DataFreeUnitsCalc {
                                             
                                         cProfileupdateFU = new CustomerProfile(
                                             udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                        state=db.UpdateCustomerFUs(cProfileupdateFU,"nothing",udr.getUdrID());
+                                        state=db.UpdateCustomerFUs(cProfileupdateFU,"nothing");
                                         costOfService = 0f;
                                         TotalUDRsCost += costOfService;
                                         System.out.println("Cost of Internet service is zero");
@@ -64,7 +64,7 @@ public class DataFreeUnitsCalc {
                                       
                                         cProfileupdateFU = new CustomerProfile(
                                                     udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);  
-                                        state=db.UpdateCustomerFUs(cProfileupdateFU,"nothing",udr.getUdrID());
+                                        state=db.UpdateCustomerFUs(cProfileupdateFU,"nothing");
                                         consumedData = abs(updatedValue);  
                                         float round = ((float) consumedData) / profileDataDetails.getRoundAmount(); 
                                         round =   (float) Math.ceil(round);                                                                      

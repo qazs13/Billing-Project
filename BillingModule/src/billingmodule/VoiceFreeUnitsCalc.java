@@ -59,7 +59,7 @@ public class VoiceFreeUnitsCalc {
 
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet, udr.getUdrID());
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("Cost of onNet Voice service is zero "+state);
@@ -68,7 +68,7 @@ public class VoiceFreeUnitsCalc {
 
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet,udr.getUdrID());
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     consumedData = abs(updatedValue);
                                     float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
                                     round =   (float) Math.ceil(round);                                    
@@ -102,7 +102,7 @@ public class VoiceFreeUnitsCalc {
 //                                  
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;                                     
                                     System.out.println("cost of crossVoiceNet Service is zero");
@@ -110,7 +110,7 @@ public class VoiceFreeUnitsCalc {
                             }else{
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
                                     consumedData = abs(updatedValue);
                                     float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
                                     round =   (float) Math.ceil(round);

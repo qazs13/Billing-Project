@@ -13,7 +13,6 @@ public class UDR {
     Boolean has_fu,is_billed;
     Float cost;
     Timestamp orderedDate;
-  
     
     public UDR(){
     }
@@ -70,21 +69,6 @@ public class UDR {
         this.has_fu = _hasFU;
         this.cost = _cost;
         this.is_billed = _isBilled;
-    }
-
-    public UDR(String _dialA, String _dialB, int _serviceID, float _duration_msg_volume, String _orderedDate, String string2) {
-       
-    
-        
-        this.dialA = _dialA;
-        this.dialB = _dialB;
-        this.serviceID = _serviceID;
-        this.duration_msg_volume = _duration_msg_volume;
-        this.start_date = _orderedDate;
-        this.start_time = string2;
-       
-    
-    
     }
     
     

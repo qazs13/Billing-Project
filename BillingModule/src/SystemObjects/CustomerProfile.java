@@ -19,6 +19,10 @@ public class CustomerProfile {
     public CustomerProfile(){
     }
     
+    public CustomerProfile(String _msisdn){
+        this.msisdn = _msisdn;
+    } 
+    
     public CustomerProfile(int _profileID,String _msisdn){
         this.msisdn = _msisdn;
         this.profileID = _profileID;
@@ -31,6 +35,18 @@ public class CustomerProfile {
         this.consumedQuantity = _consumedQuantity;
     } 
 
+     public CustomerProfile(String _msisdn,int _profileID,
+            Float _fuVoiceOnNet,Float _fuVoiceCrossNet, Float _fuSMSOnNet,
+            Float _fuSMSCrossNet,Float _fuInternet){
+        this.msisdn = _msisdn;
+        this.profileID= _profileID;
+        this.fuVoiceOnNet = _fuVoiceOnNet;
+        this.fuVoiceCrossNet = _fuVoiceCrossNet;
+        this.fuSMSOnNet = _fuSMSOnNet;
+        this.fuSMSCrossNet = _fuSMSCrossNet;
+        this.fuInternet = _fuInternet;
+    }
+     
     public CustomerProfile(String _msisdn,int _profileID,
             String _startDateOfContract, String _endDateOfContract,String _blockedServices,
             Float _fuVoiceOnNet,Float _fuVoiceCrossNet, Float _fuSMSOnNet,

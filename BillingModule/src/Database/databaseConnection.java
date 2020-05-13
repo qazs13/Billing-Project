@@ -20,7 +20,7 @@ public class databaseConnection
     
     private final String url = "jdbc:postgresql://localhost:5432/billing_system";
     private final String user = "postgres";
-    private final String password = "1234";
+    private final String password = "amrwsk13";
      
     private Connection connection;
     private String sqlcommand;
@@ -94,7 +94,7 @@ public class databaseConnection
                 customerRemainedFUs.setFUInternet(result.getFloat(10)); 
                
             }
-            System.out.println("Database retrievl:"+ customerRemainedFUs.getFUVoiceCrossNet());
+//            System.out.println("Database retrievl:"+ customerRemainedFUs.getFUVoiceCrossNet());
             System.out.println("Remained data of customer free Units returned successed");
             return customerRemainedFUs;
         } catch (SQLException ex) {
@@ -219,11 +219,11 @@ public class databaseConnection
         }  
     }
     
-    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection, int udrID){
+    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection){
 
         try {
             connect();
-            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?,?)";
+            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1,custRemainedFUs.getMSISDN());
             preparedstatement.setInt(2,custRemainedFUs.getProfileID());
@@ -231,7 +231,6 @@ public class databaseConnection
             preparedstatement.setFloat(4,custRemainedFUs.getConsumedQuantity());
 //            System.out.println("Database consumedQuentity"+custRemainedFUs.getConsumedQuantity() );
             preparedstatement.setString(5,netConnection);
-            preparedstatement.setInt(6,udrID);
             result = preparedstatement.executeQuery();
             
             while(result.next()){
@@ -269,36 +268,6 @@ public class databaseConnection
             
             System.out.println("Customer's Dial Num retrieved successfully");
             return customersDialNums;
-            
-        } catch (SQLException ex) {
-            System.out.println("Something Wrong happened");
-            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }finally{
-            stop();
-        } 
-    }
-    
-    
-    public Vector<UDR> select_from_udr(String msisdn){
-        
-        connect();
-        Vector<UDR> customers = new Vector();
-          UDR udrDialNum;
-        try {
-            sqlcommand = "SELECT * FROM udr where dialA= ?";
-            preparedstatement = connection.prepareStatement(sqlcommand);
-            preparedstatement.setString(1, msisdn);
-            result = preparedstatement.executeQuery();
-        
-            while(result.next()){
-                udrDialNum = new UDR(result.getString("dialA"),result.getString("dialB"),result.getInt("sid"),result.getInt("duration_msg_volume"),
-                result.getString("start_date"),result.getString("start_time"));
-                customers.add(udrDialNum);
-            }
-            
-            System.out.println("Customer's Dial Num retrieved successfully");
-            return customers;
             
         } catch (SQLException ex) {
             System.out.println("Something Wrong happened");
@@ -495,7 +464,7 @@ public class databaseConnection
         connect();
         
         try {
-            sqlcommand = "SELECT insertBillSheet(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            sqlcommand = "SELECT insertBillSheet(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1,invoiceData.getCustomerName());
             preparedstatement.setString(2, invoiceData.getCustomerNumber());
@@ -509,7 +478,9 @@ public class databaseConnection
             preparedstatement.setFloat(10,invoiceData.getTotalDataCost());
             preparedstatement.setFloat(11,invoiceData.getTotalInvoiceBefore());
             preparedstatement.setFloat(12,invoiceData.getTotalInvoiceAfter());
-            preparedstatement.setDate(13,invoiceData.getBillGenerationDate());
+            preparedstatement.setString(13, invoiceData.getStartDate());
+            preparedstatement.setString(14, invoiceData.getEndDate());
+            preparedstatement.setDate(15,invoiceData.getBillGenerationDate());
             result = preparedstatement.executeQuery();
             
             while(result.next()){
@@ -529,14 +500,15 @@ public class databaseConnection
         
     }
     
-    public Boolean checkIfCustomerBilledBefore(String DialNum, Date billDate){
+    public Boolean checkIfCustomerBilledBefore(String DialNum, BillDateInterval interval){
        connect();
        
         try {
-            sqlcommand = "SELECT checkIfCustomerBilledBefore(?,?)";
+            sqlcommand = "SELECT checkIfCustomerBilledBefore(?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1,DialNum);
-            preparedstatement.setDate(2,billDate);
+            preparedstatement.setString(2,interval.getStartDate());
+            preparedstatement.setString(3,interval.getEndDate());
             result = preparedstatement.executeQuery();
        
             while(result.next()){
@@ -557,8 +529,7 @@ public class databaseConnection
         }
     }
     
-    public boolean updateUDRwithFalse (int udrID)
-    {
+    public boolean updateUDRwithFalse (int udrID){
         try
         {
             connect();
@@ -579,6 +550,65 @@ public class databaseConnection
         }
     }
     
+    public Boolean renewCustomerProfile(CustomerProfile cProfile){
+        connect();
+        
+        try {
+            sqlcommand = "SELECT renewCustomerFreeunits(?,?,?,?,?,?,?)";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1, cProfile.getMSISDN());
+            preparedstatement.setInt(2, cProfile.getProfileID());
+            preparedstatement.setFloat(3, cProfile.getFUVoiceOnNet());
+            preparedstatement.setFloat(4, cProfile.getFUVoiceCrossNet());
+            preparedstatement.setFloat(5, cProfile.getFUSMSOnNet());
+            preparedstatement.setFloat(6, cProfile.getFUSMSCrossNet());
+            preparedstatement.setFloat(7, cProfile.getFUInternet());
+            result = preparedstatement.executeQuery();
+            
+            while(result.next()){
+                state = result.getBoolean(1);
+            }
+            
+            System.out.println("Last Function successed");
+            return state;
+            
+        } catch (SQLException ex) {
+            
+            System.out.println("wrong !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally{
+            stop();
+        }
+    }
+    
+    public CustomerProfile retrieveCustomerProfile(CustomerProfile cProfile){
+        connect();
+        CustomerProfile cProf = new CustomerProfile();
+        try {
+            sqlcommand = "SELECT msisdn, pid FROM customer_profile WHERE msisdn = ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1,cProfile.getMSISDN());
+            result = preparedstatement.executeQuery();
+            
+            while(result.next()){
+                cProf.setMSISDN(result.getString(1));
+                cProf.setProfileID(result.getInt(2));
+            }
+            
+            System.out.println("profile id retrieved successfully");
+            return cProf;
+            
+            
+        } catch (SQLException ex) {
+             System.out.println("profile id doesnot retrieved");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        }
+   
+    }
     private void stop(){
         try {
             connection.close();
@@ -589,6 +619,76 @@ public class databaseConnection
         }  
     }
      
-   
+ 
+    
+//    public static void main(String [] args){
+//        databaseConnection db = new databaseConnection();
+//        
+////        FreeUnit fu =db.ProfileFU(new FreeUnit(1)); 
+////        System.out.println("##########"+ fu.getFUSMSCrossNet() + "#############");
+//        
+////        CustomerProfile cFreeunits = new CustomerProfile(1,"01215860927");
+////        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
+////        System.out.println("###########"+cPFreeUnits.getEndDateOfContract()+"###############");
+//        
+////        UDR udr=new UDR("00201215860927",1,1);
+////        Vector<UDR> udrList=db.customerUDRs(udr,"20200401","20200430");
+////        for(UDR udr2 : udrList)
+////        {
+////            System.out.println("#######"+ udr2.getOrderedDate()+"#########" + udr2.getDurationMsgVolume());
+////        }
+//        
+////        UDR udr=db.UDRRow(new UDR(3));
+////        System.out.println("#####"+ udr.getDialB()+ "######" + udr.getDurationMsgVolume());
+//        
+/////////////////////////////////////Test////////////////////////////////////////////////////////////
+////        Boolean state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,50),"crossNet");
+////        System.out.println("##########################"+state);
+////        
+////        CustomerProfile cFreeunits = new CustomerProfile(1,"00201215860927");
+////        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
+////        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
+////        
+//////        databaseConnection db2 = new databaseConnection();
+////        
+////        state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,20),"crossNet");
+////        System.out.println("##########################"+state);
+////        
+////        cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
+////        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
+//        /////////////////////////////////////////////////////////////////////////
+//
+////        ProfileService pservice = db.retrieveProfileService(new ProfileService(1, 4));
+////        System.out.println("#####"+ pservice.getProfileServiceID() + "#######"+ pservice.getFeeSameOperator());
+//
+////        Vector<UDR> udrs = db.retrieveAllCustomersHaveUDRs();
+////        for(UDR udr:udrs){
+////            System.out.println("#######"+ udr.getDialA() +"#######" +udr.getProfileID());
+////        }
+//
+//
+////        Profile p = db.retieveProfileDetails(new Profile(1));
+////        System.out.println("#####" + p.getProfileName() + "######" + p.getProfileFees());
+    
+//        UDR udr= new UDR("00201215860927", 1);
+//        Vector<OCC> occs;
+//        occs = db.getAllOcc(udr, "20200401", "20200430");
+//        for(OCC occ : occs){
+//            System.out.println(occ.occ_id+" "+occ.msisdn+" "+occ.type_of_service +" "+occ.one_rec_id);
+//        }
+            
+
+//          Customer cust = db.retrieveCustomerInfo(new Customer("00201215860927"));
+//          System.out.println("#####" + cust.getF_name() + "#####" + cust.getEmail());
+    
+//            long millis=System.currentTimeMillis();  
+//            Date date=new Date(millis);  
+//            InvoiceSheet customerInvoiceObject = new InvoiceSheet("Mohamed Hassan", "sadn@jjkas","Res200", 
+//                  200f, 250f, 50f, 100.95f, 150.34f, 70.54f,821.83f, 904.013f, date);  
+//            Boolean s = db.insertCustomerbillData(customerInvoiceObject);
+//            System.out.println("########" + s);         
+//    }
+    
+    
     
 }
