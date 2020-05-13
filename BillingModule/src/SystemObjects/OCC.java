@@ -35,6 +35,10 @@ public class OCC {
         this.is_service_processed = is_service_processed;
         this.serviceprocessed_date = serviceprocessed_date;
     } 
+
+    public OCC(int aInt, String string, int aInt0, String string0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public void setTotalOneTimeFees(Float _totalOneTimeFees){
         this.totalOneTimeFees = _totalOneTimeFees;

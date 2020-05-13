@@ -20,7 +20,7 @@ public class databaseConnection
     
     private final String url = "jdbc:postgresql://localhost:5432/billing_system";
     private final String user = "postgres";
-    private final String password = "amrwsk13";
+    private final String password = "1234";
      
     private Connection connection;
     private String sqlcommand;
@@ -269,6 +269,36 @@ public class databaseConnection
             
             System.out.println("Customer's Dial Num retrieved successfully");
             return customersDialNums;
+            
+        } catch (SQLException ex) {
+            System.out.println("Something Wrong happened");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        } 
+    }
+    
+    
+    public Vector<UDR> select_from_udr(String msisdn){
+        
+        connect();
+        Vector<UDR> customers = new Vector();
+          UDR udrDialNum;
+        try {
+            sqlcommand = "SELECT * FROM udr where dialA= ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1, msisdn);
+            result = preparedstatement.executeQuery();
+        
+            while(result.next()){
+                udrDialNum = new UDR(result.getString("dialA"),result.getString("dialB"),result.getInt("sid"),result.getInt("duration_msg_volume"),
+                result.getString("start_date"),result.getString("start_time"));
+                customers.add(udrDialNum);
+            }
+            
+            System.out.println("Customer's Dial Num retrieved successfully");
+            return customers;
             
         } catch (SQLException ex) {
             System.out.println("Something Wrong happened");
@@ -559,76 +589,6 @@ public class databaseConnection
         }  
     }
      
- 
-    
-//    public static void main(String [] args){
-//        databaseConnection db = new databaseConnection();
-//        
-////        FreeUnit fu =db.ProfileFU(new FreeUnit(1)); 
-////        System.out.println("##########"+ fu.getFUSMSCrossNet() + "#############");
-//        
-////        CustomerProfile cFreeunits = new CustomerProfile(1,"01215860927");
-////        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
-////        System.out.println("###########"+cPFreeUnits.getEndDateOfContract()+"###############");
-//        
-////        UDR udr=new UDR("00201215860927",1,1);
-////        Vector<UDR> udrList=db.customerUDRs(udr,"20200401","20200430");
-////        for(UDR udr2 : udrList)
-////        {
-////            System.out.println("#######"+ udr2.getOrderedDate()+"#########" + udr2.getDurationMsgVolume());
-////        }
-//        
-////        UDR udr=db.UDRRow(new UDR(3));
-////        System.out.println("#####"+ udr.getDialB()+ "######" + udr.getDurationMsgVolume());
-//        
-/////////////////////////////////////Test////////////////////////////////////////////////////////////
-////        Boolean state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,50),"crossNet");
-////        System.out.println("##########################"+state);
-////        
-////        CustomerProfile cFreeunits = new CustomerProfile(1,"00201215860927");
-////        CustomerProfile cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
-////        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
-////        
-//////        databaseConnection db2 = new databaseConnection();
-////        
-////        state = db.UpdateCustomerFUs(new CustomerProfile("00201215860927",1,1,20),"crossNet");
-////        System.out.println("##########################"+state);
-////        
-////        cPFreeUnits=db.RemainedFreeUnits(cFreeunits);
-////        System.out.println("###########"+cPFreeUnits.getFUVoiceCrossNet()+"###############");
-//        /////////////////////////////////////////////////////////////////////////
-//
-////        ProfileService pservice = db.retrieveProfileService(new ProfileService(1, 4));
-////        System.out.println("#####"+ pservice.getProfileServiceID() + "#######"+ pservice.getFeeSameOperator());
-//
-////        Vector<UDR> udrs = db.retrieveAllCustomersHaveUDRs();
-////        for(UDR udr:udrs){
-////            System.out.println("#######"+ udr.getDialA() +"#######" +udr.getProfileID());
-////        }
-//
-//
-////        Profile p = db.retieveProfileDetails(new Profile(1));
-////        System.out.println("#####" + p.getProfileName() + "######" + p.getProfileFees());
-    
-//        UDR udr= new UDR("00201215860927", 1);
-//        Vector<OCC> occs;
-//        occs = db.getAllOcc(udr, "20200401", "20200430");
-//        for(OCC occ : occs){
-//            System.out.println(occ.occ_id+" "+occ.msisdn+" "+occ.type_of_service +" "+occ.one_rec_id);
-//        }
-            
-
-//          Customer cust = db.retrieveCustomerInfo(new Customer("00201215860927"));
-//          System.out.println("#####" + cust.getF_name() + "#####" + cust.getEmail());
-    
-//            long millis=System.currentTimeMillis();  
-//            Date date=new Date(millis);  
-//            InvoiceSheet customerInvoiceObject = new InvoiceSheet("Mohamed Hassan", "sadn@jjkas","Res200", 
-//                  200f, 250f, 50f, 100.95f, 150.34f, 70.54f,821.83f, 904.013f, date);  
-//            Boolean s = db.insertCustomerbillData(customerInvoiceObject);
-//            System.out.println("########" + s);         
-//    }
-    
-    
+   
     
 }
