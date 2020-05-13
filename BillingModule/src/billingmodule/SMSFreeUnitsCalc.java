@@ -68,7 +68,7 @@ public class SMSFreeUnitsCalc {
                                     TotalUDRsCost += costOfService;                                   
                                     System.out.println("Cost Calcu for onNet SMS service:" + costOfService);                                   
                             }
-                            state = db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet, udr.getUdrID());
+                            state = db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                         }else{
                             costOfService = udr.getCost();                           
                             TotalUDRsCost += costOfService;                           
@@ -92,7 +92,7 @@ public class SMSFreeUnitsCalc {
                                  
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID()); 
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet); 
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("cost of crossNet sms Service is zero");
@@ -101,7 +101,7 @@ public class SMSFreeUnitsCalc {
                                  
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet, udr.getUdrID());
+                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
                                     consumedData = abs(updatedValue);      
                                     float round = ((float) consumedData) / profileSMSDetails.getRoundAmount(); 
                                     round =   (float) Math.ceil(round);

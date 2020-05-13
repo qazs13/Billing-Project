@@ -14,6 +14,7 @@ public class InvoiceSheet {
     Float recurringFees, totalVoiceCost, totalSMSCost;
     Float totalDataCost, totalInvoiceBefore;
     Float totalInvoiceAfter;
+    String startDate,endDate;
     Date billGenerationDate;
     
     public InvoiceSheet(){
@@ -22,7 +23,8 @@ public class InvoiceSheet {
     public InvoiceSheet(int _billId,String _customerName,String _customerNumber,String _address,String _profileName,
             Float _profileFees,Float _oneTimeServiceFees,Float _recurringFees,
             Float _totalVoiceCost,Float _totalSMSCost,Float _totalDataCost,
-            Float _totalInvoiceBefore,Float _totalInvoiceAfter,Date _billGenerationDate){
+            Float _totalInvoiceBefore,Float _totalInvoiceAfter,String _startDate, 
+            String _endDate, Date _billGenerationDate){
         
         this.billId = _billId;
         this.customerName = _customerName;
@@ -37,13 +39,16 @@ public class InvoiceSheet {
         this.totalDataCost = _totalDataCost;
         this.totalInvoiceBefore = _totalInvoiceBefore;
         this.totalInvoiceAfter = _totalInvoiceAfter;
+        this.startDate = _startDate;
+        this.endDate = _endDate;
         this.billGenerationDate = _billGenerationDate;
     }
     
     public InvoiceSheet(String _customerName,String _customerNumber,String _address,String _profileName,
             Float _profileFees,Float _oneTimeServiceFees,Float _recurringFees,
             Float _totalVoiceCost,Float _totalSMSCost,Float _totalDataCost,
-            Float _totalInvoiceBefore,Float _totalInvoiceAfter,Date _billGenerationDate){
+            Float _totalInvoiceBefore,Float _totalInvoiceAfter,String _startDate, 
+            String _endDate,Date _billGenerationDate){
         
         this.customerName = _customerName;
         this.customerNumber = _customerNumber;
@@ -57,6 +62,8 @@ public class InvoiceSheet {
         this.totalDataCost = _totalDataCost;
         this.totalInvoiceBefore = _totalInvoiceBefore;
         this.totalInvoiceAfter = _totalInvoiceAfter;
+        this.startDate = _startDate;
+        this.endDate = _endDate;
         this.billGenerationDate = _billGenerationDate;
     }
     
@@ -110,6 +117,14 @@ public class InvoiceSheet {
     
     public void setTotalInvoiceAfter(Float _totalInvoiceAfter){
         this.totalInvoiceAfter = _totalInvoiceAfter;
+    }
+    
+    public void setStartDate(String _startDate){
+        this.startDate = _startDate;
+    }
+    
+    public void setEndDate(String _endDate){
+        this.endDate = _endDate;
     }
     
     public void setBillGenerationDate(Date _billGenerationDate){
@@ -170,6 +185,14 @@ public class InvoiceSheet {
     
     public Float getTotalInvoiceAfter(){
         return this.totalInvoiceAfter;
+    }
+    
+    public String getStartDate(){
+        return this.startDate;
+    }
+    
+    public String getEndDate(){
+        return this.endDate;
     }
     
     public Date getBillGenerationDate(){

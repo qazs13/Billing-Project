@@ -5,14 +5,14 @@ CREATE TABLE customer (msisdn text primary key, f_name text,l_name text,email te
 Create table profile (pid serial primary key, pname text ,renew_duration int ,pfees float);
 
 create table free_units (fid serial primary key,free_voice_same float,free_voice_diff float,free_sms_same float,free_sms_diff float,
-	free_internet float,pid int references profile(pid) ON DELETE CASCADE); 
+	free_internet float,pid int references profile(pid)); 
 
 Create table services (sid serial primary key ,sname text,is_recurring boolean,recurring_fees float);
 
 create table one_time_service (one_time_service_id serial primary key,osname text,osfee float);
 
-create table profile_services (profile_services_id serial primary key,pid int references profile(pid) ON DELETE CASCADE ,
-	sid int references services(sid) ON DELETE CASCADE,round_amount int,fees_local_same float,fees_local_diff float,fees_international float);
+create table profile_services (profile_services_id serial primary key,pid int references profile(pid),
+	sid int references services(sid),round_amount int,fees_local_same float,fees_local_diff float,fees_international float);
 
 create table occ (occ_id serial ,msisdn text REFERENCES customer(msisdn),one_recurring_id int,type_of_service text, is_service_processed boolean, 
 	service_processed_date date, primary key (occ_id,msisdn));
@@ -21,7 +21,8 @@ create table customer_profile (msisdn text references customer(msisdn),pid int r
 	free_voice_same float,free_voice_diff float,free_sms_same float,free_sms_diff float,free_internet float, primary key(msisdn,pid));
 
 create table invoiceSheet(bill_id serial primary key ,customer_name text,customer_number text, address text,p_name text, pfees float, osfee float,recurring_fees float,
-    total_voice_cost float, total_sms_cost float , total_data_cost float,total_invoice_before float,total_invoice_after float , bill_date date);
+    total_voice_cost float, total_sms_cost float , total_data_cost float,total_invoice_before float,total_invoice_after float , start_date text,
+	end_date text, bill_date date);
 --------------------------------------------------------------------------------------------------------------------------
 TRUNCATE TABLE customer_profile_services;
 TRUNCATE TABLE customer_profile;

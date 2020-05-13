@@ -1,8 +1,7 @@
-package billingmodule;
+ package billingmodule;
 
 import Database.databaseConnection;
 import SystemObjects.UDR;
-import java.util.Vector;
 import SystemObjects.*;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -12,11 +11,12 @@ public class BillingModule {
 
   
     
-    public void InvoiceGeneration(BillDateInterval intervalDate) throws SQLException{
+    public void InvoiceGeneration(UDR customer, BillDateInterval intervalDate) throws SQLException{
+        
         databaseConnection db = new databaseConnection();
-        Vector<UDR> allCustomersInUDRTable = db.retrieveAllCustomersHaveUDRs();
         FreeUnitsCalc retrieveCustomerObjectTotalFUCalcuation = new FreeUnitsCalc();
         OneTime_Recurring_Calc feesObject = new OneTime_Recurring_Calc();
+        
         Profile customerProfile;
         CustomerProfile cProfile;      
         OCC oneTimeRecurringFees;
@@ -27,79 +27,76 @@ public class BillingModule {
         Float totalInvoiceBeforeTaxs = 0f;
         Float totalInvoiceAfterTaxs = 0f;
         
-        for(UDR customer:allCustomersInUDRTable){
-            
-                    //Current Date Generation 
-                    long millis=System.currentTimeMillis();  
-                    Date date=new Date(millis);  
-                    System.out.println(date);
-
-                    
-                    hasBilledThisMonth = db.checkIfCustomerBilledBefore(customer.getDialA(),date);
-                    
-                    if(hasBilledThisMonth){
-                        
-                            //get ProfileTotalFees
-                            customerProfile = db.retieveProfileDetails(new Profile(customer.getProfileID()));
-                            profileRecurringFees = customerProfile.getProfileFees();
-
-                            //get Return of FreeUnitCalculation ------Vector------>ServiceName:Cost
-                            cProfile = retrieveCustomerObjectTotalFUCalcuation.CustomerServicesCalculations(new 
-                                    UDR(customer.getDialA(), customer.getProfileID()),intervalDate);                
-                            System.out.println("Billing Module Test ####" + cProfile.getTotalDataServiceCost());
+         
+        //Current Date Generation 
+        long millis=System.currentTimeMillis();  
+        Date date=new Date(millis);  
+        System.out.println(date);
 
 
-                            //return from class Recuring services/one-Time(may be +ve or -ve) services
-                            oneTimeRecurringFees = feesObject.getOneTimeRecurringFee(new UDR(customer.getDialA(),
-                                    customer.getProfileID()), intervalDate);
-                            System.out.println("Billing Module Test (recuring)#########" + 
-                                    oneTimeRecurringFees.getTotalRecurringFees());
+        hasBilledThisMonth = db.checkIfCustomerBilledBefore(customer.getDialA(),intervalDate);
 
-                            /////////////Total Invoice Before Taxs////////////////////////
-                            totalInvoiceBeforeTaxs = profileRecurringFees + cProfile.getTotalVoiceServiceCost() +
-                                    cProfile.getTotalSMSServiceCost() + cProfile.getTotalDataServiceCost() +
-                                    oneTimeRecurringFees.getTotalOneTimeFees() + 
-                                    oneTimeRecurringFees.getTotalRecurringFees();         
-                            System.out.println("#####Toooooooooooooootal ###" + totalInvoiceBeforeTaxs);
+        if(hasBilledThisMonth){
 
-                            /////////////Total Invoice After Taxs////////////////////////
-                            //Taxs hardcodes
-                            totalInvoiceAfterTaxs = totalInvoiceBeforeTaxs * 1.1f;                  
-                            System.out.println("#####Toooooooooooooootal ###" + totalInvoiceAfterTaxs);
+                //get ProfileTotalFees
+                customerProfile = db.retieveProfileDetails(new Profile(customer.getProfileID()));
+                profileRecurringFees = customerProfile.getProfileFees();
 
-                            //insert or update in bill Table
-                            retrieveCustomerData = db.retrieveCustomerInfo(new Customer(customer.getDialA()));
-
-                            StringBuilder customerName = new StringBuilder();
-                            customerName.append(retrieveCustomerData.getF_name());
-                            customerName.append(" ");
-                            customerName.append(retrieveCustomerData.getL_name());
-                            String cName = customerName.toString();
-                            System.out.println("####" + customerName );
+                //get Return of FreeUnitCalculation ------Vector------>ServiceName:Cost
+                cProfile = retrieveCustomerObjectTotalFUCalcuation.CustomerServicesCalculations(new 
+                        UDR(customer.getDialA(), customer.getProfileID()),intervalDate);                
+                System.out.println("Billing Module Test ####" + cProfile.getTotalDataServiceCost());
 
 
-                            //create InvoiceSheetObject
-                            customerInvoiceObject = new InvoiceSheet(cName,customer.getDialA(),retrieveCustomerData.getAddress(),
-                                    customerProfile.getProfileName(),profileRecurringFees,oneTimeRecurringFees.getTotalOneTimeFees(), 
-                                    oneTimeRecurringFees.getTotalRecurringFees(), cProfile.getTotalVoiceServiceCost(), 
-                                    cProfile.getTotalSMSServiceCost(), cProfile.getTotalDataServiceCost(),
-                                    totalInvoiceBeforeTaxs, totalInvoiceAfterTaxs, date);
+                //return from class Recuring services/one-Time(may be +ve or -ve) services
+                oneTimeRecurringFees = feesObject.getOneTimeRecurringFee(new UDR(customer.getDialA(),
+                        customer.getProfileID()), intervalDate);
+                System.out.println("Billing Module Test (recuring)#########" + 
+                        oneTimeRecurringFees.getTotalRecurringFees());
 
-                            Boolean state = db.insertCustomerbillData(customerInvoiceObject);
+                /////////////Total Invoice Before Taxs////////////////////////
+                totalInvoiceBeforeTaxs = profileRecurringFees + cProfile.getTotalVoiceServiceCost() +
+                        cProfile.getTotalSMSServiceCost() + cProfile.getTotalDataServiceCost() +
+                        oneTimeRecurringFees.getTotalOneTimeFees() + 
+                        oneTimeRecurringFees.getTotalRecurringFees();         
+                System.out.println("#####Toooooooooooooootal ###" + totalInvoiceBeforeTaxs);
 
-                            if(state){
-                                //---> move to pdf generation carring "InvoiceSheetObject"
-                                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + state + "@@@@@@@@@@@@@@@@@@");
-                            }
-                            else{
-                                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@" + state + "@@@@@@@@@@@@@@@@@@@@");
-                            }
+                /////////////Total Invoice After Taxs////////////////////////
+                //Taxs hardcodes
+                totalInvoiceAfterTaxs = totalInvoiceBeforeTaxs * 1.1f;                  
+                System.out.println("#####Toooooooooooooootal ###" + totalInvoiceAfterTaxs);
 
-                    
-                    }else{
-                     System.out.println("This customer has been already billed ");
-                    }
-                          
+                //insert or update in bill Table
+                retrieveCustomerData = db.retrieveCustomerInfo(new Customer(customer.getDialA()));
+
+                String cName = retrieveCustomerData.getF_name() + " " + retrieveCustomerData.getL_name();
+ 
+                //create InvoiceSheetObject
+                customerInvoiceObject = new InvoiceSheet(cName,customer.getDialA(),retrieveCustomerData.getAddress(),
+                        customerProfile.getProfileName(),profileRecurringFees,oneTimeRecurringFees.getTotalOneTimeFees(), 
+                        oneTimeRecurringFees.getTotalRecurringFees(), cProfile.getTotalVoiceServiceCost(), 
+                        cProfile.getTotalSMSServiceCost(), cProfile.getTotalDataServiceCost(),
+                        totalInvoiceBeforeTaxs,totalInvoiceAfterTaxs,intervalDate.getStartDate(),
+                        intervalDate.getEndDate(), date);
+
+                Boolean state = db.insertCustomerbillData(customerInvoiceObject);
+
+                if(state){
+                    //---> move to pdf generation carring "InvoiceSheetObject"
+                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + state + "@@@@@@@@@@@@@@@@@@");
+                    //reNew customerProfile
+                    RenewCustomerProfile cust = new RenewCustomerProfile();
+                    Boolean updated = cust.renewProfile(customer);
+                    System.out.println("999999999999999999999999999999999999" + updated);
+
+                }
+                else{
+                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@" + state + "@@@@@@@@@@@@@@@@@@@@");
+                }
+
+
+        }else{
+         System.out.println("This customer has been already billed ");
         }
     }
     
@@ -110,9 +107,7 @@ public class BillingModule {
 //            module.InvoiceGeneration(new BillDateInterval("20200401", "20200430"));
 //        } catch (SQLException ex) {
 //            Logger.getLogger(BillingModule.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        
+//        }     
 //    }
     
 

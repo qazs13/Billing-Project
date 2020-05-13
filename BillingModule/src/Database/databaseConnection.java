@@ -94,7 +94,7 @@ public class databaseConnection
                 customerRemainedFUs.setFUInternet(result.getFloat(10)); 
                
             }
-            System.out.println("Database retrievl:"+ customerRemainedFUs.getFUVoiceCrossNet());
+//            System.out.println("Database retrievl:"+ customerRemainedFUs.getFUVoiceCrossNet());
             System.out.println("Remained data of customer free Units returned successed");
             return customerRemainedFUs;
         } catch (SQLException ex) {
@@ -219,11 +219,11 @@ public class databaseConnection
         }  
     }
     
-    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection, int udrID){
+    public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection){
 
         try {
             connect();
-            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?,?)";
+            sqlcommand = "SELECT updateCustomerFUs(?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1,custRemainedFUs.getMSISDN());
             preparedstatement.setInt(2,custRemainedFUs.getProfileID());
@@ -231,7 +231,6 @@ public class databaseConnection
             preparedstatement.setFloat(4,custRemainedFUs.getConsumedQuantity());
 //            System.out.println("Database consumedQuentity"+custRemainedFUs.getConsumedQuantity() );
             preparedstatement.setString(5,netConnection);
-            preparedstatement.setInt(6,udrID);
             result = preparedstatement.executeQuery();
             
             while(result.next()){
@@ -465,7 +464,7 @@ public class databaseConnection
         connect();
         
         try {
-            sqlcommand = "SELECT insertBillSheet(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            sqlcommand = "SELECT insertBillSheet(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1,invoiceData.getCustomerName());
             preparedstatement.setString(2, invoiceData.getCustomerNumber());
@@ -479,7 +478,9 @@ public class databaseConnection
             preparedstatement.setFloat(10,invoiceData.getTotalDataCost());
             preparedstatement.setFloat(11,invoiceData.getTotalInvoiceBefore());
             preparedstatement.setFloat(12,invoiceData.getTotalInvoiceAfter());
-            preparedstatement.setDate(13,invoiceData.getBillGenerationDate());
+            preparedstatement.setString(13, invoiceData.getStartDate());
+            preparedstatement.setString(14, invoiceData.getEndDate());
+            preparedstatement.setDate(15,invoiceData.getBillGenerationDate());
             result = preparedstatement.executeQuery();
             
             while(result.next()){
@@ -499,14 +500,15 @@ public class databaseConnection
         
     }
     
-    public Boolean checkIfCustomerBilledBefore(String DialNum, Date billDate){
+    public Boolean checkIfCustomerBilledBefore(String DialNum, BillDateInterval interval){
        connect();
        
         try {
-            sqlcommand = "SELECT checkIfCustomerBilledBefore(?,?)";
+            sqlcommand = "SELECT checkIfCustomerBilledBefore(?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1,DialNum);
-            preparedstatement.setDate(2,billDate);
+            preparedstatement.setString(2,interval.getStartDate());
+            preparedstatement.setString(3,interval.getEndDate());
             result = preparedstatement.executeQuery();
        
             while(result.next()){
@@ -527,8 +529,7 @@ public class databaseConnection
         }
     }
     
-    public boolean updateUDRwithFalse (int udrID)
-    {
+    public boolean updateUDRwithFalse (int udrID){
         try
         {
             connect();
@@ -549,6 +550,65 @@ public class databaseConnection
         }
     }
     
+    public Boolean renewCustomerProfile(CustomerProfile cProfile){
+        connect();
+        
+        try {
+            sqlcommand = "SELECT renewCustomerFreeunits(?,?,?,?,?,?,?)";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1, cProfile.getMSISDN());
+            preparedstatement.setInt(2, cProfile.getProfileID());
+            preparedstatement.setFloat(3, cProfile.getFUVoiceOnNet());
+            preparedstatement.setFloat(4, cProfile.getFUVoiceCrossNet());
+            preparedstatement.setFloat(5, cProfile.getFUSMSOnNet());
+            preparedstatement.setFloat(6, cProfile.getFUSMSCrossNet());
+            preparedstatement.setFloat(7, cProfile.getFUInternet());
+            result = preparedstatement.executeQuery();
+            
+            while(result.next()){
+                state = result.getBoolean(1);
+            }
+            
+            System.out.println("Last Function successed");
+            return state;
+            
+        } catch (SQLException ex) {
+            
+            System.out.println("wrong !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally{
+            stop();
+        }
+    }
+    
+    public CustomerProfile retrieveCustomerProfile(CustomerProfile cProfile){
+        connect();
+        CustomerProfile cProf = new CustomerProfile();
+        try {
+            sqlcommand = "SELECT msisdn, pid FROM customer_profile WHERE msisdn = ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1,cProfile.getMSISDN());
+            result = preparedstatement.executeQuery();
+            
+            while(result.next()){
+                cProf.setMSISDN(result.getString(1));
+                cProf.setProfileID(result.getInt(2));
+            }
+            
+            System.out.println("profile id retrieved successfully");
+            return cProf;
+            
+            
+        } catch (SQLException ex) {
+             System.out.println("profile id doesnot retrieved");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        }
+   
+    }
     private void stop(){
         try {
             connection.close();
