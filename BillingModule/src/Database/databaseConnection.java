@@ -219,6 +219,37 @@ public class databaseConnection
         }  
     }
     
+      
+    public Vector<UDR> select_from_udr(String msisdn){
+        
+        connect();
+        Vector<UDR> customers = new Vector();
+          UDR udrDialNum;
+        try {
+            sqlcommand = "SELECT * FROM udr where dialA= ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1, msisdn);
+            result = preparedstatement.executeQuery();
+        
+            while(result.next()){
+                udrDialNum = new UDR(result.getString("dialA"),result.getString("dialB"),result.getInt("sid"),result.getInt("duration_msg_volume"),
+                result.getString("start_date"),result.getString("start_time"));
+                customers.add(udrDialNum);
+            }
+            
+            System.out.println("Customer's Dial Num retrieved successfully");
+            return customers;
+            
+        } catch (SQLException ex) {
+            System.out.println("Something Wrong happened");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        } 
+    }
+    
+    
     public Boolean UpdateCustomerFUs(CustomerProfile custRemainedFUs,String netConnection){
 
         try {

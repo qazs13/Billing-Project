@@ -1,8 +1,10 @@
 package pdfusingitext;
 
-import Database.ConnectDB;
+import Database.databaseConnection;
+import Database.databaseConnection;
 import SystemObjects.InvoiceSheet;
 import SystemObjects.OCC;
+import SystemObjects.UDR;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.*;
@@ -15,7 +17,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.text.html.WebColors;
 import java.sql.Date;
+import java.util.Vector;
 
 public class PdfUsingItext2 {
 
@@ -28,10 +32,11 @@ public class PdfUsingItext2 {
             PdfWriter.getInstance(document, new FileOutputStream(new File(FILE_NAME)));
             document.open();
             Paragraph p = new Paragraph("Invoice", f);
-            f.setColor(BaseColor.ORANGE);
+            f.setColor(WebColors.getRGBColor("#fd7e14"));
             f.setSize(20);
             p.setAlignment(Element.ALIGN_CENTER);
             document.add(p);
+////////////////// first data table ///////////////////////////////////////////////
 
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
@@ -41,10 +46,47 @@ public class PdfUsingItext2 {
             document.add(p2);
             document.add(new Paragraph("Time: " + LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME)));
             document.add(new Paragraph("Bill Number: " + oneCustomerIvoice.getBillId()));
-            document.add(new Paragraph("Customer Name: " + oneCustomerIvoice.getCustomerName()));
-            document.add(new Paragraph("Phone Number: " + oneCustomerIvoice.getCustomerNumber().substring(3)));
-            document.add(new Paragraph("Address: " + oneCustomerIvoice.getAddress()));
-            document.add(new Paragraph("Customer on Profile: " + oneCustomerIvoice.getProfileName()));
+
+            document.add(new Paragraph(""));
+            document.add(new Paragraph(""));
+         
+
+            PdfPTable datatable = new PdfPTable(2);
+            datatable.setWidthPercentage(95);
+
+            datatable.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+            PdfPCell x3 = new PdfPCell(new Paragraph("Customer Name"));
+            x3.setPaddingBottom(8);
+            x3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            x3.setBackgroundColor(BaseColor.CYAN);
+            datatable.addCell(x3);
+
+            datatable.addCell(oneCustomerIvoice.getCustomerName());
+
+            datatable.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+            PdfPCell x1 = new PdfPCell(new Paragraph("Address"));
+            x1.setPaddingBottom(8);
+            x1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            x1.setBackgroundColor(BaseColor.CYAN);
+            datatable.addCell(x1);
+
+            datatable.addCell(oneCustomerIvoice.getAddress());
+
+            datatable.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+            PdfPCell x2 = new PdfPCell(new Paragraph("Customer on Profile"));
+            x2.setPaddingBottom(8);
+            x2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            x2.setBackgroundColor(BaseColor.CYAN);
+            datatable.addCell(x2);
+
+            datatable.addCell(oneCustomerIvoice.getProfileName());
+
+     
+            document.add(datatable);
+//            document.add(new Paragraph("Customer Name: " + oneCustomerIvoice.getCustomerName()));
+//            document.add(new Paragraph("Phone Number: " + oneCustomerIvoice.getCustomerNumber().substring(3)));
+//            document.add(new Paragraph("Address: " + oneCustomerIvoice.getAddress()));
+//            document.add(new Paragraph("Customer on Profile: " + oneCustomerIvoice.getProfileName()));
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
@@ -53,6 +95,7 @@ public class PdfUsingItext2 {
             image.setAbsolutePosition(500f, 750f);
             document.add(image);
 
+////////////////////// Full summerized data /////////////////////////////////////////////////
             PdfPTable invoicetable = new PdfPTable(2);
             invoicetable.setWidthPercentage(95);
 
@@ -61,7 +104,7 @@ public class PdfUsingItext2 {
             cell.setColspan(12);
             cell.setPaddingBottom(8);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBackgroundColor(BaseColor.ORANGE);
+            cell.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
             invoicetable.addCell(cell);
 
             PdfPCell cell1 = new PdfPCell(new Paragraph("Total voice"));
@@ -136,9 +179,72 @@ public class PdfUsingItext2 {
 
             invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalInvoiceAfter()) + "L.E");
 
-            ConnectDB c = new ConnectDB();
-
             document.add(invoicetable);
+
+            ////////////////////////////// PAGE 2 //////////////////////////////////////////////  
+            Database.databaseConnection db = new databaseConnection();
+            Vector<UDR> customers = new Vector();
+            customers = db.select_from_udr(oneCustomerIvoice.getCustomerNumber());
+            int i = 0;
+            document.newPage();
+
+            Paragraph x = new Paragraph("Full Customer logs ", f);
+            f.setColor(WebColors.getRGBColor("#fd7e14"));
+            f.setSize(20);
+            x.setAlignment(Element.ALIGN_CENTER);
+            document.add(x);
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(95);
+
+            table.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+            PdfPCell cells = new PdfPCell(new Paragraph("From"));
+            cells.setPaddingBottom(8);
+            cells.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cells.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
+            table.addCell(cells);
+
+            PdfPCell cells1 = new PdfPCell(new Paragraph("To"));
+            cells1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cells1.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
+            cells1.setPaddingBottom(5);
+            cells1.setPaddingTop(5);
+            table.addCell(cells1);
+
+            PdfPCell cells2 = new PdfPCell(new Paragraph("Date"));
+            cells2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cells2.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
+            cells2.setPaddingBottom(5);
+            cells2.setPaddingTop(5);
+            table.addCell(cells2);
+
+            PdfPCell cells3 = new PdfPCell(new Paragraph("Time"));
+            cells3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cells3.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
+            cells3.setPaddingBottom(5);
+            cells3.setPaddingTop(5);
+            table.addCell(cells3);
+
+            PdfPCell cells4 = new PdfPCell(new Paragraph("Duration"));
+            cells4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cells4.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
+            cells4.setPaddingBottom(5);
+            cells4.setPaddingTop(5);
+            table.addCell(cells4);
+
+            for (i = 0; i < customers.size(); i++) {
+                table.addCell(customers.elementAt(i).getDialA());
+                table.addCell(customers.elementAt(i).getDialB());
+                table.addCell(customers.elementAt(i).getStartDate());
+                table.addCell(customers.elementAt(i).getStartTime());
+                table.addCell(String.valueOf(customers.elementAt(i).getDurationMsgVolume()));
+            }
+
+            document.add(table);
+
+//////////////////////////////////////////////////////////////////////////////////////            
             document.close();
 
             System.out.println("Done");
@@ -149,8 +255,7 @@ public class PdfUsingItext2 {
 
     public static void main(String[] args) {
         PdfUsingItext2 itext = new PdfUsingItext2();
-        itext.start(new InvoiceSheet(2, "Amr Walid", "00201222728511", "Agouza", "Orange 100", 100f, 50f, 30f,
-                573.6f, 0f, 100f, 773.6f, 851f, new Date(20200512)));
+        itext.start(new InvoiceSheet());
 
     }
 

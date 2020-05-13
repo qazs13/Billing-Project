@@ -66,6 +66,10 @@ public class InvoiceSheet {
         this.endDate = _endDate;
         this.billGenerationDate = _billGenerationDate;
     }
+
+    public InvoiceSheet(int i, String amr_Walid, String string, String agouza, String orange_100, float f, float f0, float f1, float f2, float f3, float f4, float f5, float f6, Date date) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public void setBillId(int _billId){
         this.billId = _billId;

@@ -5,6 +5,7 @@ import SystemObjects.UDR;
 import SystemObjects.*;
 import java.sql.Date;
 import java.sql.SQLException;
+import pdfusingitext.PdfUsingItext2;
 
 
 public class BillingModule {
@@ -83,6 +84,10 @@ public class BillingModule {
 
                 if(state){
                     //---> move to pdf generation carring "InvoiceSheetObject"
+                    
+                     PdfUsingItext2 itext = new PdfUsingItext2();
+                     itext.start(customerInvoiceObject);
+                     
                     System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + state + "@@@@@@@@@@@@@@@@@@");
                     //reNew customerProfile
                     RenewCustomerProfile cust = new RenewCustomerProfile();

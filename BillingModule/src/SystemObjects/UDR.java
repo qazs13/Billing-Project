@@ -17,6 +17,22 @@ public class UDR {
     public UDR(){
     }
     
+    public UDR(String _dialA, String _dialB, int _serviceID, float _duration_msg_volume, String _orderedDate, String string2) {
+       
+    
+        
+        this.dialA = _dialA;
+        this.dialB = _dialB;
+        this.serviceID = _serviceID;
+        this.duration_msg_volume = _duration_msg_volume;
+        this.start_date = _orderedDate;
+        this.start_time = string2;
+       
+    
+    
+    }
+    
+    
     public UDR(int _udrID){
         this.udrID = _udrID;
     }
