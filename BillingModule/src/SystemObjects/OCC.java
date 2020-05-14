@@ -51,4 +51,12 @@ public class OCC {
     public Float getTotalRecurringFees(){
         return this.totalRecurringFees;
     }
+    
+    public int getsid() {
+        return this.one_rec_id;
+    }
+
+    public String getstype() {
+        return this.type_of_service;
+    }
 }

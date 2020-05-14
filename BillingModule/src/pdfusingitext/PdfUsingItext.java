@@ -2,6 +2,7 @@ package pdfusingitext;
 
 import Database.databaseConnection;
 import SystemObjects.InvoiceSheet;
+import SystemObjects.OCC;
 import SystemObjects.UDR;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
@@ -15,22 +16,33 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import com.itextpdf.text.html.WebColors;
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.Formatter;
 import java.util.Vector;
 
-public class PdfUsingItext 
-{
+public class PdfUsingItext {
 
-    public void start(InvoiceSheet oneCustomerIvoice) 
-    {
-        
+    public void start(InvoiceSheet oneCustomerIvoice) {
+
         String FILE_NAME = "src" + File.separatorChar + "allPDFs" + File.separatorChar + oneCustomerIvoice.getCustomerName() + ";"
                 + java.time.LocalDate.now() + ";" + oneCustomerIvoice.getCustomerNumber().substring(3) + ";" + ".pdf";
         Document document = new Document();
         try {
+            Formatter fmt = new Formatter();
+            Calendar cal = Calendar.getInstance();
+            fmt = new Formatter();
+            fmt.format("%tB", cal);
+
+            Database.databaseConnection db = new databaseConnection();
+            Vector<OCC> occ = new Vector();
+            occ = db.select_from_occ(oneCustomerIvoice.getCustomerNumber());
+            int i, j = 0;
+
             Font f = new Font();
             PdfWriter.getInstance(document, new FileOutputStream(new File(FILE_NAME)));
             document.open();
-            Paragraph p = new Paragraph("Invoice", f);
+            Paragraph p = new Paragraph("Invoice - " + fmt, f);
             f.setColor(WebColors.getRGBColor("#FF7900"));
             f.setSize(20);
             p.setAlignment(Element.ALIGN_CENTER);
@@ -40,17 +52,38 @@ public class PdfUsingItext
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
+            Vector<String> services = new Vector();
+
             Paragraph p2 = new Paragraph();
             p2.add("Date of Bill: " + java.time.LocalDate.now()); //no alignment
             document.add(p2);
             document.add(new Paragraph("Time: " + LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME)));
             document.add(new Paragraph("Bill Number: " + oneCustomerIvoice.getBillId()));
 
+//            for (i = 0; i < occ.size(); i++) {
+//                services = db.selectall_from_services(occ.elementAt(i).getsid());
+//
+////                document.add(new Paragraph("Recurring service: " + services));
+////
+//                for (j = 0; j < services.size(); i++) {
+//                    if (occ.elementAt(i).getstype().equals("recurring")) {
+////
+//                        document.add(new Paragraph("Recurring service: " + services.elementAt(j)));
+//                    } //                    } else if (occ.elementAt(i).getstype().equals("onetime")) {
+//                    //
+//                    //                        document.add(new Paragraph("Onetime service: " + services.elementAt(i)));
+//                    //
+//                    //                    }
+//                    else {
+//                        document.add(new Paragraph(" Service failed"));
+//
+//                    }
+//                }
+//
+//            }
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
-         
-     
-            
+
             PdfPTable datatable = new PdfPTable(2);
             datatable.setWidthPercentage(95);
 
@@ -60,19 +93,17 @@ public class PdfUsingItext
             cellHeader.setPaddingBottom(8);
             cellHeader.setHorizontalAlignment(Element.ALIGN_CENTER);
             cellHeader.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
-            datatable.addCell(cellHeader);                   
-            
-            
+            datatable.addCell(cellHeader);
+
             datatable.setHorizontalAlignment(Element.ALIGN_MIDDLE);
             PdfPCell x3 = new PdfPCell(new Paragraph("Customer Name"));
             x3.setPaddingBottom(8);
             x3.setHorizontalAlignment(Element.ALIGN_CENTER);
             x3.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            datatable.addCell(x3);            
+            datatable.addCell(x3);
 
             datatable.addCell(oneCustomerIvoice.getCustomerName());
-            
-            
+
             datatable.setHorizontalAlignment(Element.ALIGN_MIDDLE);
             PdfPCell x4 = new PdfPCell(new Paragraph("Customer Number"));
             x4.setPaddingBottom(8);
@@ -80,7 +111,7 @@ public class PdfUsingItext
             x4.setBackgroundColor(BaseColor.LIGHT_GRAY);
             datatable.addCell(x4);
 
-            datatable.addCell(oneCustomerIvoice.getCustomerNumber().substring(3));            
+            datatable.addCell(oneCustomerIvoice.getCustomerNumber().substring(3));
 
             datatable.setHorizontalAlignment(Element.ALIGN_MIDDLE);
             PdfPCell x1 = new PdfPCell(new Paragraph("Address"));
@@ -99,9 +130,7 @@ public class PdfUsingItext
             datatable.addCell(x2);
 
             datatable.addCell(oneCustomerIvoice.getProfileName());
-                    
 
-     
             document.add(datatable);
 //            document.add(new Paragraph("Customer Name: " + oneCustomerIvoice.getCustomerName()));
 //            document.add(new Paragraph("Phone Number: " + oneCustomerIvoice.getCustomerNumber().substring(3)));
@@ -143,7 +172,7 @@ public class PdfUsingItext
             cell2.setPaddingTop(5);
             invoicetable.addCell(cell2);
 
-            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalSMSCost()) + "L.E");
+            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalSMSCost()) + " L.E");
 
             PdfPCell cell3 = new PdfPCell(new Paragraph("Total Data"));
             cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -152,7 +181,7 @@ public class PdfUsingItext
             cell3.setPaddingTop(5);
             invoicetable.addCell(cell3);
 
-            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalDataCost()) + "L.E");
+            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalDataCost()) + " L.E");
 
             PdfPCell cell7 = new PdfPCell(new Paragraph("Recurring service fees"));
             cell7.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -161,7 +190,7 @@ public class PdfUsingItext
             cell7.setPaddingTop(5);
             invoicetable.addCell(cell7);
 
-            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getRecurringFees()) + "L.E");
+            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getRecurringFees()) + " L.E");
 
             PdfPCell cell8 = new PdfPCell(new Paragraph("One time service fees"));
             cell8.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -170,7 +199,7 @@ public class PdfUsingItext
             cell8.setPaddingTop(5);
             invoicetable.addCell(cell8);
 
-            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getOneTimeServiceFees()) + "L.E");
+            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getOneTimeServiceFees()) + " L.E");
 
             PdfPCell cell4 = new PdfPCell(new Paragraph("Total Before taxes"));
             cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -179,7 +208,7 @@ public class PdfUsingItext
             cell4.setPaddingTop(5);
             invoicetable.addCell(cell4);
 
-            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalInvoiceBefore()) + "L.E");
+            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalInvoiceBefore()) + " L.E");
 
             PdfPCell cell5 = new PdfPCell(new Paragraph("Taxes"));
             cell5.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -201,11 +230,20 @@ public class PdfUsingItext
 
             document.add(invoicetable);
 
+            Rectangle rect = new Rectangle(577, 825, 18, 15); // you can resize rectangle 
+            rect.enableBorderSide(1);
+            rect.enableBorderSide(2);
+            rect.enableBorderSide(4);
+            rect.enableBorderSide(8);
+            rect.setBorderColor(BaseColor.BLACK);
+            rect.setBorderWidth(1);
+            document.add(rect);
+
             ////////////////////////////// PAGE 2 //////////////////////////////////////////////  
-            Database.databaseConnection db = new databaseConnection();
             Vector<UDR> customers = new Vector();
             customers = db.select_from_udr(oneCustomerIvoice.getCustomerNumber());
-            int i = 0;
+            String sname = null;
+
             document.newPage();
 
             Paragraph x = new Paragraph("Full Customer logs ", f);
@@ -216,7 +254,7 @@ public class PdfUsingItext
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
-            PdfPTable table = new PdfPTable(5);
+            PdfPTable table = new PdfPTable(6);
             table.setWidthPercentage(95);
 
             table.setHorizontalAlignment(Element.ALIGN_MIDDLE);
@@ -232,6 +270,13 @@ public class PdfUsingItext
             cells1.setPaddingBottom(5);
             cells1.setPaddingTop(5);
             table.addCell(cells1);
+
+            PdfPCell cellsx = new PdfPCell(new Paragraph("Service Types"));
+            cellsx.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellsx.setBackgroundColor(WebColors.getRGBColor("#fd7e14"));
+            cellsx.setPaddingBottom(5);
+            cellsx.setPaddingTop(5);
+            table.addCell(cellsx);
 
             PdfPCell cells2 = new PdfPCell(new Paragraph("Date"));
             cells2.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -255,14 +300,32 @@ public class PdfUsingItext
             table.addCell(cells4);
 
             for (i = 0; i < customers.size(); i++) {
+
+                sname = db.select_from_services(customers.elementAt(i).getServiceID());
+
                 table.addCell(customers.elementAt(i).getDialA().substring(3));
-                table.addCell(customers.elementAt(i).getDialB().substring(3));
+                if (customers.elementAt(i).getServiceID() != 3) {
+                    table.addCell(customers.elementAt(i).getDialB().substring(3));
+                } else {
+                    table.addCell(customers.elementAt(i).getDialB());
+                }
+
+                table.addCell(sname);
                 table.addCell(customers.elementAt(i).getStartDate());
                 table.addCell(customers.elementAt(i).getStartTime());
-                table.addCell(String.valueOf(customers.elementAt(i).getDurationMsgVolume()));
+
+                if (customers.elementAt(i).getServiceID() == 1) {
+                    table.addCell(String.valueOf(customers.elementAt(i).getDurationMsgVolume()) + " Seconds");
+                } else if (customers.elementAt(i).getServiceID() == 2) {
+                    table.addCell(String.valueOf(customers.elementAt(i).getDurationMsgVolume()) + " Msgs");
+                } else if (customers.elementAt(i).getServiceID() == 3) {
+                    table.addCell(String.valueOf(customers.elementAt(i).getDurationMsgVolume()) + " Bytes");
+                }
+
             }
 
             document.add(table);
+            document.add(rect);
 
 //////////////////////////////////////////////////////////////////////////////////////            
             document.close();
@@ -272,4 +335,6 @@ public class PdfUsingItext
             e.printStackTrace();
         }
     }
+
+  
 }
