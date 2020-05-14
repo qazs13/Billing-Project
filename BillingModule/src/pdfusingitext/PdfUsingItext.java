@@ -1,6 +1,7 @@
 package pdfusingitext;
 
 import Database.databaseConnection;
+import Interfaces.CustomerServiceTypes;
 import SystemObjects.InvoiceSheet;
 import SystemObjects.OCC;
 import SystemObjects.One_Time;
@@ -67,15 +68,15 @@ public class PdfUsingItext {
 
 //                document.add(new Paragraph("Recurring service: " + services));
 //
-                if (occ.elementAt(i).getstype().equals("recurring")) {
+                if (occ.elementAt(i).getstype().equals(CustomerServiceTypes.recurring)) {
 
                     services = db.selectall_from_services(occ.elementAt(i).getsid());
                     document.add(new Paragraph("Recurring service: " + services.getSname()));
 
                 }
-                if (occ.elementAt(i).getstype().equals("onetime")) {
+                if (occ.elementAt(i).getstype().equals(CustomerServiceTypes.onetime)) {
                     onetime = db.select_from_one_time(occ.elementAt(i).getsid());
-                    document.add(new Paragraph("Onetime service: " + services.getSname()));
+                    document.add(new Paragraph("Onetime service: " + onetime.osname));
 
                 }
 
@@ -163,7 +164,7 @@ public class PdfUsingItext {
             cell1.setPaddingTop(5);
             invoicetable.addCell(cell1);
 
-            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalVoiceCost()) + "L.E");
+            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalVoiceCost()) + " L.E");
 
             PdfPCell cell2 = new PdfPCell(new Paragraph("Total SMS"));
             cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -217,7 +218,7 @@ public class PdfUsingItext {
             cell5.setPaddingTop(5);
             invoicetable.addCell(cell5);
 
-            invoicetable.addCell(" 10%");
+            invoicetable.addCell("10%");
 
             PdfPCell cell6 = new PdfPCell(new Paragraph("Total after taxes"));
             cell6.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -226,7 +227,7 @@ public class PdfUsingItext {
             cell6.setPaddingTop(5);
             invoicetable.addCell(cell6);
 
-            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalInvoiceAfter()) + "L.E");
+            invoicetable.addCell(String.valueOf(oneCustomerIvoice.getTotalInvoiceAfter()) + " L.E");
 
             document.add(invoicetable);
 

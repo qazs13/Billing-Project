@@ -46,7 +46,7 @@
               <div class="card-body">
                   <div class="card-body-service">
                       <h6 class="serviceHeader">Round Amount: </h6>
-                      <lable><%=profile_Services.getAllProfileServices().elementAt(i).getRound_amount()%> Sec/SMS/MB</lable>
+                      <lable><%=profile_Services.getAllProfileServices().elementAt(i).getRound_amount()%> Sec/SMS/Byte</lable>
                   </div>
                   <div class="card-body-service">
                       <h6>Fees For Same Local Operator: </h6>

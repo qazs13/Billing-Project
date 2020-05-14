@@ -1263,6 +1263,38 @@ h6
     stroke: #FF7900;
 }
 /*Main Page*/
+/*Cards Billing Display*/
+.fullSize .cardDisplayforBilling
+{
+    height: 70%;
+    width: 20%;
+    border-radius: 25px;
+    background-color: black;
+    border: 3px solid #FF7900;
+    display: block;
+    float: left;
+    margin-left: 10%;
+    margin-top: 6%;
+    color: white;
+    text-align: center;
+}
+.fullSize .cardDisplayforBilling:hover
+{
+    cursor: pointer;
+    background-color: white;
+    border: 3px solid #FF7900;
+    color: #FF7900;
+}
+.fullSize .cardDisplayforBilling .billIcon
+{
+    width: 30%;
+    height: 30%;
+    display: block;
+    margin: auto;
+    margin-top: 30%;
+    margin-bottom: 5%;
+}
+/*Cards Billing Display*/
 /*Footer*/
 .footerOrange
 {

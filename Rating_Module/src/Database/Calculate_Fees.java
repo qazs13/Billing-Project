@@ -8,7 +8,7 @@ public class Calculate_Fees
     public static float Calculate_Fees_Of_Service (CDR cdr_oneUser, Profile_Services profile_Services)
     {
         float cost = 0;
-        float round = ((float) cdr_oneUser.getDuration_msg_volume()) / profile_Services.getRound_amount(); 
+        float round = cdr_oneUser.getDuration_msg_volume() / (float) profile_Services.getRound_amount(); 
         round =   (float) Math.ceil(round);
 
         if (profile_Services != null)

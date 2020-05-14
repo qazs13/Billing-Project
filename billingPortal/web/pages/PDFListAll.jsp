@@ -10,8 +10,9 @@
 
     for (File file : files)
     {
-        String[] namesAndDate = file.getName().split(";");
-        allPDFs.add(new FilesName(namesAndDate[0], namesAndDate[1].substring(0, 10), file.getAbsolutePath()));
+        String[] namesAndDateAndPhoneNumber = file.getName().split(";");
+        allPDFs.add(new FilesName(namesAndDateAndPhoneNumber[0], namesAndDateAndPhoneNumber[1], file.getAbsolutePath(),
+                namesAndDateAndPhoneNumber[2]));
     }
 %>
 
@@ -37,7 +38,12 @@
           </div>
           <div class="content">
             <p>
-              Date of Bill: <%=allPDFs.elementAt(i).getFileDate()%>
+              Phone Number: <span>(<%=allPDFs.elementAt(i).getFilePhoneNumber()%>)</span>
+            </p>              
+            <p>
+              Date of Bill: <lable>(<%=allPDFs.elementAt(i).getFileDate().substring(8, 10)+" / "+
+                        allPDFs.elementAt(i).getFileDate().substring(5, 7)+" / "+
+                        allPDFs.elementAt(i).getFileDate().substring(0, 4)%>)</lable>
             </p>
             <a href="/billingPortal/openPDF?path=<%=allPDFs.elementAt(i).getFilePath()%>" target="_blank">Open PDF</a>      
           </div>
@@ -48,9 +54,6 @@
     </div>
   </div>
   <!-- Swiper -->
-  
-      
-  </div>
   <script src="../js/swiper.min.js"></script>
   <script src="../js/pdfList.js"></script>
   <script src="../js/jquery-3.5.1.min.js"></script>

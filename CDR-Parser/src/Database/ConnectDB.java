@@ -5,7 +5,6 @@
  */
 package Database;
 import CdrModel.Cdr;
-import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 /**
@@ -24,7 +23,7 @@ public class ConnectDB {
         try {
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/billing_system", "postgres", "ahmed");
+                    "jdbc:postgresql://localhost:5432/billing_system", "postgres", "amrwsk13");
             System.out.println("connection success");
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -42,12 +41,12 @@ public class ConnectDB {
         pst.setString(1, cdr.diala);
         pst.setString(2, cdr.dialb);
         pst.setInt(3,cdr.sid);
-        pst.setInt(4, cdr.duration_msg_vol);
+        pst.setLong(4, cdr.duration_msg_vol);
         pst.setString(5, cdr.start_date);
         pst.setString(6,cdr.start_time);
         pst.setDouble(7,cdr.external_charges);
         pst.setBoolean(8,cdr.is_rated);
-        pst.executeUpdate();
+        pst.execute();
         System.out.println("inserted");
         pst.close();
         con.close();

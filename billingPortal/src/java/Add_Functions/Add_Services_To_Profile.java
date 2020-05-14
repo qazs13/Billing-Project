@@ -23,13 +23,30 @@ public class Add_Services_To_Profile extends HttpServlet
         if (db.checkProfileExistance(new Profile(profileName)))
         {
             int profileID = db.getProfileID(profileName);
+            int Amount = 1;
             for (int i = 0; i < allServices.length; i++)
             {
                 int serviceID = db.getServiceIDByItsName(allServices[i]);
-                int round_Amount = Integer.parseInt(req.getParameter("serviceRound"+allServices[i]));
-                float fees_local_same = Float.parseFloat(req.getParameter("serviceFeesSameLocal"+allServices[i])) * round_Amount;
-                float fees_local_diff = Float.parseFloat(req.getParameter("serviceFeesOtherLocal"+allServices[i])) * round_Amount;
-                float fees_international = Float.parseFloat(req.getParameter("serviceFeesInternational"+allServices[i])) * round_Amount;
+                int round_Amount = 0;
+                float fees_local_same = 0;
+                float fees_local_diff = 0;
+                float fees_international = 0;
+                if (allServices[i].equalsIgnoreCase("data"))
+                {
+                    Amount = 1024 * 1024;
+                    round_Amount = Integer.parseInt(req.getParameter("serviceRound"+allServices[i])) * Amount;
+                    fees_local_same = Float.parseFloat(req.getParameter("serviceFeesSameLocal"+allServices[i]));
+                    fees_local_diff = Float.parseFloat(req.getParameter("serviceFeesOtherLocal"+allServices[i]));
+                    fees_international = Float.parseFloat(req.getParameter("serviceFeesInternational"+allServices[i]));                    
+                }
+                else
+                {
+                    Amount = 1;
+                    round_Amount = Integer.parseInt(req.getParameter("serviceRound"+allServices[i])) * Amount;
+                    fees_local_same = Float.parseFloat(req.getParameter("serviceFeesSameLocal"+allServices[i]));
+                    fees_local_diff = Float.parseFloat(req.getParameter("serviceFeesOtherLocal"+allServices[i]));
+                    fees_international = Float.parseFloat(req.getParameter("serviceFeesInternational"+allServices[i]));
+                }
                 
                 Profile_Services profile_Services = new Profile_Services(profileID, serviceID,
                         round_Amount, fees_local_same, fees_local_diff, fees_international);

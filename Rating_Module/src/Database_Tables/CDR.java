@@ -8,7 +8,7 @@ public class CDR
     String diala;
     String dialb;
     int sid;
-    int duration_msg_volume;
+    long duration_msg_volume;
     String start_date;
     String start_time;
     Float external_charges;
@@ -20,7 +20,7 @@ public class CDR
         allCDRS = new Vector();
     }
     
-    public CDR(int cdr_id, String diala, String dialb, int sid, int duration_msg_volume, String start_date, String start_time, Float external_charges, boolean is_rated) 
+    public CDR(int cdr_id, String diala, String dialb, int sid, long duration_msg_volume, String start_date, String start_time, Float external_charges, boolean is_rated) 
     {
         this.cdr_id = cdr_id;
         this.diala = diala;
@@ -54,7 +54,7 @@ public class CDR
         this.sid = sid;
     }
 
-    public void setDuration_msg_volume(int duration_msg_volume) 
+    public void setDuration_msg_volume(long duration_msg_volume) 
     {
         this.duration_msg_volume = duration_msg_volume;
     }
@@ -104,7 +104,7 @@ public class CDR
         return sid;
     }
 
-    public int getDuration_msg_volume() 
+    public long getDuration_msg_volume() 
     {
         return duration_msg_volume;
     }

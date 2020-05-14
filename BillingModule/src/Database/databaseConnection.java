@@ -112,7 +112,7 @@ public class databaseConnection {
 
             while (result.next()) {
                 udrRow = new UDR(result.getInt(1), result.getInt(2), result.getString(3),
-                        result.getString(4), result.getInt(5), result.getFloat(6),
+                        result.getString(4), result.getInt(5), result.getLong(6),
                         result.getTimestamp(7), result.getFloat(8), result.getBoolean(9),
                         result.getFloat(10), result.getBoolean(11));
                 retrievedUDRs.add(udrRow);
@@ -145,7 +145,7 @@ public class databaseConnection {
                 udrObj.setDialA(result.getString(3));
                 udrObj.setDialB(result.getString(4));
                 udrObj.setServiceID(result.getInt(5));
-                udrObj.setDurationMsgVolume(result.getFloat(6));
+                udrObj.setDurationMsgVolume(result.getLong(6));
                 udrObj.setStartDate(result.getString(7));
                 udrObj.setStartTime(result.getString(8));
                 udrObj.setExternalCharges(result.getFloat(9));
@@ -215,7 +215,7 @@ public class databaseConnection {
             result = preparedstatement.executeQuery();
 
             while (result.next()) {
-                udrDialNum = new UDR(result.getString("dialA"), result.getString("dialB"), result.getInt("sid"), result.getInt("duration_msg_volume"),
+                udrDialNum = new UDR(result.getString("dialA"), result.getString("dialB"), result.getInt("sid"), result.getLong("duration_msg_volume"),
                         result.getString("start_date"), result.getString("start_time"));
                 customers.add(udrDialNum);
             }
@@ -331,9 +331,9 @@ public class databaseConnection {
         OCC occ;
 
         try {
-            sqlcommand = "select * from occ where msisdn=? AND is_service_processed=false \n"
-                    + "          AND service_processed_date BETWEEN to_date(?,'YYYYMMDD') AND to_date(?,'YYYYMMDD')  "
-                    + "ORDER BY service_processed_date;";
+            sqlcommand = "select * from occ where msisdn=? AND is_service_processed = false"
+                    + "AND service_processed_date BETWEEN to_date(?,'YYYYMMDD') AND to_date(?,'YYYYMMDD')"
+                    + "ORDER BY service_processed_date";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1, udr.getDialA());
             preparedstatement.setString(2, interval.getStartDate());
@@ -428,7 +428,7 @@ public class databaseConnection {
     public void updateOCC(OCC occ) throws SQLException {
         connect();
 
-        sqlcommand = "update occ set is_service_processed=true where occ_id=?";
+        sqlcommand = "update occ set is_service_processed = true where occ_id=?";
         preparedstatement = connection.prepareStatement(sqlcommand);
         preparedstatement.setInt(1, occ.occ_id);
         preparedstatement.execute();
@@ -513,9 +513,8 @@ public class databaseConnection {
     }
 
     public Boolean checkIfCustomerBilledBefore(String DialNum, BillDateInterval interval) {
-        connect();
-
         try {
+            connect();
             sqlcommand = "SELECT checkIfCustomerBilledBefore(?,?,?)";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setString(1, DialNum);
@@ -541,18 +540,24 @@ public class databaseConnection {
         }
     }
 
-    public boolean updateUDRwithFalse(int udrID) {
-        try {
+    public boolean updateUDRwithFalse(int udrID) 
+    {
+        try
+        {
             connect();
             sqlcommand = "UPDATE udr SET is_billed = true WHERE udr_id = ?";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setInt(1, udrID);
             preparedstatement.execute();
             return true;
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) 
+        {
             ex.printStackTrace();
             return false;
-        } finally {
+        } 
+        finally 
+        {
             stop();
         }
     }
@@ -733,17 +738,22 @@ public class databaseConnection {
         }
     }
 
-    public void updateHasFreeunit(UDR udr) {
-        connect();
-        try {
-            String sql = "update udr set has_freeunits =false where diala=? and sid=?";
-            preparedstatement = connection.prepareStatement(sql);
-            preparedstatement.setString(1, udr.getDialA());
-            preparedstatement.setInt(2, udr.getServiceID());
-            preparedstatement.executeQuery();
+    public void updateHasFreeunit(int udrID) 
+    {
+        try 
+        {
+            connect();
+            sqlcommand = "update udr set has_freeunits = true where udr_id  = ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1, udrID);
+            preparedstatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally
+        {
+            stop();
         }
 
     }

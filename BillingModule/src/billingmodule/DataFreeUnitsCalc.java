@@ -3,7 +3,6 @@ package billingmodule;
 import Database.databaseConnection;
 import SystemObjects.*;
 import java.util.Vector;
-import Interfaces.NetConnection;
 import static java.lang.Math.abs;
 
 
@@ -21,6 +20,7 @@ public class DataFreeUnitsCalc {
         CustomerProfile cProfileupdateFU;
         ProfileService profileDataDetails;
         Boolean state = false;
+        boolean has_freeUnits = false;
             
         Float updatedValue = 0f;
         Float consumedData = 0f;
@@ -49,7 +49,7 @@ public class DataFreeUnitsCalc {
                     
                     if(customerRemainedFUs.getFUInternet() > 0){
                           
-                                updatedValue = customerRemainedFUs.getFUInternet() - udr.getDurationMsgVolume();
+                                updatedValue = customerRemainedFUs.getFUInternet() - udr.getDurationMsgVolume() / profileDataDetails.getRoundAmount();
                                 System.out.println("updated Internet Value "+ updatedValue);
                               
                                 if(updatedValue >= 0){
@@ -60,17 +60,16 @@ public class DataFreeUnitsCalc {
                                         costOfService = 0f;
                                         TotalUDRsCost += costOfService;
                                         System.out.println("Cost of Internet service is zero");
+                                        has_freeUnits = true;
                                 }else{
                                       
                                         cProfileupdateFU = new CustomerProfile(
                                                     udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);  
                                         state=db.UpdateCustomerFUs(cProfileupdateFU,"nothing");
                                         consumedData = abs(updatedValue);  
-                                        float round = ((float) consumedData) / profileDataDetails.getRoundAmount(); 
-                                        round =   (float) Math.ceil(round);                                                                      
+                                        float round = (float) Math.ceil(consumedData);                                                                      
                                         costOfService = profileDataDetails.getFeeSameOperator() * round;
                                         TotalUDRsCost += costOfService;
-                                        db.updateHasFreeunit(udr);
                                         System.out.println("Cost Calcu :" + costOfService);
                                 }    
                     }else{
@@ -84,6 +83,10 @@ public class DataFreeUnitsCalc {
                     System.out.println("Cost Calcu :" + costOfService);     
                 }  
                 state = db.updateUDRwithFalse(udr.getUdrID());
+                if (has_freeUnits)
+                {
+                    db.updateHasFreeunit(udr.getUdrID());
+                }                   
             }
         } 
         

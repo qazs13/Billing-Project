@@ -22,6 +22,7 @@ public class VoiceFreeUnitsCalc {
         CustomerProfile cProfileupdateFU;
         ProfileService profileVoiceDetails;
         Boolean state = false ;
+        boolean has_freeUnits = false;
         
         Float updatedValue =0f;
         Float consumedData = 0f;
@@ -52,7 +53,7 @@ public class VoiceFreeUnitsCalc {
 
                         if(customerRemainedFUs.getFUVoiceOnNet() > 0){ // has free units 
                             
-                            updatedValue = customerRemainedFUs.getFUVoiceOnNet() - udr.getDurationMsgVolume();//100-150=-50
+                            updatedValue = customerRemainedFUs.getFUVoiceOnNet() - udr.getDurationMsgVolume() / profileVoiceDetails.getRoundAmount();//100-150=-50
                             System.out.println("updated Voice On Net Value "+ updatedValue);
                             
                             if(updatedValue >= 0){
@@ -63,21 +64,19 @@ public class VoiceFreeUnitsCalc {
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;
                                     System.out.println("Cost of onNet Voice service is zero "+state);
+                                    has_freeUnits = true;
 //                                    //is_billed ---> true 
                             }else{ // cost of (-50) ---> profile_service
 
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
+                                    state = db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.onNet);
                                     consumedData = abs(updatedValue);
-                                    float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
-                                    round =   (float) Math.ceil(round);                                    
+                                    float round =   (float) Math.ceil(consumedData);                                    
                                     costOfService = profileVoiceDetails.getFeeSameOperator() * round;
                                     TotalUDRsCost += costOfService;
-                                    db.updateHasFreeunit(udr);
                                     System.out.println("onNet voice Cost Calcu :" + costOfService);
                                     //update has freeunit here =false
-                                    
                             }
                         }else{
 
@@ -87,8 +86,7 @@ public class VoiceFreeUnitsCalc {
                         }
                     }else if(!(udr.getDialB().regionMatches(true,0,"0020",0, 4))){
                                     
-                        float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
-                        round =   (float) Math.ceil(round);                        
+                        float round =   (float) Math.ceil(consumedData);                        
                         costOfService = profileVoiceDetails.getFeeInternationally() * round;
                         TotalUDRsCost += costOfService;                       
                         System.out.println(" international voice cost from Rating Module:" + costOfService);
@@ -97,29 +95,29 @@ public class VoiceFreeUnitsCalc {
                         
                         if(customerRemainedFUs.getFUVoiceCrossNet() > 0){
 //                            
-                            updatedValue = customerRemainedFUs.getFUVoiceCrossNet() - udr.getDurationMsgVolume();
+                            updatedValue = customerRemainedFUs.getFUVoiceCrossNet() - udr.getDurationMsgVolume() / profileVoiceDetails.getRoundAmount();
                             System.out.println("fuVoiceCrossNet :" +customerRemainedFUs.getFUVoiceCrossNet());
                             System.out.println("updated Voice On Net Value "+ updatedValue);
 //                            
-                            if(updatedValue >= 0){
+                            if(updatedValue >= 0)
+                            {
 //                                  
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),updatedValue);
-                                    state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
+                                    state = db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
                                     costOfService = 0f;
                                     TotalUDRsCost += costOfService;                                     
                                     System.out.println("cost of crossVoiceNet Service is zero");
+                                    has_freeUnits = true;
               
                             }else{
                                     cProfileupdateFU = new CustomerProfile(
                                                 udr.getDialA(),udr.getProfileID(),udr.getServiceID(),0f);
                                     state=db.UpdateCustomerFUs(cProfileupdateFU,NetConnection.crossNet);
                                     consumedData = abs(updatedValue);
-                                    float round = ((float) consumedData) / profileVoiceDetails.getRoundAmount(); 
-                                    round =   (float) Math.ceil(round);
+                                    float round =   (float) Math.ceil(consumedData);
                                     costOfService = profileVoiceDetails.getFeeAnotherOperator() * round;
                                     TotalUDRsCost += costOfService;
-                                    db.updateHasFreeunit(udr);
                                     System.out.println("crossNet voice Cost Calcu :" + costOfService);                              
                             }
                         }else{
@@ -131,6 +129,11 @@ public class VoiceFreeUnitsCalc {
                         System.out.println("#############error msh mtwak3##############");
                     }
                     state = db.updateUDRwithFalse(udr.getUdrID());
+                    if (has_freeUnits)
+                    {
+                        db.updateHasFreeunit(udr.getUdrID());
+                    }
+                    
             }   
           
         }   

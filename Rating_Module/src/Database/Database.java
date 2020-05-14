@@ -49,7 +49,7 @@ public class Database
                     result.getString("dialA"),
                     result.getString("dialB"),
                     result.getInt("sid"),
-                    result.getInt("duration_msg_volume"),
+                    result.getLong("duration_msg_volume"),
                     result.getString("start_date"),
                     result.getString("start_time"),
                     result.getFloat("external_charges"),
@@ -155,7 +155,7 @@ public class Database
             preparedStatment.setString(2, cdr_one.getDiala());
             preparedStatment.setString(3, cdr_one.getDialb());
             preparedStatment.setInt(4, cdr_one.getSid());
-            preparedStatment.setInt(5, cdr_one.getDuration_msg_volume());
+            preparedStatment.setLong(5, cdr_one.getDuration_msg_volume());
             preparedStatment.setString(6, cdr_one.getStart_date());
             preparedStatment.setString(7, cdr_one.getStart_time());
             preparedStatment.setFloat(8, cdr_one.getExternal_charges());

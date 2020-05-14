@@ -49,10 +49,10 @@ public class Add_Customer extends HttpServlet
             for (int i = 0; i < allRecurringServices.length; i++)
             {
                 db.addOCCToCustomer(new OCC(msisdn, db.getServiceIDByItsName(allRecurringServices[i]), 
-                        "recurring_service", false, null));
+                        "recurring_service", false, startDate));
             }
             db.addOCCToCustomer(new OCC(msisdn, db.getOneTimeServiceIDByItsName(onetTimeService), 
-                    "one_time_service", false, null));
+                    "one_time_service", false, startDate));
             resp.sendError(200);                       
         }
         else 
