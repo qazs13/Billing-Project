@@ -658,6 +658,116 @@ public class databaseConnection
         }
     }
     
+    public String select_from_services(int sid){
+        
+        connect();
+         String s = null ;
+          
+        try {
+            sqlcommand = "SELECT sname FROM services where sid= ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1, sid);
+            result = preparedstatement.executeQuery();
+        
+            while(result.next()){
+                s= result.getString("sname");
+            }
+            
+            System.out.println("Customer's Dial Num retrieved successfully");
+            return s;
+            
+        } catch (SQLException ex) {
+            System.out.println("Something Wrong happened");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        } 
+    }
+    
+              public Services selectall_from_services(int sid){
+        
+        connect();
+         Services service = null;
+        try {
+            connect();
+            sqlcommand = "select * from services where sid =?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1, sid);
+            result = preparedstatement.executeQuery();
+            while (result.next()) 
+            {
+                service = new Services(result.getString("sname"),result.getBoolean("is_recurring"),result.getFloat("recurring_fees"));
+            }
+        }
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace();
+
+        } 
+        finally
+        {
+            stop();
+            return service;
+              } 
+    }
+         public One_Time select_from_one_time(int sid) 
+    {
+        One_Time oservice = null;
+        try 
+        {
+            connect();
+            sqlcommand = "select * from one_time_service where one_time_service_id =?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1, sid);
+            result = preparedstatement.executeQuery();
+            while (result.next())
+            {
+                oservice = new One_Time(result.getInt("one_time_service_id"),result.getString("osname"),result.getFloat("osfee"));
+            }
+
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally 
+        {
+            stop();
+            return oservice;
+        }
+    }    
+           
+    
+        public Vector<OCC> select_from_occ(String msisdn){
+        
+        connect();
+        Vector<OCC> customers = new Vector();
+          OCC occ;
+        try {
+            sqlcommand = "SELECT * FROM occ where msisdn= ?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setString(1, msisdn);
+            result = preparedstatement.executeQuery();
+        
+            while(result.next()){
+               
+                occ = new OCC (result.getInt("occ_id"),result.getString("msisdn"),result.getInt("one_recurring_id"),result.getString("type_of_service"),result.getBoolean("is_service_processed"),result.getDate("service_processed_date"));
+                customers.add(occ);
+            }
+            
+            System.out.println("Customer's Dial Num retrieved successfully");
+            return customers;
+            
+        } catch (SQLException ex) {
+            System.out.println("Something Wrong happened");
+            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }finally{
+            stop();
+        } 
+    }
+    
     private void stop(){
         try {
             connection.close();
