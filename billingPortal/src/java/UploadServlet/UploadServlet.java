@@ -29,21 +29,19 @@ public class UploadServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        
-        Part part = req.getPart("ufile");
+        for (Part part : req.getParts()){
         String fileName = getFileName(part);
         System.out.println(fileName);
         // String applicationpath=getServletContext().getRealPath("");
         String applicationpath = System.getProperty("user.home");
         
         System.out.println(applicationpath);
-        String uploadPath = "C:\\Users\\amrws\\Desktop\\CDR-Parser\\cdr"; //want to generic
+         String uploadPath = "C:\\Users\\amrws\\Desktop\\CDR-Parser\\cdr"; //want to generic
         System.out.println("applicationPath:" + applicationpath);
         String savePath = uploadPath + File.separator + fileName;
         System.out.println("savePath: " + savePath);
-
         part.write(savePath + File.separator);
-        part.write(savePath + File.separator);
-        
+        }
         resp.sendRedirect("/billingPortal/pages/uploadCDR.jsp");
 
     }
