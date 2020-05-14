@@ -3,13 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/iti/billing/ModuleBilling%20yarab/BillingModule/src/Database/databaseConnection.java</file>
-            <file>file:/E:/iti/billing/ModuleBilling%20yarab/BillingModule/src/billingmodule/FreeUnitsCalc.java</file>
-            <file>file:/E:/iti/billing/ModuleBilling%20yarab/BillingModule/src/billingmodule/ScanDate.java</file>
-            <file>file:/E:/iti/billing/ModuleBilling%20yarab/BillingModule/src/billingmodule/VoiceFreeUnitsCalc.java</file>
-            <file>file:/E:/iti/billing/ModuleBilling%20yarab/BillingModule/src/billingmodule/BillingModule.java</file>
-            <file>file:/E:/iti/billing/ModuleBilling%20yarab/BillingModule/src/Interfaces/CustomerNum.java</file>
-            <file>file:/E:/iti/billing/ModuleBilling%20yarab/BillingModule/src/billingmodule/RequestedOperation.java</file>
+            <file>file:/home/ahmed/NetBeansProjects/Billing-Project/BillingModule/src/billingmodule/ScanDate.java</file>
+            <file>file:/home/ahmed/NetBeansProjects/Billing-Project/BillingModule/src/billingmodule/PDFGeneration.java</file>
+            <file>file:/home/ahmed/NetBeansProjects/Billing-Project/BillingModule/src/pdfusingitext/PdfUsingItext.java</file>
         </group>
     </open-files>
 </project-private>
