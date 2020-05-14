@@ -74,7 +74,10 @@ public class VoiceFreeUnitsCalc {
                                     round =   (float) Math.ceil(round);                                    
                                     costOfService = profileVoiceDetails.getFeeSameOperator() * round;
                                     TotalUDRsCost += costOfService;
-                                    System.out.println("onNet voice Cost Calcu :" + costOfService);         
+                                    db.updateHasFreeunit(udr);
+                                    System.out.println("onNet voice Cost Calcu :" + costOfService);
+                                    //update has freeunit here =false
+                                    
                             }
                         }else{
 
@@ -116,6 +119,7 @@ public class VoiceFreeUnitsCalc {
                                     round =   (float) Math.ceil(round);
                                     costOfService = profileVoiceDetails.getFeeAnotherOperator() * round;
                                     TotalUDRsCost += costOfService;
+                                    db.updateHasFreeunit(udr);
                                     System.out.println("crossNet voice Cost Calcu :" + costOfService);                              
                             }
                         }else{

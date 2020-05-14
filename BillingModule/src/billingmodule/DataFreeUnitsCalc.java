@@ -69,7 +69,8 @@ public class DataFreeUnitsCalc {
                                         float round = ((float) consumedData) / profileDataDetails.getRoundAmount(); 
                                         round =   (float) Math.ceil(round);                                                                      
                                         costOfService = profileDataDetails.getFeeSameOperator() * round;
-                                        TotalUDRsCost += costOfService;   
+                                        TotalUDRsCost += costOfService;
+                                        db.updateHasFreeunit(udr);
                                         System.out.println("Cost Calcu :" + costOfService);
                                 }    
                     }else{
