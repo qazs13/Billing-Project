@@ -3,6 +3,8 @@ package pdfusingitext;
 import Database.databaseConnection;
 import SystemObjects.InvoiceSheet;
 import SystemObjects.OCC;
+import SystemObjects.One_Time;
+import SystemObjects.Services;
 import SystemObjects.UDR;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
@@ -52,7 +54,8 @@ public class PdfUsingItext {
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
-            Vector<String> services = new Vector();
+            Services services = new Services();
+            One_Time onetime ;
 
             Paragraph p2 = new Paragraph();
             p2.add("Date of Bill: " + java.time.LocalDate.now()); //no alignment
@@ -60,27 +63,24 @@ public class PdfUsingItext {
             document.add(new Paragraph("Time: " + LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME)));
             document.add(new Paragraph("Bill Number: " + oneCustomerIvoice.getBillId()));
 
-//            for (i = 0; i < occ.size(); i++) {
-//                services = db.selectall_from_services(occ.elementAt(i).getsid());
+            for (i = 0; i < occ.size(); i++) {
+
+//                document.add(new Paragraph("Recurring service: " + services));
 //
-////                document.add(new Paragraph("Recurring service: " + services));
-////
-//                for (j = 0; j < services.size(); i++) {
-//                    if (occ.elementAt(i).getstype().equals("recurring")) {
-////
-//                        document.add(new Paragraph("Recurring service: " + services.elementAt(j)));
-//                    } //                    } else if (occ.elementAt(i).getstype().equals("onetime")) {
-//                    //
-//                    //                        document.add(new Paragraph("Onetime service: " + services.elementAt(i)));
-//                    //
-//                    //                    }
-//                    else {
-//                        document.add(new Paragraph(" Service failed"));
-//
-//                    }
-//                }
-//
-//            }
+                if (occ.elementAt(i).getstype().equals("recurring")) {
+
+                    services = db.selectall_from_services(occ.elementAt(i).getsid());
+                    document.add(new Paragraph("Recurring service: " + services.getSname()));
+
+                }
+                if (occ.elementAt(i).getstype().equals("onetime")) {
+                    onetime = db.select_from_one_time(occ.elementAt(i).getsid());
+                    document.add(new Paragraph("Onetime service: " + services.getSname()));
+
+                }
+
+            }
+
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
@@ -336,5 +336,5 @@ public class PdfUsingItext {
         }
     }
 
-  
+ 
 }

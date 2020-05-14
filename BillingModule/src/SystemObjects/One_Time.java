@@ -13,6 +13,11 @@ public class One_Time {
         this.osfees = osfees;
     }
     
+      public One_Time() {
+       
+    }
+    
+    
     
     
 }

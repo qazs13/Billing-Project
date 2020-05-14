@@ -685,38 +685,59 @@ public class databaseConnection
         } 
     }
     
-        public Vector<String> selectall_from_services(int sid){
+              public Services selectall_from_services(int sid){
         
         connect();
-        Vector<String> services = new Vector();
-        String s =null;
-          
+         Services service = null;
         try {
-            sqlcommand = "SELECT sname FROM services where sid= ?";
+            connect();
+            sqlcommand = "select * from services where sid =?";
             preparedstatement = connection.prepareStatement(sqlcommand);
             preparedstatement.setInt(1, sid);
             result = preparedstatement.executeQuery();
-        
-            while(result.next()){
-                s= result.getString("sname");
-                
-                services.add(s);
-                
+            while (result.next()) 
+            {
+                service = new Services(result.getString("sname"),result.getBoolean("is_recurring"),result.getFloat("recurring_fees"));
             }
-            
-            System.out.println("Customer's Dial Num retrieved successfully");
-            return services;
-            
-        } catch (SQLException ex) {
-            System.out.println("Something Wrong happened");
-            Logger.getLogger(databaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }finally{
-            stop();
+        }
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace();
+
         } 
+        finally
+        {
+            stop();
+            return service;
+              } 
     }
-    
-      
+         public One_Time select_from_one_time(int sid) 
+    {
+        One_Time oservice = null;
+        try 
+        {
+            connect();
+            sqlcommand = "select * from one_time_service where one_time_service_id =?";
+            preparedstatement = connection.prepareStatement(sqlcommand);
+            preparedstatement.setInt(1, sid);
+            result = preparedstatement.executeQuery();
+            while (result.next())
+            {
+                oservice = new One_Time(result.getInt("one_time_service_id"),result.getString("osname"),result.getFloat("osfee"));
+            }
+
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally 
+        {
+            stop();
+            return oservice;
+        }
+    }    
+           
     
         public Vector<OCC> select_from_occ(String msisdn){
         
