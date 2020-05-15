@@ -35,10 +35,10 @@ TRUNCATE TABLE profile;
 TRUNCATE TABLE customer;
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 create table cdr (cdr_id serial primary key,dialA text,dialB text,sid int references services(sid) ON DELETE CASCADE,
-	duration_msg_volume float,start_date text,start_time text,external_charges float,is_rated boolean);
+	duration_msg_volume bigint,start_date text,start_time text,external_charges float,is_rated boolean);
 
 create table udr (udr_id serial ,pid int references profile(pid) ON DELETE CASCADE, dialA text,dialB text,sid int references services(sid) ON DELETE CASCADE,
-	duration_msg_volume float,start_date text,start_time text,external_charges float,has_freeUnits boolean,cost float, is_billed boolean,primary key (udr_id));
+	duration_msg_volume bigint,start_date text,start_time text,external_charges float,has_freeUnits boolean,cost float, is_billed boolean,primary key (udr_id));
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 create table admin (adminUser text primary key, adminPassword text);
 -------------------------------------------------------------------------------------------------------------------------------------------------------------

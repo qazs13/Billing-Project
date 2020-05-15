@@ -63,15 +63,11 @@ END;
 $$LANGUAGE plpgsql;
 
 ----------------------
-billing_system=# update customer_profile set free_voice_same=300 WHERE msisdn='00201215860927' AND pid=1;
-UPDATE 1
-billing_system=# update customer_profile set free_voice_diff=100 WHERE msisdn='00201215860927' AND pid=1;
-UPDATE 1
-billing_system=# update customer_profile set free_sms_diff=50 WHERE msisdn='00201215860927' AND pid=1;
-UPDATE 1
-billing_system=# update customer_profile set free_sms_same=100 WHERE msisdn='00201215860927' AND pid=1;
-UPDATE 1
-billing_system=# update customer_profile set free_internet=50 WHERE msisdn='00201215860927' AND pid=1;
+update customer_profile set free_voice_same=300 WHERE msisdn='00201215860927' AND pid=1;
+update customer_profile set free_voice_diff=100 WHERE msisdn='00201215860927' AND pid=1;
+update customer_profile set free_sms_diff=50 WHERE msisdn='00201215860927' AND pid=1;
+update customer_profile set free_sms_same=100 WHERE msisdn='00201215860927' AND pid=1;
+ update customer_profile set free_internet=50 WHERE msisdn='00201215860927' AND pid=1;
 
 billing_system=# update customer_profile set free_voice_same=300 , free_voice_diff=100  WHERE msisdn='00201215860927' AND pid=1;
 update customer_profile set free_sms_same=100 , free_sms_diff=50  WHERE msisdn='00201215860927' AND pid=1;
@@ -169,4 +165,12 @@ BEGIN
 END;
 $$LANGUAGE plpgsql;
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION renewRecurring(dialNum text, recurringID int, serviceType text, isProccessed boolean, proccessedDate date)RETURNS Boolean AS $$
+DECLARE
+BEGIN
+	INSERT INTO occ (msisdn, one_recurring_id, type_of_service, is_service_processed, service_processed_date) VALUES 
+	(dialNum,recurringID,serviceType,isProccessed,proccessedDate);
+END;
+$$LANGUAGE plpgsql;
+----------------------------------------------------------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////END//////////////////////////////////////////////////////////////////////////
