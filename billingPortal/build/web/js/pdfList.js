@@ -28,12 +28,15 @@ for (index = 0; index < document.getElementsByClassName('sliderText').length; in
 {
     var node = document.getElementsByClassName('sliderText')[index];
     var anch = document.getElementsByTagName('a')[index];
+    var anch2 = document.getElementsByTagName('a')[index+1];
     var span1 = document.getElementsByTagName('span')[index];
     var span2 = document.getElementsByTagName('lable')[index];
-    var color = generateRandomColor()
+    var color = generateRandomColor();
     node.style.backgroundColor = color;
     anch.style.borderColor = color;
     anch.style.color = color;
+    anch2.style.borderColor = color;
+    anch2.style.color = color;    
     span1.style.color = color;
     span2.style.color = color;
 }

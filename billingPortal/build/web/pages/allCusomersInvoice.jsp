@@ -12,8 +12,9 @@
         <label>End Date</label>
         <input required type="date" name="endDate"/>
       </div>
-      <input type="submit" value="GENERATE BILL">            
+      <input id="generateBill" type="submit" value="GENERATE BILL">            
     </form>
   </div>
 <%@include file="../header&footer/scripts.html" %>
+<script src="../js/allCustomersBill.js"></script>
 <%@include file="../header&footer/footer.html" %>

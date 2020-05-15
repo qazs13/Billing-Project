@@ -5,7 +5,7 @@
       <i class="fas fa-file-invoice billIcon"></i>
       <h4>Generate Invoice for One User</h4>
     </a>
-      <a href="#" class="cardDisplayforBilling">
+      <a href="allCusomersInvoice.jsp" class="cardDisplayforBilling" style="display: none">
       <i class="fas fa-file-invoice-dollar billIcon"></i>
       <h4>Generate Invoice for All User</h4>      
     </a>

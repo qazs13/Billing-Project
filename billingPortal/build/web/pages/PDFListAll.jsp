@@ -5,14 +5,17 @@
     Vector<FilesName> allPDFs = new Vector();
     String path = "C:\\Users\\amrws\\Desktop\\BillingModule\\src\\java\\allPDFs";
     File folder = new File(path);
-
-    File[] files = folder.listFiles();
-
-    for (File file : files)
+    File[] files = null;
+    if (folder.exists())
     {
-        String[] namesAndDateAndPhoneNumber = file.getName().split(";");
-        allPDFs.add(new FilesName(namesAndDateAndPhoneNumber[0], namesAndDateAndPhoneNumber[1], file.getAbsolutePath(),
-                namesAndDateAndPhoneNumber[2]));
+        files = folder.listFiles();
+
+        for (File file : files)
+        {
+            String[] namesAndDateAndPhoneNumber = file.getName().split(";");
+            allPDFs.add(new FilesName(namesAndDateAndPhoneNumber[0], namesAndDateAndPhoneNumber[1], file.getAbsolutePath(),
+                    namesAndDateAndPhoneNumber[2]));
+        }        
     }
 %>
 
@@ -25,8 +28,12 @@
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">      
   <link rel="stylesheet" href="../css/swiper.min.css">  
   <link rel="stylesheet" href="../css/pdfCss.css">
+  <link rel="stylesheet" href="../css/all.min.css">  
 </head>
 <body>
+    <div class="homeButtonDiv">
+        <a class="homeButton" href="/billingPortal/pages/mainPage.jsp"><i class="fas fa-home"></i></a>
+    </div>
   <!-- Swiper -->
   <div class="swiper-container">
     <div class="swiper-wrapper">

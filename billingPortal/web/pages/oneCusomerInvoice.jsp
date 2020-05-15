@@ -1,7 +1,7 @@
 <%@include file="../header&footer/header.html"%>
   <!-- One Customer Bill Request -->  
   <div class="fullSizeBillGenerator">
-    <form class="generateBill" action="/BillingModule/Billing_Module/billing/onePerson" method="GET">
+    <form class="generateBill">
       <h1>Generate Bill For One Customer</h1>
       <div class="phoneNumber">
         <label>Phone Number</label>
@@ -16,8 +16,9 @@
         <label>End Date</label>
         <input required type="date" name="endDate"/>
       </div>
-      <input type="submit" value="GENERATE BILL">            
+      <input id="generateBill" type="submit" value="GENERATE BILL">            
     </form>
   </div>
 <%@include file="../header&footer/scripts.html" %>
+<script src="../js/oneCustomerBill.js"></script>
 <%@include file="../header&footer/footer.html" %>

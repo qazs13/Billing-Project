@@ -118,43 +118,40 @@ document.getElementById('secondPageProfileSubmit').addEventListener("click",func
 });
 
 document.getElementById('thirdPageProfileSubmit').addEventListener("click",function(e)
-{
-    if (e.path[2][0].value != 0 && e.path[2][1].value != 0 && e.path[2][2].value != 0 && e.path[2][3].value != 0)
-    {      
-        e.preventDefault();  
-        url = "/billingPortal/Add_Free_Units";
+{    
+    e.preventDefault();  
+    url = "/billingPortal/Add_Free_Units";
 
-        var xmlhttp;
-        if (window.XMLHttpRequest)
-        {
-            xmlhttp = new XMLHttpRequest(); //for IE7+, Firefox, Chrome, Opera, Safari
-        }
-        else
-        {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); //for IE6, IE5
-        }
-
-        xmlhttp.open("POST",url,true);
-
-        xmlhttp.onreadystatechange = function()
-        {
-            if(xmlhttp.readyState === XMLHttpRequest.DONE) 
-            {
-                var status = xmlhttp.status;
-                if (status === 0 || (status >= 200 && status < 400)) 
-                {
-                    window.location.assign("allProfilesList.jsp");
-                    alert ("Third Step Free Units Added to Profile Successfully");
-                }
-                else
-                {
-                    alert("Something Went wrong");
-                }
-            }
-        };
-    
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        
-        xmlhttp.send($('form').serialize());
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {
+        xmlhttp = new XMLHttpRequest(); //for IE7+, Firefox, Chrome, Opera, Safari
     }
+    else
+    {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); //for IE6, IE5
+    }
+
+    xmlhttp.open("POST",url,true);
+
+    xmlhttp.onreadystatechange = function()
+    {
+        if(xmlhttp.readyState === XMLHttpRequest.DONE) 
+        {
+            var status = xmlhttp.status;
+            if (status === 0 || (status >= 200 && status < 400)) 
+            {
+                window.location.assign("allProfilesList.jsp");
+                alert ("Third Step Free Units Added to Profile Successfully");
+            }
+            else
+            {
+                alert("Something Went wrong");
+            }
+        }
+    };
+
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xmlhttp.send($('form').serialize());
 });
