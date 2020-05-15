@@ -3,7 +3,7 @@
 <%@page import="java.io.File"%>
 <%
     Vector<FilesName> allPDFs = new Vector();
-    String path = "C:\\Users\\amrws\\Desktop\\BillingModule\\src\\allPDFs";
+    String path = "C:\\Users\\amrws\\Desktop\\BillingModule\\src\\java\\allPDFs";
     File folder = new File(path);
 
     File[] files = folder.listFiles();
@@ -22,6 +22,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PDF VIEWER</title>
+  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">      
   <link rel="stylesheet" href="../css/swiper.min.css">  
   <link rel="stylesheet" href="../css/pdfCss.css">
 </head>

@@ -1,7 +1,7 @@
 <%@include file="../header&footer/header.html" %>
 <!-- Cards Details -->
   <div class="container-fluid fullSize">
-    <a href="#" class="cardDisplayforBilling">
+    <a href="oneCusomerInvoice.jsp" class="cardDisplayforBilling">
       <i class="fas fa-file-invoice billIcon"></i>
       <h4>Generate Invoice for One User</h4>
     </a>
