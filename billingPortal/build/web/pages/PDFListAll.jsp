@@ -48,11 +48,7 @@
             <p>
               Phone Number: <span>(<%=allPDFs.elementAt(i).getFilePhoneNumber()%>)</span>
             </p>              
-            <p>
-              Date of Bill: <lable>(<%=allPDFs.elementAt(i).getFileDate().substring(8, 10)+" / "+
-                        allPDFs.elementAt(i).getFileDate().substring(5, 7)+" / "+
-                        allPDFs.elementAt(i).getFileDate().substring(0, 4)%>)</lable>
-            </p>
+
             <a href="/billingPortal/openPDF?path=<%=allPDFs.elementAt(i).getFilePath()%>" target="_blank">Open PDF</a>      
           </div>
         </div>

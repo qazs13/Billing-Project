@@ -9,7 +9,7 @@
   <h1>Main Information</h1>
   <div class="row">
     <div class="mainStatic">
-      <h2>Num Of Users</h2>
+      <h2>Number Of Users</h2>
       <div class="precent">
         <svg>
           <circle cx = "150" cy = "100" r = "70"></circle>
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="mainStatic">
-      <h2>Num Of Rate Plans</h2>
+      <h2>Number Of Profiles</h2>
       <div class="precent">
         <svg>
           <circle cx = "150" cy = "100" r = "70"></circle>
@@ -33,7 +33,7 @@
       </div>      
     </div>
     <div class="mainStatic">
-      <h2>Num Of Services</h2>
+      <h2>Number Of Services</h2>
       <div class="precent">
         <svg>
           <circle cx = "150" cy = "100" r = "70"></circle>
@@ -45,7 +45,7 @@
       </div>      
     </div>
     <div class="mainStatic">
-      <h2>Num Of CDRs</h2>
+      <h2>Number Of CDRs</h2>
       <div class="precent">
         <svg>
           <circle cx = "150" cy = "100" r = "70"></circle>

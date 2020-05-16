@@ -25,7 +25,7 @@ document.getElementById('firstPageProfileSubmit').addEventListener("click",funct
                 var status = xmlhttp.status;
                 if (status === 0 || (status >= 200 && status < 400)) 
                 {
-                    alert ("First Step Profile Added Successfully");                    
+                    alert ("First Step Profile Added Successfully");
                     e.path[2].style.display = "none";
                     document.getElementById('secondPageProfile').style.display = "block";
                     profileName = document.getElementById('profileName').value;
@@ -40,7 +40,7 @@ document.getElementById('firstPageProfileSubmit').addEventListener("click",funct
     
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         
-        xmlhttp.send($('form').serialize());        
+        xmlhttp.send($('form').serialize());
     }
 });
 
